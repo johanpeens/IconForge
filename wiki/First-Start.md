@@ -27,6 +27,7 @@ A purple screen with the Icon Forge icon and name. It shows for about two second
 
 Icon Forge needs the AI model before it can draw. This window tells you what it is and how big it is (17.2 GB).
 
+- An orange box tells you that Icon Forge will not work until the model is downloaded.
 - Press **Download Flux Schnell model** to download it. The bar shows the speed and the time left.
 - Press **Change folder…** first if your drive is short on space.
 - Press **I already have it…** if you have the file already.

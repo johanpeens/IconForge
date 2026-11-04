@@ -129,10 +129,12 @@ a.btn { text-decoration:none; display:inline-block; color:inherit; }
 .modalbg[hidden] { display:none; }
 .modal { width:min(560px,100%); max-height:90vh; overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
 .modal h2 { margin:0 0 4px; font-size:18px; }
-.steps { display:flex; align-items:center; gap:6px; margin-bottom:12px; color:var(--muted); font-size:13px; }
-.steps i { width:30px; height:5px; border-radius:3px; background:var(--line); }
-.steps i.on { background:var(--accent); }
-.steps span { margin-left:6px; }
+.warnbox { display:flex; align-items:center; gap:10px; margin:14px 0 0; padding:10px 12px; border-radius:10px; background:rgba(245,158,11,.16); border:1px solid rgba(245,158,11,.6); color:var(--ink); font-size:14px; }
+.warnicon { flex:none; width:22px; height:22px; border-radius:50%; background:#f59e0b; color:#1c1917; font-weight:800; font-size:15px; line-height:22px; text-align:center; }
+.wsteps { display:flex; align-items:center; gap:6px; margin-bottom:12px; color:var(--muted); font-size:13px; }
+.wsteps i { width:30px; height:5px; border-radius:3px; background:var(--line); }
+.wsteps i.on { background:var(--accent); }
+.wsteps span { margin-left:6px; }
 .modal .kv { display:grid; grid-template-columns:110px 1fr; gap:6px 12px; margin:14px 0; font-size:14px; }
 .modal .kv span:nth-child(odd) { color:var(--muted); }
 .modal code { word-break:break-all; }
@@ -569,7 +571,8 @@ function viewSettings() {
   const lead = m.ready ? 'Flux Schnell is downloaded and the app is pointed at it. You are ready to make icons.'
     : w ? 'Icon Forge draws your icons with an AI model called Flux Schnell. It runs on your own PC, so you download it once (about ' + fmtGB(m.size) + '). Check the folder below, then press Download. If your drive is short on space, press Change folder first.'
     : 'Icon Forge draws icons with the Flux Schnell model, which runs on your own PC. It is one download of about ' + fmtGB(m.size) + ', saved wherever you choose. Check the folder below, then press Download.';
-  box.innerHTML = '<div class="modal" role="dialog" aria-label="' + (w ? 'Get the AI model' : 'Settings') + '">' + (w ? stepsHtml(2) : '') + '<h2>' + (w ? 'Get the AI model' : 'Settings') + '</h2><p class="lead" style="margin:0">' + lead + '</p>' +
+  const warn = m.ready ? '' : '<div class="warnbox" role="alert"><span class="warnicon" aria-hidden="true">!</span><b>Icon Forge will not work until the AI model is downloaded.</b></div>';
+  box.innerHTML = '<div class="modal" role="dialog" aria-label="' + (w ? 'Get the AI model' : 'Settings') + '">' + (w ? stepsHtml(2) : '') + '<h2>' + (w ? 'Get the AI model' : 'Settings') + '</h2><p class="lead" style="margin:0">' + lead + '</p>' + warn +
     '<div class="kv"><span>Model</span><span>' + esc(m.name) + ' (' + fmtGB(m.size) + ')</span>' +
     '<span>Status</span><span>' + (m.downloading ? 'Downloading… ' + pct + '%' : m.ready ? '<b style="color:var(--ok)">✓ Ready</b>' : 'Not installed') + '</span>' +
     '<span>' + (m.ready ? 'File' : 'Save to') + '</span><span><code>' + esc(m.ready ? m.path : m.folder) + '</code></span>' +
@@ -590,7 +593,7 @@ function openSettings(on) {
   if (on) { const t = $('#themeask'); t.hidden = true; t.innerHTML = ''; }
   viewSettings(); if (on) pollModel();
 }
-const stepsHtml = n => '<div class="steps"><i class="on"></i><i' + (n === 2 ? ' class="on"' : '') + '></i><span>Step ' + n + ' of 2</span></div>';
+const stepsHtml = n => '<div class="wsteps"><i class="on"></i><i' + (n === 2 ? ' class="on"' : '') + '></i><span>Step ' + n + ' of 2</span></div>';
 let modelTimer = null;
 function pollModel() {
   clearInterval(modelTimer);

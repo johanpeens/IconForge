@@ -11,7 +11,7 @@ It all happens on your own PC. No account. No cloud.
 
 ## Get it (nothing else to install)
 
-**[Download Icon Forge for Windows](https://github.com/johanpeens/IconForge/releases/download/v1.0.0/Icon-Forge-Setup-1.0.0.exe)** (144 MB)
+**[Download Icon Forge for Windows](https://github.com/johanpeens/IconForge/releases/download/v1.0.1/Icon-Forge-Setup-1.0.1.exe)** (170 MB)
 
 1. **Run the file you downloaded.** If Windows says "Windows protected your PC", click **More info**, then **Run anyway**. (The installer is not signed yet, so Windows warns about every new app.)
 2. **Open Icon Forge.** The installer adds anything your PC is missing (Windows asks once, click **Yes**). No Python, no ComfyUI, no setup.
