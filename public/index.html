@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Icon Forge</title>
+<style>
+
+:root { --bg:#f5f6f8; --panel:#fff; --ink:#1a1d23; --muted:#667085; --line:#e3e6eb; --accent:#4f46e5; --accent-ink:#fff; --soft:#eef0ff; --ok:#12805c; --icon:#1a1d23; --shadow:0 1px 2px rgba(16,24,40,.06); }
+:root[data-theme="dark"] { --bg:#101216; --panel:#181b21; --ink:#eceff4; --muted:#98a2b3; --line:#2a2f38; --accent:#8b8cf8; --accent-ink:#101216; --soft:#23253a; --ok:#4ade80; --icon:#eceff4; --shadow:none;  color-scheme:dark; }
+* { box-sizing:border-box; }
+body { margin:0; font:15px/1.5 system-ui, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); }
+button, input { font:inherit; color:inherit; }
+button { cursor:pointer; }
+.top { display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; padding:14px 20px; background:var(--panel); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+.brand { font-weight:700; font-size:18px; display:flex; align-items:center; gap:8px; }
+.brand svg { width:26px; height:26px; color:var(--accent); }
+.steps { display:flex; gap:6px; flex:1; flex-wrap:wrap; }
+.step { display:flex; align-items:center; gap:8px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); }
+.step b { display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--line); color:var(--ink); font-size:12px; }
+.step.on { background:var(--soft); border-color:var(--accent); color:var(--ink); }
+.step.on b { background:var(--accent); color:var(--accent-ink); }
+.step:disabled { opacity:.5; cursor:default; }
+.basketchip { display:flex; align-items:center; gap:8px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--panel); }
+.basketchip span { background:var(--accent); color:var(--accent-ink); min-width:22px; height:22px; border-radius:11px; display:grid; place-items:center; font-size:12px; padding:0 6px; }
+main { max-width:1100px; margin:0 auto; padding:24px 20px 120px; }
+h1 { font-size:22px; margin:0 0 4px; }
+.lead { color:var(--muted); margin:0 0 20px; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:var(--shadow); }
+.row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+input[type=text] { flex:1; min-width:180px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--bg); }
+input[type=text]:focus { outline:2px solid var(--accent); outline-offset:1px; }
+.btn { padding:10px 16px; border-radius:10px; border:1px solid var(--line); background:var(--panel); }
+.btn.primary { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-weight:600; }
+.btn:disabled { opacity:.45; cursor:default; }
+.btn.small { padding:6px 10px; font-size:13px; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; }
+.chip { display:flex; align-items:center; gap:6px; padding:6px 8px 6px 12px; border-radius:999px; background:var(--soft); border:1px solid var(--line); }
+.chip button { border:0; background:transparent; width:22px; height:22px; border-radius:50%; color:var(--muted); }
+.chip button:hover { background:var(--line); }
+.opts { display:flex; flex-wrap:wrap; gap:16px 28px; margin-top:18px; color:var(--muted); align-items:center; }
+.seg { display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; vertical-align:middle; }
+.seg button { border:0; background:var(--panel); padding:7px 14px; }
+.seg button.on { background:var(--accent); color:var(--accent-ink); font-weight:600; }
+select { padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:var(--panel); color:var(--ink); font-size:13px; }
+.stepper { display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.stepper button { border:0; background:var(--panel); width:32px; height:34px; }
+.stepper output { min-width:34px; text-align:center; color:var(--ink); }
+.gen { display:grid; gap:10px; margin-top:20px; }
+.gen .g { display:grid; grid-template-columns:130px 1fr 50px; gap:12px; align-items:center; }
+.bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; }
+.bar i { display:block; height:100%; width:0; background:var(--accent); transition:width .15s; }
+.section { margin-top:22px; }
+.sh { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+.sh h2 { font-size:16px; margin:0; flex:1; }
+.sh small { color:var(--muted); font-weight:400; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:10px; }
+.tile { position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px 10px; border:2px solid var(--line); border-radius:12px; background:var(--panel); }
+button.tile:hover { border-color:var(--accent); }
+.tile.sel { border-color:var(--accent); background:var(--soft); }
+.tile svg.ic { width:64px; height:64px; color:var(--icon); }
+.tile .tick { position:absolute; top:6px; left:6px; width:20px; height:20px; border-radius:50%; border:2px solid var(--line); background:var(--panel); display:grid; place-items:center; font-size:12px; color:transparent; }
+.tile.sel .tick { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+.tile .in { position:absolute; top:6px; right:6px; font-size:11px; color:var(--ok); }
+.tile .rm { position:absolute; top:4px; right:4px; border:0; background:transparent; color:var(--muted); width:22px; height:22px; border-radius:50%; }
+.tile .rm:hover { background:var(--line); }
+.tile input { width:100%; min-width:0; padding:4px 6px; border:1px solid var(--line); border-radius:6px; background:var(--bg); font-size:12px; text-align:center; }
+.dock { position:fixed; left:0; right:0; bottom:0; padding:12px 20px; background:var(--panel); border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:flex-end; z-index:6; }
+.dock .msg { margin-right:auto; color:var(--muted); }
+.two { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:18px; align-items:start; }
+@media (max-width:820px) { .two { grid-template-columns:1fr; } }
+.side label { display:block; color:var(--muted); font-size:13px; margin:12px 0 4px; }
+.side input[type=text] { width:100%; }
+.sample { display:flex; flex-wrap:wrap; gap:14px; align-items:center; padding:12px; border:1px dashed var(--line); border-radius:10px; margin-top:8px; }
+.sample svg { width:var(--s,32px); height:var(--s,32px); color:var(--c,var(--icon)); }
+.done { border-color:var(--ok); }
+.done h2 { color:var(--ok); margin:0 0 6px; font-size:18px; }
+.files { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.files code { padding:4px 10px; border-radius:8px; background:var(--soft); border:1px solid var(--line); font-size:13px; }
+pre { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px; overflow:auto; margin:10px 0 0; }
+.empty { text-align:center; color:var(--muted); padding:36px 12px; }
+.note { margin-top:26px; color:var(--muted); font-size:13px; text-align:center; }
+
+.ic { display:block; width:64px; height:64px; background:currentColor; -webkit-mask:var(--u) center/contain no-repeat; mask:var(--u) center/contain no-repeat; }
+.tile .ic { color:var(--icon); width:var(--tile,64px); height:var(--tile,64px); }
+.sample .ic { width:var(--s,32px); height:var(--s,32px); color:var(--c,var(--icon)); }
+.pill { display:flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--muted); font-size:13px; }
+.pill i { width:9px; height:9px; border-radius:50%; background:#c2410c; }
+.pill.up i { background:#16a34a; }
+.err { margin-top:14px; padding:10px 12px; border-radius:10px; border:1px solid #c2410c; background:rgba(194,65,12,.08); }
+.badge { position:absolute; top:6px; right:6px; font-size:11px; color:var(--ok); }
+.libs { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+.libs h3 { margin:0 0 8px; font-size:14px; color:var(--muted); font-weight:600; }
+pre.log { max-height:160px; font-size:12px; color:var(--muted); }
+a.btn { text-decoration:none; display:inline-block; color:inherit; }
+.fr { display:block; overflow:hidden; width:var(--tile,64px); height:var(--tile,64px); }
+.sample .fr { width:var(--s,32px); height:var(--s,32px); }
+.fr .ic { width:100%; height:100%; }
+.canvas { position:relative; width:min(100%,420px); aspect-ratio:1; margin:0 auto; border:1px dashed var(--muted); border-radius:8px; background:linear-gradient(var(--line),var(--line)) center/1px 100% no-repeat, linear-gradient(var(--line),var(--line)) center/100% 1px no-repeat; }
+.canvas .fr { width:100%; height:100%; }
+.canvas .fr .ic { color:var(--icon); }
+.ctl { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:14px 0 6px; }
+.sl { display:grid; grid-template-columns:110px 1fr 56px; gap:10px; align-items:center; margin:8px 0; color:var(--muted); font-size:14px; }
+.sl output { color:var(--ink); text-align:right; }
+.edgrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(78px,1fr)); gap:8px; --tile:52px; }
+.edgrid .tile { padding:8px 4px 6px; }
+.ctxm { position:fixed; z-index:20; min-width:200px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:4px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+.ctxm button { display:block; width:100%; text-align:left; border:0; background:transparent; padding:8px 12px; border-radius:6px; }
+.ctxm button:hover { background:var(--soft); }
+#toast { position:fixed; bottom:78px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:8px; opacity:0; transition:opacity .2s; pointer-events:none; z-index:30; }
+#toast.show { opacity:1; }
+#cleansvg path { cursor:pointer; }
+#cleansvg path:hover { fill:var(--accent); }
+#cleansvg path.s { fill:#dc2626; }
+.seg.mode { margin-left:auto; }
+.slots { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.slot { position:relative; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-size:14px; font-weight:700; background:var(--line); color:var(--muted); }
+.slot.ok { background:var(--ok); color:#fff; }
+.slot.bad { background:#c2410c; color:#fff; }
+.slot.now { background:conic-gradient(var(--accent) calc(var(--p) * 1%), var(--line) 0); color:var(--ink); }
+.slot.now::before { content:''; position:absolute; inset:4px; border-radius:50%; background:var(--panel); }
+.slot.now::after { content:''; position:absolute; inset:-3px; border-radius:50%; border:3px solid transparent; border-top-color:var(--accent); animation:spin 1s linear infinite; }
+.slot.now span { position:relative; z-index:1; font-size:11px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.genmsg { color:var(--muted); font-size:14px; }
+.genmsg b { color:var(--ink); }
+.gear { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--panel); color:var(--muted); }
+.gear:hover { color:var(--ink); border-color:var(--accent); }
+.gear svg { width:20px; height:20px; }
+.modalbg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:40; display:grid; place-items:center; padding:16px; }
+.modalbg[hidden] { display:none; }
+.modal { width:min(560px,100%); max-height:90vh; overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+.modal h2 { margin:0 0 4px; font-size:18px; }
+.modal .kv { display:grid; grid-template-columns:110px 1fr; gap:6px 12px; margin:14px 0; font-size:14px; }
+.modal .kv span:nth-child(odd) { color:var(--muted); }
+.modal code { word-break:break-all; }
+.grid { grid-template-columns:repeat(auto-fill, minmax(max(118px, calc(var(--tile,64px) + 44px)), 1fr)); }
+
+.dlbar { position:fixed; top:0; left:0; right:0; height:4px; z-index:50; background:var(--line); }
+.dlbar[hidden] { display:none; }
+.dlbar i { display:block; height:100%; width:0; background:var(--accent); transition:width .6s ease; }
+.bar.big { height:12px; border-radius:6px; margin-top:4px; }
+.bar.big i { border-radius:6px; }
+.dlinfo { margin-top:8px; font-size:14px; color:var(--muted); }
+.dlinfo b { color:var(--ink); }
+/* theme choice */
+.themes { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0 6px; }
+.themeopt { display:flex; flex-direction:column; gap:10px; align-items:center; padding:14px 12px 12px; border:2px solid var(--line); border-radius:14px; background:var(--panel); font-weight:600; }
+.themeopt:hover { border-color:var(--accent); }
+.themeopt .sw { width:100%; aspect-ratio:16/10; border-radius:8px; border:1px solid #d0d5dd; display:grid; grid-template-rows:22% 1fr; overflow:hidden; }
+.themeopt .sw i { background:#fff; border-bottom:1px solid #e3e6eb; }
+.themeopt .sw b { display:block; margin:12% 14%; border-radius:6px; background:#fff; border:1px solid #e3e6eb; }
+.themeopt .sw.light { background:#f5f6f8; }
+.themeopt .sw.dark { background:#101216; border-color:#2a2f38; }
+.themeopt .sw.dark i, .themeopt .sw.dark b { background:#181b21; border-color:#2a2f38; }
+/* long icon names are cut short instead of running into the next tile */
+button.tile { min-width:0; }
+button.tile > span:last-child { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* button movement */
+button, .btn, .tile, .chip, .step { transition:transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease, opacity .15s ease; }
+.btn:not(:disabled):hover, .step:not(:disabled):hover, .basketchip:hover, .chip:not(:disabled):hover, .pill:hover { transform:translateY(-1px); box-shadow:0 3px 8px rgba(16,24,40,.14); }
+button.tile:hover { transform:translateY(-2px); box-shadow:0 4px 10px rgba(16,24,40,.14); }
+.btn.primary:not(:disabled):hover { box-shadow:0 4px 12px rgba(79,70,229,.35); filter:brightness(1.06); }
+.btn:not(:disabled):active, .step:not(:disabled):active, .basketchip:active, .chip:not(:disabled):active, button.tile:active, .gear:active { transform:translateY(0) scale(.96); box-shadow:none; transition-duration:.05s; }
+.gear { transition:transform .35s ease, color .15s ease, border-color .15s ease; }
+.gear:hover { transform:rotate(60deg); }
+.seg button, .stepper button, .chip button, .rm { transition:background-color .15s ease, color .15s ease, transform .1s ease; }
+.seg button:active, .stepper button:active { transform:scale(.92); }
+button:focus-visible, .btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.btn:disabled, button:disabled { cursor:default; }
+.btn.busy { display:inline-flex; align-items:center; gap:8px; }
+.btn .spin { width:14px; height:14px; border-radius:50%; border:2px solid currentColor; border-right-color:transparent; animation:spin .8s linear infinite; }
+.modalbg:not([hidden]) { animation:fadein .15s ease; }
+.modalbg:not([hidden]) .modal { animation:popin .18s ease; }
+#toast { transform:translate(-50%, 8px); transition:opacity .2s ease, transform .2s ease; }
+#toast.show { transform:translate(-50%, 0); }
+@keyframes fadein { from { opacity:0; } }
+@keyframes popin { from { opacity:0; transform:translateY(8px) scale(.97); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; } .gear:hover { transform:none; } }
+</style></head><body>
+<header class="top">
+  <div class="brand"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 52L36 28M30 16l18 18M26 22l16 16"/><path d="M44 12l8 8"/></svg>Icon Forge</div>
+  <nav class="steps" id="steps"></nav>
+  <span class="pill" id="comfy" title="Open settings"><i></i><span>Model…</span></span>
+  <button class="basketchip" id="chip" aria-label="Open basket">Basket <span id="chipn">0</span></button>
+  <button class="gear" id="gear" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+</header>
+<div class="dlbar" id="dlbar" hidden><i></i></div>
+<div class="modalbg" id="modal" hidden></div>
+<div class="modalbg" id="themeask" hidden></div>
+<main id="app"></main>
+<div class="dock" id="dock" hidden></div>
+<div id="toast" role="status"></div>
+<script>
+const DETAIL = { 1:['Simple','very thick outline, few bold shapes. Best at small sizes.'], 2:['Medium','your usual look: thick outline with some inner detail.'], 3:['Detailed','fine lines and interior detail. Best at 48px and larger, slower to trace.'] };
+const STYLES = { line:['Line', 'outline strokes, no fill (your current look).'], filled:['Filled', 'solid silhouettes with small cut-out details.'], double:['Double line', 'a bold outline with a thin line inside it.'], hand:['Hand-drawn', 'a wobbly ink line, loose and friendly.'] };
+const S = { step:1, kws:[], per:5, detail:2, ready:false, lib:[], model:{}, settings:false, theme:'', sets:[], sel:new Set(), basket:[], font:'myIcons', genKws:[], job:null, jobErr:'', building:false, size:64, edSel:0, edMode:'move', cleanSel:new Set(), speck:40, style:'line', result:null, fontErr:'' };
+const $ = s => document.querySelector(s), esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'icons';
+const key = (f, n) => f + '/' + n;
+const url = (f, n) => '/svg/' + encodeURIComponent(f) + '/' + encodeURIComponent(n);
+const ic = (f, n, cls) => '<span class="ic ' + (cls || '') + '" style="--u:url(\'' + url(f, n) + '\')"></span>';
+const inBasket = k => S.basket.some(b => b.key === k);
+const post = (u, b) => fetch(u, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(b) }).then(r => r.json());
+
+async function refresh() {
+  try { const r = await (await fetch('/api/status')).json(); S.ready = r.model.ready; S.model = r.model; S.lib = r.library; S.theme = r.theme || ''; } catch (e) { S.ready = false; }
+  const p = $('#comfy'); p.className = 'pill' + (S.ready ? ' up' : ''); p.lastChild.textContent = S.model.downloading ? 'Downloading model ' + Math.round(S.model.percent) + '%' + (S.model.speed ? ' · ' + (S.model.speed / 1e6).toFixed(1) + ' MB/s' : '') : S.ready ? 'Flux model ready' : 'Flux model not installed';
+  const bar = $('#dlbar'); if (bar) { bar.hidden = !S.model.downloading; bar.firstChild.style.width = (S.model.percent || 0) + '%'; }
+  if (S.wasDl && !S.model.downloading && S.ready) toast('Flux model downloaded and ready');
+  S.wasDl = !!S.model.downloading;
+}
+function go(n) { S.step = n; render(); window.scrollTo(0, 0); }
+function renderTop() {
+  const names = ['Keywords', 'Pick icons', 'Edit SVGs', 'Basket & font'];
+  $('#steps').innerHTML = names.map((t, i) => '<button class="step ' + (S.step === i + 1 ? 'on' : '') + '" data-go="' + (i + 1) + '"' + ((i === 1 && !S.sets.length) || (i === 2 && !S.basket.length) ? ' disabled' : '') + '><b>' + (i + 1) + '</b>' + t + '</button>').join('');
+  $('#chipn').textContent = S.basket.length;
+}
+function render() { renderTop(); $('#dock').hidden = true; if (S.step === 1) viewKeywords(); else if (S.step === 2) viewPick(); else if (S.step === 3) viewEdit(); else viewBasket(); }
+
+function viewKeywords() {
+  const busy = !!S.job;
+  const mins = Math.max(1, Math.round(S.kws.length * S.per * 60 / 60));
+  $('#app').innerHTML =
+    '<h1>1. Add your keywords</h1><p class="lead">Each keyword is drawn by Flux Schnell on your PC and traced to SVG. Add as many as you like.</p>' +
+    '<div class="card"><form class="row" id="kwform"><input type="text" id="kwin" placeholder="Type a keyword, e.g. bicycle, then press Enter" autocomplete="off"' + (busy ? ' disabled' : '') + '><button class="btn" type="submit"' + (busy ? ' disabled' : '') + '>Add keyword</button></form>' +
+    '<div class="chips">' + (S.kws.length ? S.kws.map((k, i) => '<span class="chip">' + esc(k) + '<button data-rm="' + i + '" aria-label="Remove ' + esc(k) + '"' + (busy ? ' disabled' : '') + '>×</button></span>').join('') : '<span class="empty" style="padding:6px 0">No keywords yet.</span>') + '</div>' +
+    '<div class="opts"><span>Icons per keyword <span class="stepper"><button data-per="-1" aria-label="Fewer"' + (busy ? ' disabled' : '') + '>−</button><output>' + S.per + '</output><button data-per="1" aria-label="More"' + (busy ? ' disabled' : '') + '>+</button></span></span>' +
+    '<span>About ' + (S.kws.length * S.per) + ' icons, roughly ' + mins + ' min</span></div>' +
+    '<div class="opts" style="margin-top:12px"><span>Detail <span class="seg">' + [1,2,3].map(n => '<button data-detail="' + n + '" class="' + (S.detail === n ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + DETAIL[n][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + DETAIL[S.detail][0] + ':</b> ' + DETAIL[S.detail][1] + '</span></div>' +
+    '<div class="opts" style="margin-top:12px"><span>Style <span class="seg">' + Object.keys(STYLES).map(k => '<button data-style="' + k + '" class="' + (S.style === k ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + STYLES[k][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + STYLES[S.style][0] + ':</b> ' + STYLES[S.style][1] + '</span></div>' +
+    '<div class="gen" id="gen"></div>' + (S.jobErr ? '<div class="err">' + esc(S.jobErr) + '</div>' : '') +
+    '<div class="row" style="margin-top:20px;justify-content:flex-end"><button class="btn primary' + (busy ? ' busy' : '') + '" id="gobtn"' + (!S.kws.length || busy ? ' disabled' : '') + '>' + (busy ? '<i class="spin"></i>Generating…' : 'Generate ' + (S.kws.length * S.per) + ' icons') + '</button></div>' +
+    (S.lib.length ? '<div class="libs"><h3>Or start from icons you already have</h3><div class="chips" style="margin:0">' + S.lib.map(l => '<button class="chip" style="cursor:pointer" data-uselib="' + esc(l.folder) + '"' + (S.sets.some(s => s.folder === l.folder) ? ' disabled' : '') + '>' + esc(l.folder) + ' · ' + l.files.length + '</button>').join('') + '</div></div>' : '') +
+    '</div>';
+  if (busy) drawGen();
+  dockKeywords();
+}
+function dockKeywords() {
+  const d = $('#dock');
+  if (!S.job) { d.hidden = true; return; }
+  d.hidden = false;
+  d.innerHTML = '<span class="msg">' + (S.stopping ? 'Stopping, the icons already drawn are kept…' : 'Drawing icons…') + '</span><button class="btn primary" id="stopbtn"' + (S.stopping ? ' disabled' : '') + '>' + (S.stopping ? 'Stopping…' : '■ Stop generating') + '</button>';
+}
+async function stopGen() {
+  if (!S.job || S.stopping) return;
+  S.stopping = true; dockKeywords();
+  try { await post('/api/generate/cancel', { id:S.job.id }); } catch (e) { S.stopping = false; dockKeywords(); }
+}
+function drawGen() {
+  const g = $('#gen'); if (!g) return;
+  const job = S.job, cur = job.current, avg = job.avgMs || 60000, now = Date.now();
+  const fmt = ms => { const t = Math.max(1, Math.round(ms / 1000)); return t >= 60 ? Math.floor(t / 60) + ' min ' + (t % 60) + ' s' : t + ' s'; };
+  let msg = '';
+  if (cur) {
+    const el = now - cur.startedAt, est = cur.first ? (job.avgMs || 60000) + 60000 : avg;
+    msg = cur.first
+      ? '<b>Loading the Flux model and drawing the first icon.</b> This one takes a little longer (about ' + fmt(est) + '), the rest are quicker. ' + fmt(el) + ' so far.'
+      : '<b>Drawing ' + esc(cur.keyword) + ' icon ' + cur.n + ' of ' + job.per + '.</b> About ' + fmt(Math.max(0, est - el)) + ' left for this one.';
+  } else if (job.stage) msg = '<b>' + esc(job.stage) + '…</b>';
+  g.innerHTML = (msg ? '<div class="genmsg">' + msg + '</div>' : '') + S.genKws.map(k => {
+    const it = (job.items || []).find(x => x.keyword === k);
+    const n = it ? it.done + it.failed : 0, t = it ? it.total : job.per;
+    const active = cur && cur.keyword === k ? cur : null;
+    const frac = active ? Math.min(0.95, (now - active.startedAt) / (active.first ? (job.avgMs || 60000) + 60000 : avg)) : 0;
+    const pct = Math.round((n + frac) / t * 100);
+    let slots = '';
+    for (let i = 0; i < t; i++) {
+      if (i < (it ? it.done : 0)) slots += '<span class="slot ok" title="Done">✓</span>';
+      else if (i < n) slots += '<span class="slot bad" title="Did not finish">✕</span>';
+      else if (active && i === n) slots += '<span class="slot now" style="--p:' + Math.round(frac * 100) + '" title="Drawing…"><span>' + Math.round(frac * 100) + '%</span></span>';
+      else slots += '<span class="slot" title="Waiting">' + (i + 1) + '</span>';
+    }
+    return '<div class="g"><span>' + esc(k) + '</span><div><div class="bar"><i style="width:' + pct + '%"></i></div><div class="slots">' + slots + '</div></div><span>' + (it ? n + '/' + t : 'waiting') + '</span></div>';
+  }).join('');
+}
+async function startGen() {
+  S.jobErr = ''; S.stopping = false; S.genKws = S.kws.slice();
+  const r = await post('/api/generate', { keywords:S.kws, per:S.per, detail:S.detail, style:S.style });
+  if (r.error) { S.jobErr = r.error; refresh(); viewKeywords(); return; }
+  S.job = { id:r.id, items:[], per:S.per }; viewKeywords();
+  const tick = setInterval(() => { if (S.job) drawGen(); }, 400);
+  const t = setInterval(async () => {
+    const j = await (await fetch('/api/job?id=' + r.id)).json();
+    S.job = j; drawGen();
+    if (j.state === 'running') return;
+    clearInterval(t); clearInterval(tick);
+    await refresh();
+    j.items.forEach(it => {
+      const lib = S.lib.find(l => l.folder.toLowerCase() === it.folder.toLowerCase());
+      if (!lib) return;
+      let set = S.sets.find(s => s.folder === lib.folder);
+      if (!set) { set = { folder:lib.folder, title:it.keyword + (j.style && j.style !== 'line' ? ' (' + STYLES[j.style][0].toLowerCase() + ')' : ''), keyword:it.keyword, files:[], added:[], detail:j.detail, style:j.style }; S.sets.push(set); }
+      set.files = lib.files; set.added = it.files; set.detail = j.detail; set.style = j.style; set.keyword = it.keyword;
+    });
+    S.jobErr = j.error || (j.state === 'stopped' ? 'Stopped. Icons that were already drawn are kept.' : j.items.some(it => it.failed) ? 'Some icons did not finish. Try again, or check the settings.' : '');
+    S.job = null; S.stopping = false;
+    if (S.sets.length && !j.error) go(2); else viewKeywords();
+  }, 1500);
+}
+
+function viewPick() {
+  document.documentElement.style.setProperty('--tile', S.size + 'px');
+  $('#app').innerHTML = '<h1>2. Pick the icons you want</h1><p class="lead">Click icons to select them, then add them to the basket.</p><div class="row" style="margin:-6px 0 6px;color:var(--muted)"><label>Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
+    S.sets.map((set, si) => '<section class="section card"><div class="sh"><h2>' + esc(set.title) + ' <small>' + set.files.length + ' icons' + (set.added && set.added.length ? ', ' + set.added.length + ' new' : '') + (set.detail && set.keyword ? ' · ' + DETAIL[set.detail][0] + ' detail' : '') + '</small></h2><button class="btn small" data-all="' + si + '">Select all</button>' +
+      (set.keyword ? '<button class="btn small" data-more="' + si + '"' + (S.ready ? '' : ' disabled') + '>Make ' + S.per + ' more</button>' : '') + '<button class="btn small" data-hide="' + si + '">Hide</button></div><div class="grid">' +
+      set.files.map(f => { const k = key(set.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(set.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>').join('') +
+    '<div class="row" style="margin-top:16px"><button class="btn" data-go="1">← Add more keywords</button></div>';
+  dockPick();
+}
+function dockPick() {
+  const d = $('#dock'); d.hidden = false; const n = S.sel.size;
+  d.innerHTML = '<span class="msg">' + n + ' selected · ' + S.basket.length + ' in basket</span><button class="btn" id="clr"' + (n ? '' : ' disabled') + '>Clear selection</button><button class="btn primary" id="addb"' + (n ? '' : ' disabled') + '>Add ' + n + ' to basket</button><button class="btn" data-go="3"' + (S.basket.length ? '' : ' disabled') + '>Edit icons →</button>';
+}
+function addToBasket() {
+  S.sets.forEach(set => set.files.forEach(f => { const k = key(set.folder, f); if (S.sel.has(k) && !inBasket(k)) S.basket.push({ key:k, folder:set.folder, file:f, name:f.replace(/\.svg$/i, '').replace(/_/g, '-').toLowerCase(), ed:newEd() }); }));
+  S.sel.clear(); S.result = null; render();
+}
+async function makeMore(si) {
+  const set = S.sets[si]; S.kws = [set.keyword]; S.genKws = [set.keyword]; S.style = set.style || 'line'; S.detail = set.detail || S.detail; S.step = 1; S.jobErr = ''; renderTop(); await startGen();
+}
+
+function viewBasket() {
+  const b = S.basket, s = slug(S.font);
+  $('#app').innerHTML = '<h1>4. Basket and font</h1><p class="lead">Check your selection, rename icons if you like, then create the font.</p>' +
+    '<div class="two"><div class="card"><div class="sh"><h2>Basket <small>' + b.length + ' icons</small></h2><button class="btn small" data-go="2"' + (S.sets.length ? '' : ' disabled') + '>+ Add more</button></div>' +
+    (b.length ? '<div class="grid">' + b.map((x, n) => '<div class="tile" data-ctx="' + esc(x.key) + '"><button class="rm" data-del="' + n + '" aria-label="Remove">×</button>' + icE(x) + '<input type="text" value="' + esc(x.name) + '" data-name="' + n + '" aria-label="Icon name"></div>').join('') + '</div>' : '<div class="empty">Your basket is empty. Pick some icons first.</div>') +
+    '<div class="sample" id="sample">' + b.slice(0, 10).map(x => icE(x)).join('') + (b.length ? '<span style="color:var(--muted)">Live preview at <span id="szv">32</span>px</span>' : '') + '</div>' +
+    '<div class="row" style="margin-top:10px"><label style="color:var(--muted)">Size <input type="range" id="sz" min="16" max="256" step="8" value="32"></label><label style="color:var(--muted)">Colour <input type="color" id="co" value="#1a1d23"></label></div></div>' +
+    '<aside class="side card"><h2 style="margin:0 0 4px;font-size:16px">Font</h2><label for="fname">What do you want to call it?</label><input type="text" id="fname" value="' + esc(S.font) + '">' +
+    '<p style="color:var(--muted);font-size:13px">Classes will look like <code>' + esc(s) + ' ' + esc(s) + '-' + esc(b[0] ? slug(b[0].name) : 'icon') + '</code></p>' +
+    '</aside></div>' +
+    (S.fontErr ? '<div class="err">' + esc(S.fontErr) + '</div>' : '') + (S.result ? doneCard() : '');
+  dockBasket();
+}
+function dockBasket() {
+  const d = $('#dock'), b = S.basket; d.hidden = false;
+  d.innerHTML = '<span class="msg">' + b.length + ' icons in basket</span><button class="btn primary" id="mkfont"' + (b.length && !S.building ? '' : ' disabled') + '>' + (S.building ? 'Creating…' : 'Create font from ' + b.length + ' icons') + '</button>';
+}
+function doneCard() {
+  const r = S.result, s = r.slug;
+  return '<section class="card done" style="margin-top:18px"><h2>✓ Font created</h2><div>' + r.count + ' icons saved to <code>iconfonts\\' + esc(s) + '\\</code></div><div class="files">' + r.files.map(f => '<code>' + esc(f) + '</code>').join('') + '</div>' +
+    '<div class="row"><a class="btn primary" href="' + esc(r.preview) + '" target="_blank" rel="noopener">Open preview.html</a><button class="btn" data-reveal="' + esc(s) + '">Open folder</button><button class="btn" data-new="1">Start a new set</button></div>' +
+    '<pre>&lt;link rel="stylesheet" href="' + esc(s) + '.css"&gt;\n&lt;i class="' + esc(s) + ' ' + esc(s) + '-' + esc(slug(S.basket[0].name)) + '"&gt;&lt;/i&gt;</pre></section>';
+}
+async function buildFont() {
+  S.building = true; S.result = null; S.fontErr = ''; viewBasket();
+  try {
+    const r = await post('/api/font', { name:S.font, icons:S.basket.map(b => ({ folder:b.folder, file:b.file, name:b.name, edit:b.ed })) });
+    if (r.ok) S.result = r; else S.fontErr = (r.error || 'Font creation failed.') + (r.log ? '\n' + r.log : '');
+  } catch (e) { S.fontErr = 'Could not reach the app: ' + e.message; }
+  S.building = false; if (S.step === 4) { viewBasket(); window.scrollTo(0, document.body.scrollHeight); }
+}
+
+const DEF = { fx:1, fy:1, rot:0, s:1, dx:0, dy:0, del:[] };
+const newEd = () => ({ fx:1, fy:1, rot:0, s:1, dx:0, dy:0, del:[] });
+const urlD = x => url(x.folder, x.file) + (x.ed && x.ed.del && x.ed.del.length ? '?del=' + x.ed.del.join(',') : '');
+const PATHS = {};
+const edT = e => 'translate(' + (e.dx / 10.24).toFixed(3) + '%,' + (e.dy / 10.24).toFixed(3) + '%) scale(' + (e.s * e.fx) + ',' + (e.s * e.fy) + ') rotate(' + e.rot + 'deg)';
+const edIsId = e => !e || (e.fx === 1 && e.fy === 1 && e.rot === 0 && e.s === 1 && e.dx === 0 && e.dy === 0 && !(e.del && e.del.length));
+const icE = x => '<span class="fr"><span class="ic" style="--u:url(\'' + urlD(x) + '\'); transform:' + edT(x.ed || DEF) + '"></span></span>';
+const edTf = (e, s, x, y) => { x -= 512; y -= 512; for (let i = 0; i < e.rot / 90; i++) [x, y] = [-y, x]; return [x * s * e.fx + 512, y * s * e.fy + 512]; };
+
+function viewEdit() {
+  const b = S.basket;
+  if (!b.length) { $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><div class="card empty">Your basket is empty. Pick some icons first.</div>'; return; }
+  S.edSel = Math.min(S.edSel, b.length - 1);
+  const x = b[S.edSel], e = x.ed, clean = S.edMode === 'clean';
+  const stage = clean ? '<span class="fr"><div id="cleansvg" style="width:100%;height:100%;transform:' + edT(e) + '"></div></span>'
+    : '<span class="fr"><span class="ic" id="edic" style="--u:url(\'' + urlD(x) + '\'); transform:' + edT(e) + '"></span></span>';
+  const move = '<div class="ctl"><button class="btn small" data-ed="fh">↔ Flip</button><button class="btn small" data-ed="fv">↕ Flip</button><button class="btn small" data-ed="rl">⟲ 90°</button><button class="btn small" data-ed="rr">⟳ 90°</button><button class="btn small" data-ed="fit">Fit to canvas</button><button class="btn small" data-ed="reset">Reset</button></div>' +
+    '<div class="sl"><span>Size</span><input type="range" data-edin="s" min="50" max="200" value="' + Math.round(e.s * 100) + '"><output id="o_s">' + Math.round(e.s * 100) + '%</output></div>' +
+    '<div class="sl"><span>Move left/right</span><input type="range" data-edin="dx" min="-300" max="300" value="' + Math.round(e.dx) + '"><output id="o_dx">' + Math.round(e.dx) + '</output></div>' +
+    '<div class="sl"><span>Move up/down</span><input type="range" data-edin="dy" min="-300" max="300" value="' + Math.round(e.dy) + '"><output id="o_dy">' + Math.round(e.dy) + '</output></div>' +
+    '<div class="ctl"><button class="btn small" data-ed="all">Apply these edits to all ' + b.length + ' icons</button><button class="btn small" data-ed="fitall">Fit all to canvas</button></div>';
+  const tidy = '<p style="color:var(--muted);font-size:14px;margin:12px 0 4px">Click shapes to select them (they turn red), then delete. Deleting is per icon and your original file is untouched.</p><div class="ctl" id="cleaninfo"></div>' +
+    '<div class="ctl"><button class="btn small" data-ed="delsel" id="delsel" disabled>Delete selected</button><button class="btn small" data-ed="undo"' + ((x.hist || []).length ? '' : ' disabled') + '>Undo</button><button class="btn small" data-ed="restore"' + (e.del.length ? '' : ' disabled') + '>Restore all</button><button class="btn small" data-ed="clearsel">Clear selection</button></div>' +
+    '<div class="sl"><span>Speck size</span><input type="range" data-speck="1" min="5" max="150" value="' + S.speck + '"><output id="o_speck">' + S.speck + '</output></div>' +
+    '<div class="ctl"><button class="btn small" data-ed="specks">Select shapes smaller than this</button></div>';
+  $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><p class="lead">Fix direction, size and position, or delete stray shapes, before the font is made. Edits apply to the copies sent to the font. Your original SVG files are never changed.</p>' +
+    '<div class="two" style="grid-template-columns:minmax(0,1fr) 340px"><div class="card"><div class="sh"><h2>' + esc(x.name) + ' <small>' + (S.edSel + 1) + ' of ' + b.length + (e.del.length ? ' · ' + e.del.length + ' shapes deleted' : '') + '</small></h2><span class="seg mode"><button data-ed="mode-move" class="' + (clean ? '' : 'on') + '">Position</button><button data-ed="mode-clean" class="' + (clean ? 'on' : '') + '">Clean up</button></span></div>' +
+    '<div class="canvas">' + stage + '</div>' + (clean ? tidy : move) + '</div>' +
+    '<aside class="card"><h2 style="margin:0 0 10px;font-size:16px">Icons</h2><div class="edgrid">' +
+    b.map((it, i) => '<button class="tile ' + (i === S.edSel ? 'sel' : '') + '" data-edsel="' + i + '" title="' + esc(it.name) + '">' + icE(it) + '</button>').join('') + '</div></aside></div>';
+  dockEdit();
+  if (clean) loadClean();
+}
+function dockEdit() {
+  const d = $('#dock'); d.hidden = false;
+  d.innerHTML = '<span class="msg">' + S.basket.length + ' in basket</span><button class="btn" data-go="2">← Pick more</button><button class="btn primary" data-go="4">Basket &amp; font →</button>';
+}
+async function loadClean() {
+  const x = S.basket[S.edSel], box = $('#cleansvg'); if (!box) return;
+  let paths = PATHS[x.key];
+  if (!paths) {
+    const txt = await (await fetch(url(x.folder, x.file))).text();
+    paths = PATHS[x.key] = [...txt.matchAll(/<path\b([^>]*)>/g)].map(m => ({ d:(m[1].match(/\bd="([^"]*)"/) || [])[1] || '', t:(m[1].match(/transform="([^"]*)"/) || [])[1] || '' }));
+  }
+  if (!$('#cleansvg')) return;
+  const del = new Set(x.ed.del);
+  box.innerHTML = '<svg viewBox="0 0 1024 1024" width="100%" height="100%" fill="currentColor" style="display:block;color:var(--icon)">' +
+    paths.map((p, i) => del.has(i) ? '' : '<path data-i="' + i + '" d="' + p.d + '"' + (p.t ? ' transform="' + p.t + '"' : '') + (S.cleanSel.has(i) ? ' class="s"' : '') + '/>').join('') + '</svg>';
+  cleanInfo();
+}
+function cleanInfo() {
+  const el = $('#cleaninfo'); if (!el) return;
+  const total = document.querySelectorAll('#cleansvg path').length;
+  el.innerHTML = '<span style="color:var(--muted)">' + total + ' shapes · ' + S.cleanSel.size + ' selected</span>';
+  const b = $('#delsel'); if (b) b.disabled = !S.cleanSel.size;
+}
+function edLive() {
+  const x = S.basket[S.edSel], e = x.ed;
+  $('#edic').style.transform = edT(e);
+  $('#o_s').textContent = Math.round(e.s * 100) + '%'; $('#o_dx').textContent = Math.round(e.dx); $('#o_dy').textContent = Math.round(e.dy);
+  const th = document.querySelectorAll('.edgrid .tile')[S.edSel]; if (th) th.querySelector('.ic').style.transform = edT(e);
+  S.result = null;
+}
+async function fitOne(x) {
+  const txt = await (await fetch(urlD(x))).text();
+  const inner = (txt.match(/<svg[^>]*>([\s\S]*)<\/svg>/) || [])[1] || '';
+  const NS = 'http://www.w3.org/2000/svg', sv = document.createElementNS(NS, 'svg'), g = document.createElementNS(NS, 'g');
+  sv.setAttribute('width', 0); sv.setAttribute('height', 0); sv.style.position = 'absolute'; g.innerHTML = inner; sv.appendChild(g); document.body.appendChild(sv);
+  const bb = g.getBBox(); sv.remove();
+  if (!bb.width || !bb.height) return;
+  const e = x.ed, cs = [[bb.x, bb.y], [bb.x + bb.width, bb.y], [bb.x, bb.y + bb.height], [bb.x + bb.width, bb.y + bb.height]].map(p => edTf(e, 1, p[0], p[1]));
+  const xs = cs.map(p => p[0]), ys = cs.map(p => p[1]);
+  const w = Math.max(...xs) - Math.min(...xs), h = Math.max(...ys) - Math.min(...ys), cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2;
+  const s = Math.max(0.5, Math.min(2, 860 / Math.max(w, h)));
+  e.s = +s.toFixed(3); e.dx = Math.round(512 - (512 + s * (cx - 512))); e.dy = Math.round(512 - (512 + s * (cy - 512)));
+}
+async function edAction(a) {
+  const b = S.basket, x = b[S.edSel], e = x.ed; S.result = null;
+  if (a === 'fh') e.fx *= -1; else if (a === 'fv') e.fy *= -1;
+  else if (a === 'rl') e.rot = (e.rot + 270) % 360; else if (a === 'rr') e.rot = (e.rot + 90) % 360;
+  else if (a === 'reset') { const del = e.del; Object.assign(e, newEd()); e.del = del; }
+  else if (a === 'fit') await fitOne(x);
+  else if (a === 'all') b.forEach(it => { const del = it.ed.del; it.ed = Object.assign({}, e, { del:del.slice() }); });
+  else if (a === 'fitall') { for (const it of b) await fitOne(it); }
+  else if (a === 'mode-move') { S.edMode = 'move'; S.cleanSel.clear(); }
+  else if (a === 'mode-clean') { S.edMode = 'clean'; S.cleanSel.clear(); }
+  else if (a === 'clearsel') { S.cleanSel.clear(); document.querySelectorAll('#cleansvg path.s').forEach(p => p.classList.remove('s')); cleanInfo(); return; }
+  else if (a === 'specks') {
+    document.querySelectorAll('#cleansvg path').forEach(p => { const bb = p.getBBox(); if (Math.max(bb.width, bb.height) < S.speck) { S.cleanSel.add(+p.dataset.i); p.classList.add('s'); } });
+    cleanInfo(); return;
+  }
+  else if (a === 'delsel') { if (!S.cleanSel.size) return; (x.hist = x.hist || []).push(e.del.slice()); e.del = [...new Set([...e.del, ...S.cleanSel])].sort((m, n) => m - n); S.cleanSel.clear(); }
+  else if (a === 'undo') { if (x.hist && x.hist.length) e.del = x.hist.pop(); S.cleanSel.clear(); }
+  else if (a === 'restore') { (x.hist = x.hist || []).push(e.del.slice()); e.del = []; S.cleanSel.clear(); }
+  viewEdit();
+}
+document.addEventListener('click', e => {
+  const p = e.target.closest && e.target.closest('#cleansvg path'); if (!p) return;
+  const i = +p.dataset.i; S.cleanSel.has(i) ? S.cleanSel.delete(i) : S.cleanSel.add(i); p.classList.toggle('s', S.cleanSel.has(i)); cleanInfo();
+});
+document.addEventListener('input', e => {
+  const t = e.target; if (t.dataset && t.dataset.speck) { S.speck = +t.value; $('#o_speck').textContent = S.speck; return; }
+  if (!t.dataset || !t.dataset.edin) return;
+  const ed = S.basket[S.edSel].ed, v = +t.value;
+  if (t.dataset.edin === 's') ed.s = v / 100; else ed[t.dataset.edin] = v;
+  edLive();
+});
+
+// right-click an icon: copy its SVG to the clipboard
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
+function closeMenu() { const m = $('#ctxm'); if (m) m.remove(); }
+async function copyText(txt) {
+  try { await navigator.clipboard.writeText(txt); return true; } catch (e) {}
+  const a = document.createElement('textarea'); a.value = txt; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} a.remove(); return ok;
+}
+async function copySvg(folder, file, ed) {
+  closeMenu();
+  try {
+    let txt;
+    if (ed) txt = (await post('/api/bake', { folder, file, edit:ed })).svg;
+    else { txt = await (await fetch(url(folder, file))).text(); txt = txt.slice(txt.indexOf('<svg')); }
+    toast(await copyText(txt) ? 'SVG copied to clipboard' : 'Could not copy');
+  } catch (e) { toast('Could not copy'); }
+}
+function iconAt(el) {
+  const sp = k => { const i = k.indexOf('/'); return { folder:k.slice(0, i), file:k.slice(i + 1) }; };
+  let n;
+  if ((n = el.closest('[data-pick]'))) { const r = sp(n.dataset.pick); r.item = S.basket.find(b => b.key === n.dataset.pick); return r; }
+  if ((n = el.closest('[data-ctx]'))) { const r = sp(n.dataset.ctx); r.item = S.basket.find(b => b.key === n.dataset.ctx); return r; }
+  if ((n = el.closest('[data-edsel]'))) { const it = S.basket[+n.dataset.edsel]; return it && { folder:it.folder, file:it.file, item:it }; }
+  if (el.closest('.canvas')) { const it = S.basket[S.edSel]; return it && { folder:it.folder, file:it.file, item:it }; }
+  return null;
+}
+document.addEventListener('contextmenu', e => {
+  const r = iconAt(e.target); if (!r) return;
+  e.preventDefault(); closeMenu();
+  const m = document.createElement('div'); m.className = 'ctxm'; m.id = 'ctxm';
+  const edited = r.item && !edIsId(r.item.ed);
+  m.innerHTML = '<button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '');
+  m.style.left = Math.min(e.clientX, innerWidth - 220) + 'px'; m.style.top = Math.min(e.clientY, innerHeight - 90) + 'px';
+  m.addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) copySvg(r.folder, r.file, b.dataset.cp === '1' ? r.item.ed : null); });
+  document.body.appendChild(m);
+});
+document.addEventListener('mousedown', e => { if (!e.target.closest('#ctxm')) closeMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+window.addEventListener('scroll', closeMenu, true);
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t || t.disabled) return; const d = t.dataset;
+  if (t.id === 'chip') { go(4); return; }
+  if (d.edsel !== undefined) { S.edSel = +d.edsel; S.cleanSel.clear(); viewEdit(); return; }
+  if (d.ed) { edAction(d.ed); return; }
+  if (d.go) { go(+d.go); return; }
+  if (d.rm !== undefined) { S.kws.splice(+d.rm, 1); viewKeywords(); return; }
+  if (d.per) { S.per = Math.min(24, Math.max(1, S.per + +d.per)); viewKeywords(); return; }
+  if (d.style) { S.style = d.style; viewKeywords(); return; }
+  if (d.detail) { S.detail = +d.detail; viewKeywords(); return; }
+  if (d.uselib) { const l = S.lib.find(x => x.folder === d.uselib); if (l && !S.sets.some(s => s.folder === l.folder)) S.sets.push({ folder:l.folder, title:l.folder, files:l.files }); go(2); return; }
+  if (t.id === 'gobtn') { startGen(); return; }
+  if (t.id === 'stopbtn') { stopGen(); return; }
+  if (d.pick) { S.sel.has(d.pick) ? S.sel.delete(d.pick) : S.sel.add(d.pick); t.classList.toggle('sel'); t.setAttribute('aria-pressed', S.sel.has(d.pick)); dockPick(); return; }
+  if (d.all) { const set = S.sets[+d.all]; set.files.forEach(f => { const k = key(set.folder, f); if (!inBasket(k)) S.sel.add(k); }); viewPick(); return; }
+  if (d.hide) { S.sets.splice(+d.hide, 1); S.sets.length ? viewPick() : go(1); return; }
+  if (d.more) { makeMore(+d.more); return; }
+  if (t.id === 'clr') { S.sel.clear(); viewPick(); return; }
+  if (t.id === 'addb') { addToBasket(); return; }
+  if (d.del !== undefined) { S.basket.splice(+d.del, 1); S.result = null; render(); return; }
+  if (t.id === 'mkfont') { buildFont(); return; }
+  if (d.reveal) { post('/api/reveal', { slug:d.reveal }); return; }
+  if (d.new) { S.basket = []; S.sel.clear(); S.result = null; S.sets = []; S.kws = []; go(1); return; }
+});
+document.addEventListener('submit', e => {
+  if (e.target.id !== 'kwform') return; e.preventDefault();
+  $('#kwin').value.split(',').map(x => x.trim().toLowerCase()).filter(x => x && !S.kws.includes(x)).forEach(x => S.kws.push(x));
+  viewKeywords(); $('#kwin').focus();
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'tsz') { S.size = +t.value; document.documentElement.style.setProperty('--tile', S.size + 'px'); $('#tszv').textContent = S.size + 'px'; }
+  else if (t.id === 'sz') { $('#sample').style.setProperty('--s', t.value + 'px'); $('#szv').textContent = t.value; }
+  else if (t.id === 'co') $('#sample').style.setProperty('--c', t.value);
+  else if (t.id === 'fname') { S.font = t.value; S.result = null; }
+  else if (t.dataset && t.dataset.name !== undefined) { S.basket[+t.dataset.name].name = t.value; S.result = null; }
+});
+const fmtGB = n => (n / 1e9).toFixed(1) + ' GB';
+const fmtDur = t => { t = Math.round(t); if (!(t > 0)) return ''; if (t >= 3600) return Math.floor(t / 3600) + ' h ' + Math.round((t % 3600) / 60) + ' min'; if (t >= 60) return Math.round(t / 60) + ' min'; return t + ' s'; };
+function viewSettings() {
+  const m = S.model, box = $('#modal'); if (!S.settings) { box.hidden = true; return; }
+  const pct = Math.round(m.percent || 0);
+  box.hidden = false;
+  const left = fmtDur(m.eta), speed = m.speed ? (m.speed / 1e6).toFixed(1) + ' MB/s' : '';
+  const lead = m.ready ? 'Flux Schnell is downloaded and the app is pointed at it. You are ready to make icons.'
+    : 'Icon Forge draws icons with the Flux Schnell model, which runs on your own PC. It is one download of about ' + fmtGB(m.size) + ', saved wherever you choose. Check the folder below, then press Download.';
+  box.innerHTML = '<div class="modal" role="dialog" aria-label="Settings"><h2>Settings</h2><p class="lead" style="margin:0">' + lead + '</p>' +
+    '<div class="kv"><span>Model</span><span>' + esc(m.name) + ' (' + fmtGB(m.size) + ')</span>' +
+    '<span>Status</span><span>' + (m.downloading ? 'Downloading… ' + pct + '%' : m.ready ? '<b style="color:var(--ok)">✓ Ready</b>' : 'Not installed') + '</span>' +
+    '<span>' + (m.ready ? 'File' : 'Save to') + '</span><span><code>' + esc(m.ready ? m.path : m.folder) + '</code></span>' +
+    '<span>Library</span><span><code>' + esc(m.library || '') + '</code></span>' +
+    '<span>Theme</span><span><span class="seg"><button data-theme-pick="light" class="' + (S.theme !== 'dark' ? 'on' : '') + '">Light</button><button data-theme-pick="dark" class="' + (S.theme === 'dark' ? 'on' : '') + '">Dark</button></span></span></div>' +
+    (m.downloading ? '<div class="bar big"><i style="width:' + (m.percent || 0).toFixed(1) + '%"></i></div><div class="dlinfo"><b>' + fmtGB(m.got) + ' of ' + fmtGB(m.size) + '</b> · ' + pct + '%' + (speed ? ' · ' + speed : '') + (left ? ' · about ' + left + ' left' : '') + '</div>' : '') +
+    (m.error ? '<div class="err">' + esc(m.error) + '</div>' : '') +
+    '<div class="row" style="margin-top:16px">' +
+    (m.downloading ? '<button class="btn" id="mdlcancel">Cancel download</button>'
+      : m.ready ? '<button class="btn" id="mbrowse">Use a different file…</button>'
+      : '<button class="btn primary" id="mdl">Download Flux Schnell model</button><button class="btn" id="mchoose">Change folder…</button><button class="btn" id="mbrowse">I already have it…</button>') +
+    '<button class="btn" id="mopen">Open icon folder</button><button class="btn" id="mclose" style="margin-left:auto">Close</button></div>' +
+    '<p style="color:var(--muted);font-size:13px;margin:14px 0 0">Flux Schnell is free to use (Apache 2.0). Nothing else is sent anywhere; icons are made on this PC.' + (m.downloading ? ' You can close this window; the download carries on and the bar at the top of the app shows its progress.' : '') + '</p></div>';
+}
+function openSettings(on) { S.settings = on; viewSettings(); if (on) pollModel(); }
+let modelTimer = null;
+function pollModel() {
+  clearInterval(modelTimer);
+  modelTimer = setInterval(async () => { await refresh(); if (S.settings) viewSettings(); if (!S.model.downloading) clearInterval(modelTimer); }, 1000);
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('button, .modalbg'); if (!t) return;
+  if (t.id === 'gear' || t.id === 'comfy') { await refresh(); openSettings(true); return; }
+  if (t.id === 'modal' && e.target === t) { openSettings(false); return; }
+  if (t.id === 'mclose') { openSettings(false); return; }
+  if (t.id === 'mdl') { await post('/api/model/download', {}); await refresh(); viewSettings(); pollModel(); return; }
+  if (t.id === 'mdlcancel') { await post('/api/model/cancel', {}); await refresh(); viewSettings(); return; }
+  if (t.id === 'mchoose') { const r = await post('/api/model/folder', {}); if (r.error) alert(r.error); await refresh(); viewSettings(); return; }
+  if (t.id === 'mbrowse') { const r = await post('/api/model/browse', {}); if (r.error) alert(r.error); await refresh(); viewSettings(); return; }
+  if (t.id === 'mopen') { post('/api/reveal', { slug:'' }); return; }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) openSettings(false); });
+function applyTheme(t) { document.documentElement.dataset.theme = t; S.theme = t; }
+function askTheme() {
+  const box = $('#themeask'); box.hidden = false;
+  box.innerHTML = '<div class="modal" role="dialog" aria-label="Choose a theme"><h2>Choose your look</h2><p class="lead" style="margin:0">Pick light or dark. Icon Forge remembers it, and you can change it later in Settings (the gear).</p>' +
+    '<div class="themes"><button class="themeopt" data-theme-pick="light"><span class="sw light"><i></i><b></b></span>Light</button><button class="themeopt" data-theme-pick="dark"><span class="sw dark"><i></i><b></b></span>Dark</button></div></div>';
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-theme-pick]'); if (!b) return;
+  const t = b.dataset.themePick; applyTheme(t); $('#themeask').hidden = true; $('#themeask').innerHTML = '';
+  await post('/api/theme', { theme:t }); if (S.settings) viewSettings();
+});
+refresh().then(() => { if (S.theme) applyTheme(S.theme); else askTheme(); render(); if (S.model.downloading || !S.model.ready) openSettings(true); });
+</script></body></html>

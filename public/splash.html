@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Icon Forge</title>
+<style>
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; background:transparent; overflow:hidden; font:15px/1.4 system-ui, "Segoe UI", sans-serif; -webkit-user-select:none; user-select:none; }
+.card { height:100%; border-radius:28px; background:linear-gradient(135deg, #4a0d82 0%, #3b2aa8 55%, #2b5fd9 100%); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; animation:rise .5s ease both; }
+.card img { width:132px; height:132px; border-radius:30px; box-shadow:0 12px 32px rgba(0,0,0,.35); animation:pop .6s ease both; }
+h1 { margin:6px 0 0; font-size:32px; font-weight:700; letter-spacing:.04em; }
+p { margin:0; color:rgba(255,255,255,.85); }
+.bar { width:180px; height:4px; border-radius:2px; background:rgba(255,255,255,.25); overflow:hidden; margin-top:10px; }
+.bar i { display:block; height:100%; width:40%; border-radius:2px; background:#fff; animation:slide 1.2s ease-in-out infinite; }
+@keyframes slide { from { transform:translateX(-100%); } to { transform:translateX(450%); } }
+@keyframes pop { from { opacity:0; transform:scale(.85); } }
+@keyframes rise { from { opacity:0; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; } }
+</style></head><body>
+<div class="card">
+  <img src="splash-icon.png" alt="">
+  <h1>Icon Forge</h1>
+  <p>Getting things ready…</p>
+  <div class="bar"><i></i></div>
+</div>
+</body></html>
