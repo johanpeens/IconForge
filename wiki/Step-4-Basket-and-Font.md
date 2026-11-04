@@ -13,7 +13,7 @@ The basket has two tabs: **Icons** and **Preview**.
 | A tile for each icon | Click the **×** or the red **Remove** button to take it out of the basket |
 | A name under each icon | Click it and type a new name |
 | A small **checkbox** on each tile | Tick several, then remove them all at once (see below) |
-| **+ Add more** | Opens the [library](Library) to pick more icons |
+| **+ Add more** | Opens the [library](Library.md) to pick more icons |
 | **Download as zip** | Saves all the icons in a `.zip` (see below) |
 | **Clear basket** | Takes every icon out of the basket. It asks first. The files stay in your library. |
 
@@ -61,7 +61,7 @@ Press **Download as zip**. Windows asks where to save it. The zip is named after
 | 2 | Look at "Classes will look like…". That is how you will use it. |
 | 3 | Press **Create font from N icons** at the bottom. |
 
-It takes a few seconds. **← Back** in the same bar goes back to [Step 3](Step-3-Edit-SVGs).
+It takes a few seconds. **← Back** in the same bar goes back to [Step 3](Step-3-Edit-SVGs.md).
 
 ## When it is done
 
@@ -75,7 +75,7 @@ A green box says **"Font created"**.
 | **Open folder** | Opens the folder with your font files |
 | **Start a new set** | Clears the basket so you can begin again |
 
-The box also shows two lines of code you can copy. See [Use your font](Use-Your-Font).
+The box also shows two lines of code you can copy. See [Use your font](Use-Your-Font.md).
 
 ![The preview page](images/14-font-preview.png)
 

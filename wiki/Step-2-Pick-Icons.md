@@ -25,21 +25,21 @@ Not every icon will be perfect. This step is where you choose the good ones.
 
 | Button | What it does |
 |---|---|
-| **← Back** | Goes back to [Step 1](Step-1-Keywords) |
+| **← Back** | Goes back to [Step 1](Step-1-Keywords.md) |
 | **Clear selection** | Unselects everything |
 | **Remove N from basket** | Shown when some selected icons are already in your basket. It takes them out of the basket. |
-| **Vary this icon…** | Shown when exactly one icon is selected. See [Vary an icon](Vary-an-Icon). |
+| **Vary this icon…** | Shown when exactly one icon is selected. See [Vary an icon](Vary-an-Icon.md). |
 | **Add N to basket** | Puts the selected icons in your basket. Icons already there are not added twice. |
-| **Edit icons →** | Goes to [Step 3](Step-3-Edit-SVGs) |
+| **Edit icons →** | Goes to [Step 3](Step-3-Edit-SVGs.md) |
 
 ## Good to know
 
 - An icon already in your basket shows an **"in basket"** label.
 - The bottom bar shows how many icons you selected and how many are in the basket.
 - You can mix icons from different words in one basket.
-- **Right-click** any icon to copy it, or to vary it. See [Copy an icon](Step-4-Basket-and-Font#copy-a-single-icon).
-- Want icons from an older set? Open the [library](Library) and pick from there.
+- **Right-click** any icon to copy it, or to vary it. See [Copy an icon](Step-4-Basket-and-Font.md#copy-a-single-icon).
+- Want icons from an older set? Open the [library](Library.md) and pick from there.
 
 ## Next
 
-[Step 3: Edit SVGs](Step-3-Edit-SVGs) is optional. You can also jump to [Step 4](Step-4-Basket-and-Font).
+[Step 3: Edit SVGs](Step-3-Edit-SVGs.md) is optional. You can also jump to [Step 4](Step-4-Basket-and-Font.md).

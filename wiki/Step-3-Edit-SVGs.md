@@ -9,7 +9,7 @@ Fix small problems before you make the font. This step is optional.
 - The big box shows the icon you are editing.
 - The small icons on the right are your basket. Click one to edit it.
 - There are two modes: **Position** and **Clean up**.
-- Under the big box, **Vary this icon…** opens [Vary an icon](Vary-an-Icon), and **Remove this icon from the basket** takes it out of the basket.
+- Under the big box, **Vary this icon…** opens [Vary an icon](Vary-an-Icon.md), and **Remove this icon from the basket** takes it out of the basket.
 
 ## Position mode
 

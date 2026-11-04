@@ -53,12 +53,12 @@ Press **Generate** in the bar at the bottom. It says how many icons you will get
 
 ## When it is done
 
-- Icon Forge moves you to [Step 2](Step-2-Pick-Icons).
-- Your icons are saved as SVG files. See [Your files](Your-Files).
+- Icon Forge moves you to [Step 2](Step-2-Pick-Icons.md).
+- Your icons are saved as SVG files. See [Your files](Your-Files.md).
 
 ## Start from icons you already have
 
-Under the settings you may see **"Or start from icons you already have"**. Each tag is a folder of icons from before. Click one to jump straight to [Step 2](Step-2-Pick-Icons).
+Under the settings you may see **"Or start from icons you already have"**. Each tag is a folder of icons from before. Click one to jump straight to [Step 2](Step-2-Pick-Icons.md).
 
 ## Notes
 

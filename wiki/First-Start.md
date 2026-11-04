@@ -6,7 +6,7 @@ The first time you open Icon Forge, it walks you through two quick steps. Only o
 |---|---|---|
 | 0 | A purple welcome screen | Nothing. It closes by itself. |
 | 1 | **Step 1 of 2: Welcome** | Pick Light or Dark. |
-| 2 | **Step 2 of 2: Get the AI model** | Press **Download**. See [Download the model](Download-the-Model). |
+| 2 | **Step 2 of 2: Get the AI model** | Press **Download**. See [Download the model](Download-the-Model.md). |
 
 ## 1. The welcome screen
 
@@ -18,7 +18,7 @@ A purple screen with the Icon Forge icon and name. It shows for about two second
 
 - Pick **Light** or **Dark**.
 - Icon Forge remembers your choice. It will not ask again.
-- You can change it later in [Settings](Settings).
+- You can change it later in [Settings](Settings.md).
 - When you pick, the window goes straight to step 2.
 
 ![Choose your look](images/02-choose-look.png)
@@ -36,7 +36,7 @@ Icon Forge needs the AI model before it can draw. This window tells you what it 
 
 ![Model setup](images/03-model-setup.png)
 
-Go to [Download the model](Download-the-Model) for more detail.
+Go to [Download the model](Download-the-Model.md) for more detail.
 
 ## Dark theme
 

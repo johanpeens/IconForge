@@ -14,7 +14,7 @@ Icon Forge saves five files in a folder named after your font, for example `myic
 | `myicons.ttf` | The font file. For desktop and other apps. |
 | `preview.html` | A page that shows all your icons |
 
-Find the folder with the **Open folder** button. Or look in [Your files](Your-Files).
+Find the folder with the **Open folder** button. Or look in [Your files](Your-Files.md).
 
 ## Use it on a website
 

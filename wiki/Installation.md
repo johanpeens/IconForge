@@ -5,7 +5,7 @@ Installing takes about two minutes.
 ## Before you start
 
 - You need Windows 10 or 11 (64-bit).
-- You need about 20 GB of free disk space. [More details](Home#what-you-need).
+- You need about 20 GB of free disk space. [More details](Home.md#what-you-need).
 - You do not need to install anything else. The installer brings what Icon Forge needs.
 
 ## Install it
@@ -39,7 +39,7 @@ Installing takes about two minutes.
 <img src="images/app-icon.png" alt="The Icon Forge icon" width="96">
 
 - Icon Forge starts with a short purple welcome screen.
-- Next: [First start](First-Start).
+- Next: [First start](First-Start.md).
 
 ![The Icon Forge welcome screen](images/01-splash.png)
 

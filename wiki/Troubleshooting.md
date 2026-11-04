@@ -6,7 +6,7 @@ Find your problem in the table.
 
 | Problem | What to do |
 |---|---|
-| Windows says **"Windows protected your PC"** | Click **More info**, then **Run anyway**. The installer is not signed yet. See [Installation](Installation). |
+| Windows says **"Windows protected your PC"** | Click **More info**, then **Run anyway**. The installer is not signed yet. See [Installation](Installation.md). |
 | It says **"Windows is missing the Microsoft Visual C++ runtime"** | You clicked **No** when the installer asked for permission. Run the installer again and click **Yes**. Or get the runtime free from [Microsoft](https://aka.ms/vs/17/release/vc_redist.x64.exe). |
 | The app does not open a second time | Only one Icon Forge can run at once. Look for the first window. |
 
@@ -14,7 +14,7 @@ Find your problem in the table.
 
 | Problem | What to do |
 |---|---|
-| It says **"Flux model not installed"** | Open Settings (the gear). Download the model or pick one you have. See [Download the model](Download-the-Model). |
+| It says **"Flux model not installed"** | Open Settings (the gear). Download the model or pick one you have. See [Download the model](Download-the-Model.md). |
 | **Not enough free space** | Press **Change folder…** and choose a drive with at least 20 GB free. |
 | The download stopped | Check your internet. Press **Download** again. It carries on from where it stopped. |
 | **"That file is too small"** | You picked the wrong file. You need `flux1-schnell-fp8.safetensors` (17.2 GB). |
@@ -44,8 +44,8 @@ Find your problem in the table.
 | Problem | What to do |
 |---|---|
 | An icon looks strange | The AI makes mistakes. Skip it in step 2, or press **Make 5 more**. |
-| Stray dots on an icon | Use **Clean up** in [Step 3](Step-3-Edit-SVGs). |
-| An icon is off to one side | Use **Fit to canvas** in [Step 3](Step-3-Edit-SVGs). |
+| Stray dots on an icon | Use **Clean up** in [Step 3](Step-3-Edit-SVGs.md). |
+| An icon is off to one side | Use **Fit to canvas** in [Step 3](Step-3-Edit-SVGs.md). |
 
 ## The font
 
@@ -53,7 +53,7 @@ Find your problem in the table.
 |---|---|
 | The icons do not show on my website | Check the path to the `.css` file. Keep the font files in the same folder as the `.css`. |
 | I see a square instead of an icon | The font file did not load. Check that the folder was copied in full. |
-| The class name has changed | Class names come from the font name and icon names. Change them in [Step 4](Step-4-Basket-and-Font). |
+| The class name has changed | Class names come from the font name and icon names. Change them in [Step 4](Step-4-Basket-and-Font.md). |
 
 ## Still stuck?
 

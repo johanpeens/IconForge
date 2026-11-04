@@ -17,7 +17,7 @@ It all happens on your own PC. No account. No cloud.
 2. **Open Icon Forge.** The installer adds anything your PC is missing (Windows asks once, click **Yes**). No Python, no ComfyUI, no setup.
 3. **Press Download** when it asks for the AI model. It is a one-time download (17.2 GB) and the app finds it by itself afterwards.
 
-That is all. You need Windows 10 or 11 (64-bit), a graphics card that supports Vulkan, and about 20 GB of free disk space. See the [first start guide](../../wiki/First-Start) if you want screenshots of each step.
+That is all. You need Windows 10 or 11 (64-bit), a graphics card that supports Vulkan, and about 20 GB of free disk space. See the [first start guide](wiki/First-Start.md) if you want screenshots of each step.
 
 ## Why use it
 
@@ -35,8 +35,8 @@ That is all. You need Windows 10 or 11 (64-bit), a graphics card that supports V
 
 ## Help and guides
 
-Everything is explained in simple words on the **[Wiki](../../wiki)**:
-[Installation](../../wiki/Installation) · [Download the model](../../wiki/Download-the-Model) · [Make icons](../../wiki/Step-1-Keywords) · [Use your font](../../wiki/Use-Your-Font) · [Troubleshooting](../../wiki/Troubleshooting) · [FAQ](../../wiki/FAQ)
+Everything is explained in simple words on the **[Wiki](wiki/Home.md)**:
+[Installation](wiki/Installation.md) · [Download the model](wiki/Download-the-Model.md) · [Make icons](wiki/Step-1-Keywords.md) · [Use your font](wiki/Use-Your-Font.md) · [Troubleshooting](wiki/Troubleshooting.md) · [FAQ](wiki/FAQ.md)
 
 ## For developers
 
@@ -73,4 +73,4 @@ The image engine is not stored in this repository. It is a separate open-source 
 
 Icon Forge is built on other people's open work:
 **FLUX.1 [schnell]** by Black Forest Labs (Apache 2.0), **stable-diffusion.cpp** by leejet and contributors (MIT), **VTracer** by Vision Cortex (MIT), **Electron** (MIT), and the font tools svg2ttf, ttf2woff and wawoff2.
-See [Credits and licences](../../wiki/Credits-and-Licences).
+See [Credits and licences](wiki/Credits-and-Licences.md).

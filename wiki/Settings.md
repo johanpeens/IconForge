@@ -18,7 +18,7 @@ Open Settings with the **gear** at the top right. You can also click the model s
 
 | Button | When you see it | What it does |
 |---|---|---|
-| **Download Flux Schnell model** | Model not installed | Starts the download. See [Download the model](Download-the-Model). |
+| **Download Flux Schnell model** | Model not installed | Starts the download. See [Download the model](Download-the-Model.md). |
 | **Change folder…** | Model not installed | Choose where the model is saved |
 | **I already have it…** | Model not installed | Pick a model file you already have |
 | **Use a different file…** | Model ready | Switch to another copy of the model |

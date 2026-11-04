@@ -6,9 +6,9 @@ When Icon Forge opens, you land on the **Home** screen. It asks: *What would you
 
 | Tile | What it does |
 |---|---|
-| **Make new icons** | Starts the four steps, from [Step 1: Keywords](Step-1-Keywords) |
+| **Make new icons** | Starts the four steps, from [Step 1: Keywords](Step-1-Keywords.md) |
 | **My library** | Opens every icon set you made before |
-| **Vary an icon** | Opens the library so you can pick one icon and change it. See [Vary an icon](Vary-an-Icon). |
+| **Vary an icon** | Opens the library so you can pick one icon and change it. See [Vary an icon](Vary-an-Icon.md). |
 
 If you already have icons in your basket, a strip at the bottom says so. Press **Open basket** to carry on.
 
@@ -48,9 +48,9 @@ Click icons to select them. You can select icons from several sets. Then use the
 | **Clear selection** | Unselects everything |
 | **Remove N from basket** | Shown if some selected icons are already in your basket |
 | **Delete N from library…** | Moves the selected icons to the Recycle Bin |
-| **Vary this icon…** | Shown when exactly one icon is selected. See [Vary an icon](Vary-an-Icon). |
+| **Vary this icon…** | Shown when exactly one icon is selected. See [Vary an icon](Vary-an-Icon.md). |
 | **Add N to basket** | Puts the selected icons in your basket |
-| **Edit icons →** | Goes to [Step 3](Step-3-Edit-SVGs) |
+| **Edit icons →** | Goes to [Step 3](Step-3-Edit-SVGs.md) |
 
 **Right-click** an icon for **Copy SVG**, **Copy as picture (PNG)**, **Vary this icon…** and **Delete from library…**.
 

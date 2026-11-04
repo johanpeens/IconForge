@@ -55,4 +55,4 @@ A thin bar also shows at the very top of the app. You can close the Settings win
 
 ## Next
 
-[Step 1: Keywords](Step-1-Keywords)
+[Step 1: Keywords](Step-1-Keywords.md)

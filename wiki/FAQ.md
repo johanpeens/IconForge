@@ -46,7 +46,7 @@ Yes. In a font, use CSS `color`. For SVG files, edit the fill in any SVG editor.
 The model (Flux Schnell) uses the Apache 2.0 licence, which allows it. AI picture rules differ in each country. If it matters for your work, check the rules where you live.
 
 **Can I use my own SVG files?**
-Yes. Put them in a folder inside `Documents\Icon Forge`. See [Your files](Your-Files). One-colour icons work best.
+Yes. Put them in a folder inside `Documents\Icon Forge`. See [Your files](Your-Files.md). One-colour icons work best.
 
 **Why do some icons look odd?**
 The AI is not perfect. That is why step 2 lets you choose. You can also press **Make 5 more**.
@@ -54,24 +54,24 @@ The AI is not perfect. That is why step 2 lets you choose. You can also press **
 ## About your library
 
 **How do I delete icons or a whole set?**
-Open the [library](Library). Tick icons and press **Delete N from library…**, or press the small bin on a set. Files go to the Windows Recycle Bin, so you can restore them.
+Open the [library](Library.md). Tick icons and press **Delete N from library…**, or press the small bin on a set. Files go to the Windows Recycle Bin, so you can restore them.
 
 **What is the difference between "Remove" and "Delete"?**
 **Remove from basket** only takes an icon out of your basket. The file stays in your library. **Delete from library** moves the file to the Recycle Bin.
 
 **Can I change an icon I already made?**
-Yes. Pick it and use [Vary an icon](Vary-an-Icon). Change the words and the AI draws new versions. Your original is kept.
+Yes. Pick it and use [Vary an icon](Vary-an-Icon.md). Change the words and the AI draws new versions. Your original is kept.
 
 **Is my prompt saved?**
-Yes, inside each new icon's SVG file. It is left out when you copy an icon or download a zip. See [Your files](Your-Files).
+Yes, inside each new icon's SVG file. It is left out when you copy an icon or download a zip. See [Your files](Your-Files.md).
 
 **Can I get all my icons as one file?**
-Yes. In Step 4, press **Download as zip**. See [Step 4](Step-4-Basket-and-Font).
+Yes. In Step 4, press **Download as zip**. See [Step 4](Step-4-Basket-and-Font.md).
 
 ## About the font
 
 **What do I get?**
-`.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page. See [Use your font](Use-Your-Font).
+`.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page. See [Use your font](Use-Your-Font.md).
 
 **Can I have more than one colour in a font icon?**
 No. Font icons are one colour. Use the SVG files if you need more.
