@@ -72,6 +72,21 @@ async function start() {
   closeSplash();
 }
 
+// Electron shows no right-click menu of its own, so text boxes get Cut / Copy / Paste here.
+app.on('web-contents-created', (_e, contents) => {
+  contents.on('context-menu', (_ev, params) => {
+    if (!params.isEditable && !params.selectionText) return;
+    const f = params.editFlags;
+    Menu.buildFromTemplate([
+      { role: 'cut', enabled: f.canCut, visible: params.isEditable },
+      { role: 'copy', enabled: f.canCopy },
+      { role: 'paste', enabled: f.canPaste, visible: params.isEditable },
+      { type: 'separator' },
+      { role: 'selectAll', enabled: f.canSelectAll },
+    ]).popup();
+  });
+});
+
 app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
 app.whenReady().then(start).catch(e => { closeSplash(); dialog.showErrorBox('Icon Forge could not start', String(e && e.stack || e)); app.quit(); });
 app.on('before-quit', () => { if (gen) gen.stopEngine(); });

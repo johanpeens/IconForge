@@ -18,6 +18,7 @@ It all happens on your own PC. No account. No cloud.
 | **Many icons fast** | Type a few words. Get five icons for each one. |
 | **Clean icons** | Every icon is an SVG. It stays sharp at any size. You can change its colour. |
 | **Fix them before you use them** | Flip, turn, resize, move, or delete stray dots. |
+| **Copy with one right-click** | Right-click any icon. Copy its SVG, or a picture (PNG), and paste it anywhere. |
 | **Icon font in one click** | You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page. |
 
 ## How it works

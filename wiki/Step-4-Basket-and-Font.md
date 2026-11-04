@@ -43,11 +43,14 @@ The box also shows two lines of code you can copy. See [Use your font](Use-Your-
 
 ## Copy a single icon
 
-You do not need a font to use an icon. **Right-click** any icon and choose:
+You do not need a font to use an icon. **Right-click** any icon (in step 2, 3 or 4) and choose:
 
-- **Copy SVG** to copy the original
-- **Copy SVG with my edits** to copy the edited version (shown only if you edited it)
+| Choice | What you get on the clipboard | Paste it into |
+|---|---|---|
+| **Copy SVG** | The SVG code of the original icon | A code editor, a website, Figma, Illustrator |
+| **Copy SVG with my edits** | The SVG code with your flips, size and deletions (shown only if you edited the icon) | The same places |
+| **Copy as picture (PNG)** | A 512 px picture on a white background | Word, Slides, email, chat |
 
-Then paste it where you need it.
+A small message says **"copied to clipboard"**. Then press **Ctrl+V** where you want it.
 
 ![Right-click menu](images/15-copy-svg.png)

@@ -20,6 +20,9 @@ Windows 10 and 11 (64-bit) with a graphics card that supports Vulkan. Mac and Li
 **Do I need an NVIDIA card?**
 No. NVIDIA, AMD and Intel cards can work. We tested on an NVIDIA laptop card, so we cannot promise the same speed on others.
 
+**Can I copy and paste in the text boxes?**
+Yes. Right-click in any box for **Cut, Copy, Paste** and **Select all**. Ctrl+C and Ctrl+V work too.
+
 ## About the speed
 
 **How long does one icon take?**

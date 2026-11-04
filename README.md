@@ -15,6 +15,7 @@ It all happens on your own PC. No account. No cloud.
 - **One installer.** No Python, no ComfyUI.
 - **Clean SVG icons.** Sharp at any size. You can change the colour.
 - **Fix them before you use them.** Flip, turn, resize, move, delete stray dots.
+- **Copy with one right-click.** Copy any icon as SVG or as a picture, then paste it anywhere.
 - **Icon font in one click.** `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page.
 
 ## Get it

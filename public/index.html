@@ -299,7 +299,7 @@ async function startGen() {
 
 function viewPick() {
   document.documentElement.style.setProperty('--tile', S.size + 'px');
-  $('#app').innerHTML = '<h1>2. Pick the icons you want</h1><p class="lead">Click icons to select them, then add them to the basket.</p><div class="row" style="margin:-6px 0 6px;color:var(--muted)"><label>Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
+  $('#app').innerHTML = '<h1>2. Pick the icons you want</h1><p class="lead">Click icons to select them, then add them to the basket. <b>Tip:</b> right-click any icon to copy its SVG or a picture of it.</p><div class="row" style="margin:-6px 0 6px;color:var(--muted)"><label>Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
     S.sets.map((set, si) => '<section class="section card"><div class="sh"><h2>' + esc(set.title) + ' <small>' + set.files.length + ' icons' + (set.added && set.added.length ? ', ' + set.added.length + ' new' : '') + (set.detail && set.keyword ? ' · ' + DETAIL[set.detail][0] + ' detail' : '') + '</small></h2><button class="btn small" data-all="' + si + '">Select all</button>' +
       (set.keyword ? '<button class="btn small" data-more="' + si + '"' + (S.ready ? '' : ' disabled') + '>Make ' + S.per + ' more</button>' : '') + '<button class="btn small" data-hide="' + si + '">Hide</button></div><div class="grid">' +
       set.files.map(f => { const k = key(set.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(set.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>').join('') +
@@ -320,7 +320,7 @@ async function makeMore(si) {
 
 function viewBasket() {
   const b = S.basket, s = slug(S.font);
-  $('#app').innerHTML = '<h1>4. Basket and font</h1><p class="lead">Check your selection, rename icons if you like, then create the font.</p>' +
+  $('#app').innerHTML = '<h1>4. Basket and font</h1><p class="lead">Check your selection, rename icons if you like, then create the font. <b>Tip:</b> right-click any icon to copy it.</p>' +
     '<div class="two"><div class="card"><div class="sh"><h2>Basket <small>' + b.length + ' icons</small></h2><button class="btn small" data-go="2"' + (S.sets.length ? '' : ' disabled') + '>+ Add more</button></div>' +
     (b.length ? '<div class="grid">' + b.map((x, n) => '<div class="tile" data-ctx="' + esc(x.key) + '"><button class="rm" data-del="' + n + '" aria-label="Remove">×</button>' + icE(x) + '<input type="text" value="' + esc(x.name) + '" data-name="' + n + '" aria-label="Icon name"></div>').join('') + '</div>' : '<div class="empty">Your basket is empty. Pick some icons first.</div>') +
     '<div class="sample" id="sample">' + b.slice(0, 10).map(x => icE(x)).join('') + (b.length ? '<span style="color:var(--muted)">Live preview at <span id="szv">32</span>px</span>' : '') + '</div>' +
@@ -466,14 +466,29 @@ async function copyText(txt) {
   const a = document.createElement('textarea'); a.value = txt; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select();
   let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} a.remove(); return ok;
 }
+async function svgText(folder, file, ed) {
+  if (ed) return (await post('/api/bake', { folder, file, edit:ed })).svg;
+  const txt = await (await fetch(url(folder, file))).text();
+  return txt.slice(txt.indexOf('<svg'));
+}
 async function copySvg(folder, file, ed) {
   closeMenu();
+  try { toast(await copyText(await svgText(folder, file, ed)) ? 'SVG copied to clipboard' : 'Could not copy'); }
+  catch (e) { toast('Could not copy'); }
+}
+// A 512 px picture on white, so it pastes cleanly into documents, chats and slides.
+async function copyPng(folder, file, ed) {
+  closeMenu();
   try {
-    let txt;
-    if (ed) txt = (await post('/api/bake', { folder, file, edit:ed })).svg;
-    else { txt = await (await fetch(url(folder, file))).text(); txt = txt.slice(txt.indexOf('<svg')); }
-    toast(await copyText(txt) ? 'SVG copied to clipboard' : 'Could not copy');
-  } catch (e) { toast('Could not copy'); }
+    const img = new Image();
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(await svgText(folder, file, ed));
+    await img.decode();
+    const c = document.createElement('canvas'); c.width = c.height = 512;
+    const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, 512, 512); g.drawImage(img, 0, 0, 512, 512);
+    const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png':blob })]);
+    toast('Picture copied to clipboard');
+  } catch (e) { toast('Could not copy the picture'); }
 }
 function iconAt(el) {
   const sp = k => { const i = k.indexOf('/'); return { folder:k.slice(0, i), file:k.slice(i + 1) }; };
@@ -489,9 +504,13 @@ document.addEventListener('contextmenu', e => {
   e.preventDefault(); closeMenu();
   const m = document.createElement('div'); m.className = 'ctxm'; m.id = 'ctxm';
   const edited = r.item && !edIsId(r.item.ed);
-  m.innerHTML = '<button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '');
-  m.style.left = Math.min(e.clientX, innerWidth - 220) + 'px'; m.style.top = Math.min(e.clientY, innerHeight - 90) + 'px';
-  m.addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) copySvg(r.folder, r.file, b.dataset.cp === '1' ? r.item.ed : null); });
+  m.innerHTML = '<button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '') + '<button data-cp="2">Copy as picture (PNG)</button>';
+  m.style.left = Math.min(e.clientX, innerWidth - 240) + 'px'; m.style.top = Math.min(e.clientY, innerHeight - 140) + 'px';
+  m.addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.cp === '2') copyPng(r.folder, r.file, edited ? r.item.ed : null);
+    else copySvg(r.folder, r.file, b.dataset.cp === '1' ? r.item.ed : null);
+  });
   document.body.appendChild(m);
 });
 document.addEventListener('mousedown', e => { if (!e.target.closest('#ctxm')) closeMenu(); });

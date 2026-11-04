@@ -28,7 +28,7 @@ Not every icon will be perfect. This step is where you choose the good ones.
 - An icon already in your basket shows an **"in basket"** label.
 - The bottom bar shows how many icons you selected and how many are in the basket.
 - You can mix icons from different words in one basket.
-- **Right-click** any icon and choose **Copy SVG**. You can then paste it into your own project.
+- **Right-click** any icon to copy it. See [Copy an icon](Step-4-Basket-and-Font#copy-a-single-icon).
 
 ## Next
 
