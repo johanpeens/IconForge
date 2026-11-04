@@ -20,10 +20,14 @@ It all happens on your own PC. No account. No cloud.
 | **Fix them before you use them** | Flip, turn, resize, move, or delete stray dots. |
 | **Copy with one right-click** | Right-click any icon. Copy its SVG, or a picture (PNG), and paste it anywhere. |
 | **Icon font in one click** | You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page. |
+| **Keep every set** | Your [library](Library) holds every icon set you made. Search it, reuse icons, or delete what you do not need. |
+| **Vary an icon** | Pick an icon, change the words, and the AI draws new versions of it. See [Vary an icon](Vary-an-Icon). |
+| **Preview on dark** | Check your icons on a white, dark or any colour background, at any size up to 512 px. |
+| **Download as zip** | Save your icons as one `.zip` of SVG files, with your edits applied. |
 
 ## How it works
 
-There are four steps. The top of the app shows them.
+When the app opens you see the [Home screen](Library): make new icons, open your library, or vary an icon. Making new icons takes four steps. The top of the app shows them.
 
 | Step | What you do | What you get |
 |---|---|---|

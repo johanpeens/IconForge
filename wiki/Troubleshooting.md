@@ -30,6 +30,15 @@ Find your problem in the table.
 | **"The image engine stopped"** | The picture engine crashed. This is usually a graphics driver problem. Update the driver and try again. |
 | It is very slow | A weaker graphics card is slower. Try **Simple** detail. Draw fewer icons at once. |
 
+## Vary an icon
+
+| Problem | What to do |
+|---|---|
+| **Make N versions** is greyed out | The AI model is not installed, or the **What should it show?** box is empty. |
+| It says **"No recipe was saved"** | The icon is from before recipes were saved. The words are a guess from the set name. Correct them. |
+| The new versions look almost the same | You chose **This picture** with a low percent. Raise **How much to change**, or change the words. |
+| The versions look nothing like the original | Lower the percent, or choose **The words** and keep the first version close to the original. |
+
 ## The icons
 
 | Problem | What to do |

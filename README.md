@@ -11,7 +11,7 @@ It all happens on your own PC. No account. No cloud.
 
 ## Get it (nothing else to install)
 
-**[Download Icon Forge for Windows](https://github.com/johanpeens/IconForge/releases/download/v1.0.1/Icon-Forge-Setup-1.0.1.exe)** (170 MB)
+**[Download Icon Forge for Windows](https://github.com/johanpeens/IconForge/releases/latest/download/Icon-Forge-Setup.exe)** (170 MB)
 
 1. **Run the file you downloaded.** If Windows says "Windows protected your PC", click **More info**, then **Run anyway**. (The installer is not signed yet, so Windows warns about every new app.)
 2. **Open Icon Forge.** The installer adds anything your PC is missing (Windows asks once, click **Yes**). No Python, no ComfyUI, no setup.
@@ -28,6 +28,9 @@ That is all. You need Windows 10 or 11 (64-bit), a graphics card that supports V
 - **Clean SVG icons.** Sharp at any size. You can change the colour.
 - **Fix them before you use them.** Flip, turn, resize, move, delete stray dots.
 - **Copy with one right-click.** Copy any icon as SVG or as a picture, then paste it anywhere.
+- **Keep and reuse your icons.** A library of every set you made. Search it, reuse icons, delete what you do not need (it goes to the Recycle Bin).
+- **Vary an icon.** Pick an icon, change the words, and the AI draws new versions of it. Your prompt is saved inside each icon.
+- **Preview on dark.** Check your icons on any background colour, at any size up to 512 px, then download them all as a zip.
 - **Icon font in one click.** Best way to use your icons on a website or in an app: one small file, any size, any colour. You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page.
 
 ## Help and guides

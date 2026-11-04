@@ -20,7 +20,16 @@ Not every icon will be perfect. This step is where you choose the good ones.
 | **Make 5 more** | Draws more icons for the same word (needs the model ready) |
 | **Hide** | Hides that set from this page. Your files stay safe. |
 | **Icon size** slider | Makes the icons bigger or smaller on screen. It does not change the icons. |
+
+## The bar at the bottom
+
+| Button | What it does |
+|---|---|
+| **← Back** | Goes back to [Step 1](Step-1-Keywords) |
 | **Clear selection** | Unselects everything |
+| **Remove N from basket** | Shown when some selected icons are already in your basket. It takes them out of the basket. |
+| **Vary this icon…** | Shown when exactly one icon is selected. See [Vary an icon](Vary-an-Icon). |
+| **Add N to basket** | Puts the selected icons in your basket. Icons already there are not added twice. |
 | **Edit icons →** | Goes to [Step 3](Step-3-Edit-SVGs) |
 
 ## Good to know
@@ -28,7 +37,8 @@ Not every icon will be perfect. This step is where you choose the good ones.
 - An icon already in your basket shows an **"in basket"** label.
 - The bottom bar shows how many icons you selected and how many are in the basket.
 - You can mix icons from different words in one basket.
-- **Right-click** any icon to copy it. See [Copy an icon](Step-4-Basket-and-Font#copy-a-single-icon).
+- **Right-click** any icon to copy it, or to vary it. See [Copy an icon](Step-4-Basket-and-Font#copy-a-single-icon).
+- Want icons from an older set? Open the [library](Library) and pick from there.
 
 ## Next
 

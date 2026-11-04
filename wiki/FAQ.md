@@ -51,6 +51,23 @@ Yes. Put them in a folder inside `Documents\Icon Forge`. See [Your files](Your-F
 **Why do some icons look odd?**
 The AI is not perfect. That is why step 2 lets you choose. You can also press **Make 5 more**.
 
+## About your library
+
+**How do I delete icons or a whole set?**
+Open the [library](Library). Tick icons and press **Delete N from library…**, or press the small bin on a set. Files go to the Windows Recycle Bin, so you can restore them.
+
+**What is the difference between "Remove" and "Delete"?**
+**Remove from basket** only takes an icon out of your basket. The file stays in your library. **Delete from library** moves the file to the Recycle Bin.
+
+**Can I change an icon I already made?**
+Yes. Pick it and use [Vary an icon](Vary-an-Icon). Change the words and the AI draws new versions. Your original is kept.
+
+**Is my prompt saved?**
+Yes, inside each new icon's SVG file. It is left out when you copy an icon or download a zip. See [Your files](Your-Files).
+
+**Can I get all my icons as one file?**
+Yes. In Step 4, press **Download as zip**. See [Step 4](Step-4-Basket-and-Font).
+
 ## About the font
 
 **What do I get?**

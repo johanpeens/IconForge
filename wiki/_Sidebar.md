@@ -14,6 +14,10 @@
 - [4. Basket and font](Step-4-Basket-and-Font)
 - [Use your font](Use-Your-Font)
 
+**Your icons**
+- [Home and library](Library)
+- [Vary an icon](Vary-an-Icon)
+
 **More**
 - [Settings](Settings)
 - [Your files](Your-Files)

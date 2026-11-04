@@ -29,7 +29,7 @@ Under the settings you see how many icons you will get and about how long it tak
 
 ## Press Generate
 
-Press the big **Generate** button. Now Icon Forge draws.
+Press **Generate** in the bar at the bottom. It says how many icons you will get. **← Back** next to it goes back to Home. Now Icon Forge draws.
 
 | What you see | What it means |
 |---|---|
@@ -58,7 +58,7 @@ Press the big **Generate** button. Now Icon Forge draws.
 
 ## Start from icons you already have
 
-Under the Generate button you may see **"Or start from icons you already have"**. Each tag is a folder of icons from before. Click one to jump straight to [Step 2](Step-2-Pick-Icons).
+Under the settings you may see **"Or start from icons you already have"**. Each tag is a folder of icons from before. Click one to jump straight to [Step 2](Step-2-Pick-Icons).
 
 ## Notes
 
