@@ -1,12 +1,12 @@
 # First start
 
-The first time you open Icon Forge, three things happen.
+The first time you open Icon Forge, it walks you through two quick steps. Only one window is open at a time.
 
 | Order | What you see | What you do |
 |---|---|---|
-| 1 | A purple welcome screen | Nothing. It closes by itself. |
-| 2 | **Choose your look** | Pick Light or Dark. |
-| 3 | **Settings** with the model | [Download the model](Download-the-Model). |
+| 0 | A purple welcome screen | Nothing. It closes by itself. |
+| 1 | **Step 1 of 2: Welcome** | Pick Light or Dark. |
+| 2 | **Step 2 of 2: Get the AI model** | Press **Download**. See [Download the model](Download-the-Model). |
 
 ## 1. The welcome screen
 
@@ -14,21 +14,28 @@ A purple screen with the Icon Forge icon and name. It shows for about two second
 
 ![Welcome screen](images/01-splash.png)
 
-## 2. Choose your look
+## Step 1 of 2: Choose your look
 
 - Pick **Light** or **Dark**.
 - Icon Forge remembers your choice. It will not ask again.
 - You can change it later in [Settings](Settings).
+- When you pick, the window goes straight to step 2.
 
 ![Choose your look](images/02-choose-look.png)
 
-## 3. Set up the model
+## Step 2 of 2: Get the AI model
 
-Icon Forge needs the AI model before it can draw. The Settings window opens by itself until the model is ready.
+Icon Forge needs the AI model before it can draw. This window tells you what it is and how big it is (17.2 GB).
+
+- Press **Download Flux Schnell model** to download it. The bar shows the speed and the time left.
+- Press **Change folder…** first if your drive is short on space.
+- Press **I already have it…** if you have the file already.
+- When it is done, press **Start making icons**.
+- Press **Not now** to skip. The window comes back next time you open the app, until the model is ready.
 
 ![Model setup](images/03-model-setup.png)
 
-Go to [Download the model](Download-the-Model) for the next step.
+Go to [Download the model](Download-the-Model) for more detail.
 
 ## Dark theme
 

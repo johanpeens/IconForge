@@ -129,6 +129,10 @@ a.btn { text-decoration:none; display:inline-block; color:inherit; }
 .modalbg[hidden] { display:none; }
 .modal { width:min(560px,100%); max-height:90vh; overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
 .modal h2 { margin:0 0 4px; font-size:18px; }
+.steps { display:flex; align-items:center; gap:6px; margin-bottom:12px; color:var(--muted); font-size:13px; }
+.steps i { width:30px; height:5px; border-radius:3px; background:var(--line); }
+.steps i.on { background:var(--accent); }
+.steps span { margin-left:6px; }
 .modal .kv { display:grid; grid-template-columns:110px 1fr; gap:6px 12px; margin:14px 0; font-size:14px; }
 .modal .kv span:nth-child(odd) { color:var(--muted); }
 .modal code { word-break:break-all; }
@@ -561,24 +565,32 @@ function viewSettings() {
   const pct = Math.round(m.percent || 0);
   box.hidden = false;
   const left = fmtDur(m.eta), speed = m.speed ? (m.speed / 1e6).toFixed(1) + ' MB/s' : '';
+  const w = S.welcome === 'model';
   const lead = m.ready ? 'Flux Schnell is downloaded and the app is pointed at it. You are ready to make icons.'
+    : w ? 'Icon Forge draws your icons with an AI model called Flux Schnell. It runs on your own PC, so you download it once (about ' + fmtGB(m.size) + '). Check the folder below, then press Download. If your drive is short on space, press Change folder first.'
     : 'Icon Forge draws icons with the Flux Schnell model, which runs on your own PC. It is one download of about ' + fmtGB(m.size) + ', saved wherever you choose. Check the folder below, then press Download.';
-  box.innerHTML = '<div class="modal" role="dialog" aria-label="Settings"><h2>Settings</h2><p class="lead" style="margin:0">' + lead + '</p>' +
+  box.innerHTML = '<div class="modal" role="dialog" aria-label="' + (w ? 'Get the AI model' : 'Settings') + '">' + (w ? stepsHtml(2) : '') + '<h2>' + (w ? 'Get the AI model' : 'Settings') + '</h2><p class="lead" style="margin:0">' + lead + '</p>' +
     '<div class="kv"><span>Model</span><span>' + esc(m.name) + ' (' + fmtGB(m.size) + ')</span>' +
     '<span>Status</span><span>' + (m.downloading ? 'Downloading… ' + pct + '%' : m.ready ? '<b style="color:var(--ok)">✓ Ready</b>' : 'Not installed') + '</span>' +
     '<span>' + (m.ready ? 'File' : 'Save to') + '</span><span><code>' + esc(m.ready ? m.path : m.folder) + '</code></span>' +
-    '<span>Library</span><span><code>' + esc(m.library || '') + '</code></span>' +
-    '<span>Theme</span><span><span class="seg"><button data-theme-pick="light" class="' + (S.theme !== 'dark' ? 'on' : '') + '">Light</button><button data-theme-pick="dark" class="' + (S.theme === 'dark' ? 'on' : '') + '">Dark</button></span></span></div>' +
+    (w ? '' : '<span>Library</span><span><code>' + esc(m.library || '') + '</code></span>' +
+    '<span>Theme</span><span><span class="seg"><button data-theme-pick="light" class="' + (S.theme !== 'dark' ? 'on' : '') + '">Light</button><button data-theme-pick="dark" class="' + (S.theme === 'dark' ? 'on' : '') + '">Dark</button></span></span>') + '</div>' +
     (m.downloading ? '<div class="bar big"><i style="width:' + (m.percent || 0).toFixed(1) + '%"></i></div><div class="dlinfo"><b>' + fmtGB(m.got) + ' of ' + fmtGB(m.size) + '</b> · ' + pct + '%' + (speed ? ' · ' + speed : '') + (left ? ' · about ' + left + ' left' : '') + '</div>' : '') +
     (m.error ? '<div class="err">' + esc(m.error) + '</div>' : '') +
     '<div class="row" style="margin-top:16px">' +
     (m.downloading ? '<button class="btn" id="mdlcancel">Cancel download</button>'
-      : m.ready ? '<button class="btn" id="mbrowse">Use a different file…</button>'
+      : m.ready ? (w ? '<button class="btn primary" id="mclose">Start making icons</button>' : '<button class="btn" id="mbrowse">Use a different file…</button>')
       : '<button class="btn primary" id="mdl">Download Flux Schnell model</button><button class="btn" id="mchoose">Change folder…</button><button class="btn" id="mbrowse">I already have it…</button>') +
-    '<button class="btn" id="mopen">Open icon folder</button><button class="btn" id="mclose" style="margin-left:auto">Close</button></div>' +
+    (w ? '' : '<button class="btn" id="mopen">Open icon folder</button>') + (w && m.ready ? '' : '<button class="btn" id="mclose" style="margin-left:auto">' + (w && !m.downloading ? 'Not now' : 'Close') + '</button>') + '</div>' +
     '<p style="color:var(--muted);font-size:13px;margin:14px 0 0">Flux Schnell is free to use (Apache 2.0). Nothing else is sent anywhere; icons are made on this PC.' + (m.downloading ? ' You can close this window; the download carries on and the bar at the top of the app shows its progress.' : '') + '</p></div>';
 }
-function openSettings(on) { S.settings = on; viewSettings(); if (on) pollModel(); }
+// Only one dialog is ever open: showing one closes the other.
+function openSettings(on) {
+  S.settings = on; if (!on) S.welcome = null;
+  if (on) { const t = $('#themeask'); t.hidden = true; t.innerHTML = ''; }
+  viewSettings(); if (on) pollModel();
+}
+const stepsHtml = n => '<div class="steps"><i class="on"></i><i' + (n === 2 ? ' class="on"' : '') + '></i><span>Step ' + n + ' of 2</span></div>';
 let modelTimer = null;
 function pollModel() {
   clearInterval(modelTimer);
@@ -598,14 +610,23 @@ document.addEventListener('click', async e => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) openSettings(false); });
 function applyTheme(t) { document.documentElement.dataset.theme = t; S.theme = t; }
 function askTheme() {
+  S.settings = false; viewSettings();
   const box = $('#themeask'); box.hidden = false;
-  box.innerHTML = '<div class="modal" role="dialog" aria-label="Choose a theme"><h2>Choose your look</h2><p class="lead" style="margin:0">Pick light or dark. Icon Forge remembers it, and you can change it later in Settings (the gear).</p>' +
+  box.innerHTML = '<div class="modal" role="dialog" aria-label="Choose a theme">' + stepsHtml(1) + '<h2>Welcome to Icon Forge</h2><p class="lead" style="margin:0">Let us get you set up in two quick steps. First, choose how the app looks: light or dark. Icon Forge remembers it, and you can change it later in Settings (the gear).</p>' +
     '<div class="themes"><button class="themeopt" data-theme-pick="light"><span class="sw light"><i></i><b></b></span>Light</button><button class="themeopt" data-theme-pick="dark"><span class="sw dark"><i></i><b></b></span>Dark</button></div></div>';
 }
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-theme-pick]'); if (!b) return;
   const t = b.dataset.themePick; applyTheme(t); $('#themeask').hidden = true; $('#themeask').innerHTML = '';
-  await post('/api/theme', { theme:t }); if (S.settings) viewSettings();
+  await post('/api/theme', { theme:t });
+  if (S.welcome === 'theme') { await refresh(); if (S.model.ready && !S.model.downloading) { S.welcome = null; return; } S.welcome = 'model'; openSettings(true); return; }
+  if (S.settings) viewSettings();
 });
-refresh().then(() => { if (S.theme) applyTheme(S.theme); else askTheme(); render(); if (S.model.downloading || !S.model.ready) openSettings(true); });
+// First start: step 1 = look (light or dark), step 2 = get the AI model. Later starts only show step 2 if the model is missing.
+refresh().then(() => {
+  if (S.theme) applyTheme(S.theme);
+  render();
+  if (!S.theme) { S.welcome = 'theme'; askTheme(); }
+  else if (S.model.downloading || !S.model.ready) { S.welcome = 'model'; openSettings(true); }
+});
 </script></body></html>
