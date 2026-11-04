@@ -5,6 +5,8 @@
 **Type a word. Get a set of icons. Turn them into an icon font.**
 It all happens on your own PC. No account. No cloud.
 
+**Built with:** Electron and Node.js, with the Flux Schnell image model running locally through stable-diffusion.cpp (Vulkan) and VTracer to turn pictures into SVG.
+
 ![Icon Forge picking icons](wiki/images/09-pick-icons.png)
 
 ## Why use it
