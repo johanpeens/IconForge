@@ -9,6 +9,16 @@ It all happens on your own PC. No account. No cloud.
 
 ![Icon Forge picking icons](wiki/images/09-pick-icons.png)
 
+## Get it (nothing else to install)
+
+**[Download Icon Forge for Windows](https://github.com/johanpeens/IconForge/releases/download/v1.0.0/Icon-Forge-Setup-1.0.0.exe)** (144 MB)
+
+1. **Run the file you downloaded.** If Windows says "Windows protected your PC", click **More info**, then **Run anyway**. (The installer is not signed yet, so Windows warns about every new app.)
+2. **Open Icon Forge.** It has everything inside it. No Python, no ComfyUI, no setup.
+3. **Press Download** when it asks for the AI model. It is a one-time download (17.2 GB) and the app finds it by itself afterwards.
+
+That is all. You need Windows 10 or 11 (64-bit), a graphics card that supports Vulkan, and about 20 GB of free disk space. See the [first start guide](../../wiki/First-Start) if you want screenshots of each step.
+
 ## Why use it
 
 - **Free.** No subscription, no credits, no sign-up.
@@ -18,22 +28,17 @@ It all happens on your own PC. No account. No cloud.
 - **Clean SVG icons.** Sharp at any size. You can change the colour.
 - **Fix them before you use them.** Flip, turn, resize, move, delete stray dots.
 - **Copy with one right-click.** Copy any icon as SVG or as a picture, then paste it anywhere.
-- **Icon font in one click.** `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page.
-
-## Get it
-
-1. Download **Icon Forge Setup** from the [Releases](../../releases) page.
-2. Run it. If Windows says "Windows protected your PC", click **More info**, then **Run anyway**. (The installer is not signed yet.)
-3. Follow the [first start guide](../../wiki/First-Start). You download the AI model once (17.2 GB).
-
-You need Windows 10 or 11 (64-bit), a graphics card that supports Vulkan, and about 20 GB of free disk space.
+- **Icon font in one click.** Best way to use your icons on a website or in an app: one small file, any size, any colour. You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page.
 
 ## Help and guides
 
 Everything is explained in simple words on the **[Wiki](../../wiki)**:
 [Installation](../../wiki/Installation) · [Download the model](../../wiki/Download-the-Model) · [Make icons](../../wiki/Step-1-Keywords) · [Use your font](../../wiki/Use-Your-Font) · [Troubleshooting](../../wiki/Troubleshooting) · [FAQ](../../wiki/FAQ)
 
-## Build it yourself
+## For developers
+
+<details>
+<summary><strong>Build it yourself</strong> (you do not need this to use the app)</summary>
 
 You need [Node.js](https://nodejs.org/) (version 24 was used) and Windows.
 
@@ -58,6 +63,8 @@ The image engine is not stored in this repository. It is a separate open-source 
 | `fontmaker.js` | Builds the icon font files |
 | `public/` | The screens you see |
 | `wiki/` | The pages of the project wiki |
+
+</details>
 
 ## Credits
 
