@@ -7,6 +7,7 @@ Find your problem in the table.
 | Problem | What to do |
 |---|---|
 | Windows says **"Windows protected your PC"** | Click **More info**, then **Run anyway**. The installer is not signed yet. See [Installation](Installation). |
+| It says **"Windows is missing the Microsoft Visual C++ runtime"** | You clicked **No** when the installer asked for permission. Run the installer again and click **Yes**. Or get the runtime free from [Microsoft](https://aka.ms/vs/17/release/vc_redist.x64.exe). |
 | The app does not open a second time | Only one Icon Forge can run at once. Look for the first window. |
 
 ## The model

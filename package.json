@@ -1,7 +1,7 @@
 {
   "name": "icon-forge",
   "productName": "Icon Forge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Make icon sets and icon fonts from a keyword. Flux Schnell runs on your own PC.",
   "author": "Johan Peens",
   "main": "main.js",
@@ -11,7 +11,8 @@
     "dist": "electron-builder --win nsis",
     "engine": "node scripts/fetch-engine.js",
     "prestart": "node scripts/fetch-engine.js",
-    "predist": "node scripts/fetch-engine.js"
+    "prereq": "node scripts/fetch-prereq.js",
+    "predist": "node scripts/fetch-engine.js && node scripts/fetch-prereq.js"
   },
   "build": {
     "appId": "com.johanpeens.iconforge",
@@ -49,6 +50,7 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "perMachine": false,
+      "include": "build/installer.nsh",
       "shortcutName": "Icon Forge"
     }
   },

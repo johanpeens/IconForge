@@ -90,6 +90,8 @@ function createEngine(engineDir) {
       if (onStage) onStage('Starting the image engine');
       const t0 = Date.now();
       while (Date.now() - t0 < 15 * 60 * 1000) {
+        // 0xC0000135 / 0xC0000139: Windows could not load a DLL the engine needs (the Microsoft Visual C++ runtime).
+        if (exited === 3221225781 || exited === 3221225785) throw new Error('Windows is missing the Microsoft Visual C++ runtime that the image engine needs. The Icon Forge installer adds it; run the installer again, or get it free from https://aka.ms/vs/17/release/vc_redist.x64.exe');
         if (exited !== null) throw new Error('The image engine stopped (code ' + exited + ').\n' + log.slice(-1500));
         if (await up()) { loadedModel = model; return; }
         await new Promise(r => setTimeout(r, 1500));

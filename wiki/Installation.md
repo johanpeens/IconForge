@@ -6,16 +6,25 @@ Installing takes about two minutes.
 
 - You need Windows 10 or 11 (64-bit).
 - You need about 20 GB of free disk space. [More details](Home#what-you-need).
+- You do not need to install anything else. The installer brings what Icon Forge needs.
 
 ## Install it
 
 | Step | What to do |
 |---|---|
-| 1 | Download **Icon Forge Setup 1.0.0.exe** from the **Releases** page of this project. |
+| 1 | Download **Icon Forge Setup** from the **Releases** page of this project. |
 | 2 | Double-click the file. |
 | 3 | If Windows says **"Windows protected your PC"**, click **More info**, then **Run anyway**. (Why? See below.) |
 | 4 | Follow the steps on screen. You can keep the default folder. |
-| 5 | Press **Finish**. Icon Forge starts. |
+| 5 | If your PC does not have the Microsoft Visual C++ runtime yet, the installer adds it. Windows asks once: *"Do you want to allow this app to make changes?"* Click **Yes**. (More on this below.) |
+| 6 | Press **Finish**. Icon Forge starts. |
+
+## What is the "Visual C++ runtime"?
+
+- It is a free Microsoft add-on that many programs need. The picture engine inside Icon Forge is one of them.
+- Most PCs already have it. If yours does, the installer skips this step and does not ask you anything.
+- If it is missing, the installer adds it for you. It comes inside the installer, so you do not need the internet for this.
+- If you click **No** when Windows asks, Icon Forge is still installed but cannot draw icons. Run the installer again and click **Yes**.
 
 ## Why does Windows show a warning?
 
