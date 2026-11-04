@@ -3,3 +3,4 @@ dist/
 engine/
 *.log
 build/prereq/
+research/

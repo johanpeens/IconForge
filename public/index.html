@@ -11,10 +11,52 @@ body { margin:0; font:15px/1.5 system-ui, "Segoe UI", sans-serif; background:var
 button, input { font:inherit; color:inherit; }
 button { cursor:pointer; }
 .top { display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; padding:14px 20px; background:var(--panel); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
-.brand { font-weight:700; font-size:18px; display:flex; align-items:center; gap:8px; }
-.brand svg { width:26px; height:26px; color:var(--accent); }
-.steps { display:flex; gap:6px; flex:1; flex-wrap:wrap; }
-.step { display:flex; align-items:center; gap:8px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); }
+.brand { font-weight:700; font-size:18px; display:flex; align-items:center; gap:8px; border:0; background:transparent; padding:0; border-radius:10px; }
+.hometiles { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:18px; margin-top:8px; }
+.hometile { text-align:left; display:flex; flex-direction:column; gap:10px; padding:22px; border:2px solid var(--line); border-radius:16px; background:var(--panel); box-shadow:var(--shadow); min-height:220px; transition:border-color .15s, transform .15s; }
+.hometile:hover { border-color:var(--accent); transform:translateY(-2px); }
+.hometile h2 { margin:0; font-size:20px; }
+.hometile p { margin:0; color:var(--muted); }
+.hometile .go { margin-top:auto; color:var(--accent); font-weight:600; }
+.hometile .hnote { color:#b45309; font-size:13px; font-weight:600; }
+.hico { width:46px; height:46px; border-radius:12px; background:var(--soft); display:grid; place-items:center; color:var(--accent); }
+.hico svg { width:26px; height:26px; }
+.covers { display:flex; gap:8px; align-items:center; min-height:46px; }
+.covers .ic { width:38px; height:38px; color:var(--icon); }
+.libgrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:14px; margin-top:14px; }
+.setcard { text-align:left; display:flex; flex-direction:column; gap:6px; padding:12px; border:2px solid var(--line); border-radius:14px; background:var(--panel); }
+.setcard:hover { border-color:var(--accent); }
+.setcard .cv { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; padding:8px; border-radius:10px; background:var(--bg); min-height:120px; align-content:center; }
+.setcard .cv .ic { width:100%; height:48px; color:var(--icon); }
+.setcard b { word-break:break-word; text-transform:capitalize; }
+.setcard small { color:var(--muted); }
+.btn.danger { background:#dc2626; color:#fff; border-color:#dc2626; font-weight:600; }
+.btn.danger:hover { filter:brightness(1.08); }
+.canvas.mv { cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
+.canvas.mv.drag { cursor:grabbing; border-color:var(--accent); }
+.tile .bchk { position:absolute; top:9px; left:9px; width:18px; height:18px; min-width:0; padding:0; margin:0; border:0; background:transparent; accent-color:var(--accent); cursor:pointer; }
+.bselbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:10px 12px; margin:0 0 12px; border:1px solid var(--accent); background:var(--soft); border-radius:10px; position:sticky; top:78px; z-index:4; }
+.bselbar[hidden] { display:none; }
+.pvbar { display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; margin:2px 0 12px; }
+.pvg { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; }
+.pvl { color:var(--muted); font-size:14px; display:inline-flex; align-items:center; gap:8px; }
+.seg .sw { display:inline-block; width:12px; height:12px; border-radius:50%; border:1px solid var(--muted); margin-right:6px; vertical-align:-1px; }
+.sample.pv { min-height:180px; border-style:solid; border-radius:12px; padding:18px; gap:18px 22px; transition:background .15s; }
+.pvi { display:inline-flex; }
+.rmtext { width:100%; color:#dc2626; }
+.rmtext:hover { background:rgba(220,38,38,.1); border-color:#dc2626; }
+.setwrap { position:relative; display:flex; flex-direction:column; }
+.setwrap .setcard { flex:1; }
+.setbin { position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:#dc2626; display:grid; place-items:center; opacity:0; transition:opacity .15s; }
+.setbin svg { width:17px; height:17px; }
+.setwrap:hover .setbin, .setbin:focus-visible { opacity:1; }
+.setbin:hover { background:rgba(220,38,38,.1); border-color:#dc2626; }
+@media (hover:none) { .setbin { opacity:.9; } }
+.libbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:4px; }
+.libbar input[type=text] { max-width:340px; }
+.brand img { width:32px; height:32px; border-radius:8px; display:block; }
+.steps { display:flex; gap:4px; flex:1; flex-wrap:wrap; }
+.step { display:flex; align-items:center; gap:7px; padding:6px 11px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); }
 .step b { display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--line); color:var(--ink); font-size:12px; }
 .step.on { background:var(--soft); border-color:var(--accent); color:var(--ink); }
 .step.on b { background:var(--accent); color:var(--accent-ink); }
@@ -66,7 +108,25 @@ button.tile:hover { border-color:var(--accent); }
 .dock { position:fixed; left:0; right:0; bottom:0; padding:12px 20px; background:var(--panel); border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:flex-end; z-index:6; }
 .dock .msg { margin-right:auto; color:var(--muted); }
 .two { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:18px; align-items:start; }
-@media (max-width:820px) { .two { grid-template-columns:1fr; } }
+.two.ed { grid-template-columns:minmax(0,1fr) 340px; }
+.two.vv { grid-template-columns:260px minmax(0,1fr); }
+@media (max-width:820px) { .two, .two.ed, .two.vv { grid-template-columns:1fr; } }
+.vorig .ic { width:200px; height:200px; margin:0 auto; color:var(--icon); }
+.vname { text-align:center; font-weight:600; margin-top:6px; word-break:break-all; }
+.vnote { color:var(--muted); font-size:13px; margin:8px 0 0; }
+.vl { display:block; color:var(--muted); font-size:13px; margin:0 0 4px; }
+.vrow { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; margin-top:12px; color:var(--muted); }
+.vrow > span:first-child { min-width:118px; }
+.vchk { display:flex; gap:8px; align-items:center; margin-top:12px; color:var(--muted); }
+.vsl { grid-template-columns:150px 1fr 56px; }
+.vdet { margin-top:14px; color:var(--muted); }
+.vdet summary { cursor:pointer; }
+.vdet textarea { width:100%; margin-top:8px; padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--ink); font:13px/1.45 ui-monospace, Consolas, monospace; resize:vertical; }
+.vv input[type=text] { width:100%; }
+.navsep { width:1px; align-self:stretch; background:var(--line); margin:3px 4px; }
+.ndot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent); margin-left:6px; animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity:.25; } }
+.hint { border-color:var(--accent); background:var(--soft); margin:0 0 14px; }
 .side label { display:block; color:var(--muted); font-size:13px; margin:12px 0 4px; }
 .side input[type=text] { width:100%; }
 .sample { display:flex; flex-wrap:wrap; gap:14px; align-items:center; padding:12px; border:1px dashed var(--line); border-radius:10px; margin-top:8px; }
@@ -183,7 +243,7 @@ button:focus-visible, .btn:focus-visible { outline:2px solid var(--accent); outl
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; } .gear:hover { transform:none; } }
 </style></head><body>
 <header class="top">
-  <div class="brand"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 52L36 28M30 16l18 18M26 22l16 16"/><path d="M44 12l8 8"/></svg>Icon Forge</div>
+  <button class="brand" data-go="0" title="Home" aria-label="Icon Forge home"><img src="/app-icon.png" alt="" width="32" height="32">Icon Forge</button>
   <nav class="steps" id="steps"></nav>
   <span class="pill" id="comfy" title="Open settings"><i></i><span>Model…</span></span>
   <button class="basketchip" id="chip" aria-label="Open basket">Basket <span id="chipn">0</span></button>
@@ -192,13 +252,14 @@ button:focus-visible, .btn:focus-visible { outline:2px solid var(--accent); outl
 <div class="dlbar" id="dlbar" hidden><i></i></div>
 <div class="modalbg" id="modal" hidden></div>
 <div class="modalbg" id="themeask" hidden></div>
+<div class="modalbg" id="cfm" hidden></div>
 <main id="app"></main>
 <div class="dock" id="dock" hidden></div>
 <div id="toast" role="status"></div>
 <script>
 const DETAIL = { 1:['Simple','very thick outline, few bold shapes. Best at small sizes.'], 2:['Medium','your usual look: thick outline with some inner detail.'], 3:['Detailed','fine lines and interior detail. Best at 48px and larger, slower to trace.'] };
 const STYLES = { line:['Line', 'outline strokes, no fill (your current look).'], filled:['Filled', 'solid silhouettes with small cut-out details.'], double:['Double line', 'a bold outline with a thin line inside it.'], hand:['Hand-drawn', 'a wobbly ink line, loose and friendly.'] };
-const S = { step:1, kws:[], per:5, detail:2, ready:false, lib:[], model:{}, settings:false, theme:'', sets:[], sel:new Set(), basket:[], font:'myIcons', genKws:[], job:null, jobErr:'', building:false, size:64, edSel:0, edMode:'move', cleanSel:new Set(), speck:40, style:'line', result:null, fontErr:'' };
+const S = { step:0, libOpen:null, libQ:'', vary:null, libHint:false, bTab:'icons', bSel:new Set(), bLast:-1, pv:{ bg:'#ffffff', col:'#1a1d23', size:32, touched:false }, kws:[], per:5, detail:2, ready:false, lib:[], model:{}, settings:false, theme:'', sets:[], sel:new Set(), basket:[], font:'myIcons', genKws:[], job:null, jobErr:'', building:false, size:64, edSel:0, edMode:'move', cleanSel:new Set(), speck:40, style:'line', result:null, fontErr:'' };
 const $ = s => document.querySelector(s), esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'icons';
 const key = (f, n) => f + '/' + n;
@@ -214,13 +275,67 @@ async function refresh() {
   if (S.wasDl && !S.model.downloading && S.ready) toast('Flux model downloaded and ready');
   S.wasDl = !!S.model.downloading;
 }
-function go(n) { S.step = n; render(); window.scrollTo(0, 0); }
+function go(n) { S.step = n; if (n === 5) S.libOpen = null; if (n === 0) S.libHint = false; render(); window.scrollTo(0, 0); }
 function renderTop() {
+  // The bar shows where you are and lets you reach every screen. A pulsing dot marks work that is still drawing.
   const names = ['Keywords', 'Pick icons', 'Edit SVGs', 'Basket & font'];
-  $('#steps').innerHTML = names.map((t, i) => '<button class="step ' + (S.step === i + 1 ? 'on' : '') + '" data-go="' + (i + 1) + '"' + ((i === 1 && !S.sets.length) || (i === 2 && !S.basket.length) ? ' disabled' : '') + '><b>' + (i + 1) + '</b>' + t + '</button>').join('');
+  const dot = '<i class="ndot" title="Drawing…"></i>', kwBusy = !!S.job, varyBusy = typeof varyRunning === 'function' && varyRunning();
+  const plain = (go, label, on, extra) => '<button class="step ' + (on ? 'on' : '') + '" data-go="' + go + '"' + (extra || '') + '>' + label + '</button>';
+  $('#steps').innerHTML = plain(0, 'Home', S.step === 0) + plain(5, 'Library', S.step === 5) + '<span class="navsep"></span>' +
+    names.map((t, i) => plain(i + 1, '<b>' + (i + 1) + '</b>' + t + (i === 0 && kwBusy ? dot : ''), S.step === i + 1, (i === 1 && !S.sets.length) || (i === 2 && !S.basket.length) ? ' disabled' : '')).join('') +
+    (S.vary && (S.step === 6 || varyBusy) ? '<span class="navsep"></span>' + plain(6, 'Vary' + (varyBusy ? dot : ''), S.step === 6) : '');
+  $('#steps').style.visibility = '';
   $('#chipn').textContent = S.basket.length;
 }
-function render() { renderTop(); $('#dock').hidden = true; if (S.step === 1) viewKeywords(); else if (S.step === 2) viewPick(); else if (S.step === 3) viewEdit(); else viewBasket(); }
+function render() { renderTop(); $('#dock').hidden = true; if (S.step === 0) viewHome(); else if (S.step === 6) viewVary(); else if (S.step === 5) viewLibrary(); else if (S.step === 1) viewKeywords(); else if (S.step === 2) viewPick(); else if (S.step === 3) viewEdit(); else viewBasket(); }
+
+// ---- Home: two big tiles ----
+const prettyName = f => f.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+const fmtDate = ms => ms ? new Date(ms).toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' }) : '';
+const newest = () => S.lib.slice().sort((a, b) => (b.mtime || 0) - (a.mtime || 0) || a.folder.localeCompare(b.folder));
+function viewHome() {
+  const sets = S.lib.length, icons = S.lib.reduce((a, l) => a + l.files.length, 0);
+  const covers = newest().slice(0, 5).map(l => ic(l.folder, l.files[0])).join('');
+  $('#app').innerHTML = '<h1>What would you like to do?</h1><p class="lead">Make a brand new set of icons, or reuse icons you made before.</p>' +
+    '<div class="hometiles">' +
+    '<button class="hometile" data-go="1"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg></span><h2>Make new icons</h2><p>Type a word and the AI draws a set of icons for you. Four quick steps, then your icon font.</p>' +
+    (S.ready ? '' : '<span class="hnote">! Needs the AI model first. Press the gear to download it.</span>') + '<span class="go">Start →</span></button>' +
+    '<button class="hometile" data-go="5"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><h2>My library</h2><p>' +
+    (sets ? icons + ' icons in ' + sets + ' set' + (sets === 1 ? '' : 's') + ' you made before. Pick some and add them to your basket.' : 'Your past icon sets will show up here once you have made some.') + '</p>' +
+    (covers ? '<span class="covers">' + covers + '</span>' : '') + '<span class="go">Open library →</span></button>' +
+    '<button class="hometile" data-varyhome="1"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="11" height="11" rx="2"/><path d="M17 4h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"/></svg></span><h2>Vary an icon</h2><p>' +
+    (icons ? 'Pick one of your icons, change the words, and the AI draws new versions of it. The new versions are saved next to the original.' : 'Once you have an icon, you can change its words here and the AI draws new versions of it.') + '</p><span class="go">Pick an icon →</span></button></div>' +
+    (S.basket.length ? '<div class="card row" style="margin-top:18px"><span><b>' + S.basket.length + ' icon' + (S.basket.length === 1 ? '' : 's') + '</b> waiting in your basket.</span><button class="btn primary" data-go="4" style="margin-left:auto">Open basket</button></div>' : '');
+}
+
+// ---- Library: every set you made before ----
+function viewLibrary() {
+  document.documentElement.style.setProperty('--tile', S.size + 'px');
+  const open = S.libOpen ? S.lib.find(l => l.folder === S.libOpen) : null;
+  if (!open) S.libOpen = null;
+  const hint = S.libHint ? '<div class="card hint"><b>To vary an icon:</b> ' + (open ? 'tick one icon, then press <b>Vary this icon…</b> in the bar at the bottom.' : 'open a set, tick one icon, then press <b>Vary this icon…</b> in the bar at the bottom.') + '</div>' : '';
+  if (open) {
+    $('#app').innerHTML = hint + '<h1>' + esc(prettyName(open.folder)) + '</h1><p class="lead">' + open.files.length + ' icons' + (open.mtime ? ' · ' + fmtDate(open.mtime) : '') + '. Click icons to select them, then add them to the basket. <b>Tip:</b> right-click any icon to copy it.</p>' +
+      '<div class="libbar"><button class="btn" data-libopen="">← All sets</button><button class="btn small" data-liball="1">Select all</button><button class="btn small" data-revealset="' + esc(open.folder) + '">Show in folder</button><button class="btn small rmtext" style="width:auto" data-delset="' + esc(open.folder) + '">Delete set…</button><label style="color:var(--muted);margin-left:auto">Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
+      '<section class="section card"><div class="grid">' + open.files.map(f => { const k = key(open.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(open.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>';
+    dockPick();
+    return;
+  }
+  $('#app').innerHTML = hint + '<h1>My library</h1><p class="lead">Every icon set you have made. Open a set to pick icons for your basket.</p>' +
+    '<div class="libbar"><input type="text" id="libq" placeholder="Search sets and icons" autocomplete="off" value="' + esc(S.libQ) + '"><span id="libn" style="color:var(--muted)"></span><button class="btn primary" data-go="1" style="margin-left:auto">+ Make new icons</button></div><div id="libgrid"></div>';
+  drawLibGrid();
+  dockPick();
+}
+function drawLibGrid() {
+  const g = $('#libgrid'); if (!g) return;
+  const q = S.libQ.trim().toLowerCase(), all = newest();
+  const list = q ? all.filter(l => l.folder.toLowerCase().includes(q) || prettyName(l.folder).toLowerCase().includes(q) || l.files.some(f => f.toLowerCase().includes(q))) : all;
+  $('#libn').textContent = q ? list.length + ' of ' + all.length + ' sets' : all.length + ' set' + (all.length === 1 ? '' : 's');
+  g.innerHTML = !all.length ? '<div class="empty">No icon sets yet. <button class="btn primary" data-go="1">Make your first set</button></div>'
+    : !list.length ? '<div class="empty">Nothing matches "' + esc(S.libQ) + '".</div>'
+    : '<div class="libgrid">' + list.map(l => '<div class="setwrap"><button class="setcard" data-libopen="' + esc(l.folder) + '"><span class="cv">' + l.files.slice(0, 4).map(f => ic(l.folder, f)).join('') + '</span><b>' + esc(prettyName(l.folder)) + '</b><small>' + l.files.length + ' icons' + (l.mtime ? ' · ' + fmtDate(l.mtime) : '') + '</small></button>' +
+      '<button class="setbin" data-delset="' + esc(l.folder) + '" title="Delete this set" aria-label="Delete the set ' + esc(prettyName(l.folder)) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg></button></div>').join('') + '</div>';
+}
 
 function viewKeywords() {
   const busy = !!S.job;
@@ -234,16 +349,18 @@ function viewKeywords() {
     '<div class="opts" style="margin-top:12px"><span>Detail <span class="seg">' + [1,2,3].map(n => '<button data-detail="' + n + '" class="' + (S.detail === n ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + DETAIL[n][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + DETAIL[S.detail][0] + ':</b> ' + DETAIL[S.detail][1] + '</span></div>' +
     '<div class="opts" style="margin-top:12px"><span>Style <span class="seg">' + Object.keys(STYLES).map(k => '<button data-style="' + k + '" class="' + (S.style === k ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + STYLES[k][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + STYLES[S.style][0] + ':</b> ' + STYLES[S.style][1] + '</span></div>' +
     '<div class="gen" id="gen"></div>' + (S.jobErr ? '<div class="err">' + esc(S.jobErr) + '</div>' : '') +
-    '<div class="row" style="margin-top:20px;justify-content:flex-end"><button class="btn primary' + (busy ? ' busy' : '') + '" id="gobtn"' + (!S.kws.length || busy ? ' disabled' : '') + '>' + (busy ? '<i class="spin"></i>Generating…' : 'Generate ' + (S.kws.length * S.per) + ' icons') + '</button></div>' +
     (S.lib.length ? '<div class="libs"><h3>Or start from icons you already have</h3><div class="chips" style="margin:0">' + S.lib.map(l => '<button class="chip" style="cursor:pointer" data-uselib="' + esc(l.folder) + '"' + (S.sets.some(s => s.folder === l.folder) ? ' disabled' : '') + '>' + esc(l.folder) + ' · ' + l.files.length + '</button>').join('') + '</div></div>' : '') +
     '</div>';
   if (busy) drawGen();
   dockKeywords();
 }
 function dockKeywords() {
-  const d = $('#dock');
-  if (!S.job) { d.hidden = true; return; }
-  d.hidden = false;
+  const d = $('#dock'); d.hidden = false;
+  if (!S.job) {
+    const n = S.kws.length * S.per;
+    d.innerHTML = '<span class="msg">' + (S.kws.length ? S.kws.length + ' keyword' + (S.kws.length === 1 ? '' : 's') + ' · about ' + n + ' icon' + (n === 1 ? '' : 's') : 'Add a keyword to start') + '</span><button class="btn" data-go="0">← Back</button><button class="btn primary" id="gobtn"' + (S.kws.length ? '' : ' disabled') + '>Generate ' + n + ' icon' + (n === 1 ? '' : 's') + '</button>';
+    return;
+  }
   d.innerHTML = '<span class="msg">' + (S.stopping ? 'Stopping, the icons already drawn are kept…' : 'Drawing icons…') + '</span><button class="btn primary" id="stopbtn"' + (S.stopping ? ' disabled' : '') + '>' + (S.stopping ? 'Stopping…' : '■ Stop generating') + '</button>';
 }
 async function stopGen() {
@@ -282,7 +399,7 @@ async function startGen() {
   S.jobErr = ''; S.stopping = false; S.genKws = S.kws.slice();
   const r = await post('/api/generate', { keywords:S.kws, per:S.per, detail:S.detail, style:S.style });
   if (r.error) { S.jobErr = r.error; refresh(); viewKeywords(); return; }
-  S.job = { id:r.id, items:[], per:S.per }; viewKeywords();
+  S.job = { id:r.id, items:[], per:S.per }; renderTop(); viewKeywords();
   const tick = setInterval(() => { if (S.job) drawGen(); }, 400);
   const t = setInterval(async () => {
     const j = await (await fetch('/api/job?id=' + r.id)).json();
@@ -299,7 +416,9 @@ async function startGen() {
     });
     S.jobErr = j.error || (j.state === 'stopped' ? 'Stopped. Icons that were already drawn are kept.' : j.items.some(it => it.failed) ? 'Some icons did not finish. Try again, or check the settings.' : '');
     S.job = null; S.stopping = false;
-    if (S.sets.length && !j.error) go(2); else viewKeywords();
+    // Only move the user on if they are still waiting on this screen. Otherwise leave them where they are.
+    if (S.step === 1) { if (S.sets.length && !j.error) go(2); else viewKeywords(); }
+    else { renderTop(); if (S.sets.length && !j.error) toast('Your new icons are ready. Open step 2, Pick icons.'); }
   }, 1500);
 }
 
@@ -308,38 +427,224 @@ function viewPick() {
   $('#app').innerHTML = '<h1>2. Pick the icons you want</h1><p class="lead">Click icons to select them, then add them to the basket. <b>Tip:</b> right-click any icon to copy its SVG or a picture of it.</p><div class="row" style="margin:-6px 0 6px;color:var(--muted)"><label>Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
     S.sets.map((set, si) => '<section class="section card"><div class="sh"><h2>' + esc(set.title) + ' <small>' + set.files.length + ' icons' + (set.added && set.added.length ? ', ' + set.added.length + ' new' : '') + (set.detail && set.keyword ? ' · ' + DETAIL[set.detail][0] + ' detail' : '') + '</small></h2><button class="btn small" data-all="' + si + '">Select all</button>' +
       (set.keyword ? '<button class="btn small" data-more="' + si + '"' + (S.ready ? '' : ' disabled') + '>Make ' + S.per + ' more</button>' : '') + '<button class="btn small" data-hide="' + si + '">Hide</button></div><div class="grid">' +
-      set.files.map(f => { const k = key(set.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(set.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>').join('') +
-    '<div class="row" style="margin-top:16px"><button class="btn" data-go="1">← Add more keywords</button></div>';
+      set.files.map(f => { const k = key(set.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(set.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>').join('');
   dockPick();
 }
 function dockPick() {
   const d = $('#dock'); d.hidden = false; const n = S.sel.size;
-  d.innerHTML = '<span class="msg">' + n + ' selected · ' + S.basket.length + ' in basket</span><button class="btn" id="clr"' + (n ? '' : ' disabled') + '>Clear selection</button><button class="btn primary" id="addb"' + (n ? '' : ' disabled') + '>Add ' + n + ' to basket</button><button class="btn" data-go="3"' + (S.basket.length ? '' : ' disabled') + '>Edit icons →</button>';
+  const inB = S.basket.filter(b => S.sel.has(b.key)).length;
+  // Back goes one step: keywords from Pick, the set list from inside a set, Home from the set list.
+  const back = S.step === 5 ? (S.libOpen ? '<button class="btn" data-libopen="">← All sets</button>' : '<button class="btn" data-go="0">← Back</button>') : '<button class="btn" data-go="1">← Back</button>';
+  const openSet = S.step === 5 && S.libOpen ? S.lib.find(l => l.folder === S.libOpen) : null;
+  const libSel = openSet ? openSet.files.filter(f => S.sel.has(key(openSet.folder, f))).length : 0;
+  d.innerHTML = '<span class="msg">' + n + ' selected · ' + S.basket.length + ' in basket</span>' + back + '<button class="btn" id="clr"' + (n ? '' : ' disabled') + '>Clear selection</button>' + (inB ? '<button class="btn" id="rmsel">Remove ' + inB + ' from basket</button>' : '') + (libSel ? '<button class="btn danger" id="dellib">Delete ' + libSel + ' from library…</button>' : '') + (n === 1 ? '<button class="btn" id="varybtn">Vary this icon…</button>' : '') + '<button class="btn primary" id="addb"' + (n > inB ? '' : ' disabled') + '>Add ' + (n - inB) + ' to basket</button><button class="btn" data-go="3"' + (S.basket.length ? '' : ' disabled') + '>Edit icons →</button>';
 }
 function addToBasket() {
-  S.sets.forEach(set => set.files.forEach(f => { const k = key(set.folder, f); if (S.sel.has(k) && !inBasket(k)) S.basket.push({ key:k, folder:set.folder, file:f, name:f.replace(/\.svg$/i, '').replace(/_/g, '-').toLowerCase(), ed:newEd() }); }));
+  [...S.sets, ...S.lib].forEach(set => set.files.forEach(f => { const k = key(set.folder, f); if (S.sel.has(k) && !inBasket(k)) S.basket.push({ key:k, folder:set.folder, file:f, name:f.replace(/\.svg$/i, '').replace(/_/g, '-').toLowerCase(), ed:newEd() }); }));
   S.sel.clear(); S.result = null; render();
+}
+function removeSelected() {
+  const n = S.basket.filter(b => S.sel.has(b.key)).length;
+  S.basket = S.basket.filter(b => !S.sel.has(b.key)); S.sel.clear(); S.result = null; render();
+  toast(n + ' icon' + (n === 1 ? '' : 's') + ' removed from the basket');
+}
+async function clearBasket() {
+  if (!S.basket.length) return;
+  if (!await askConfirm({ title:'Clear the basket?', body:'Remove all ' + S.basket.length + ' icons from the basket? The icons stay in your library.', ok:'Clear basket', danger:false })) return;
+  S.basket = []; S.result = null; S.edSel = 0; render(); toast('Basket cleared');
+}
+// One simple question dialog. Escape or Cancel answers no; Cancel has the focus so Enter never deletes by accident.
+function askConfirm({ title, body, ok, danger = true }) {
+  return new Promise(resolve => {
+    const box = $('#cfm'); box.hidden = false;
+    box.innerHTML = '<div class="modal" role="alertdialog" aria-label="' + esc(title) + '"><h2>' + esc(title) + '</h2><p class="lead" style="margin:8px 0 0">' + esc(body) + '</p>' +
+      '<div class="row" style="margin-top:18px;justify-content:flex-end"><button class="btn" id="cfmno">Cancel</button><button class="btn ' + (danger ? 'danger' : 'primary') + '" id="cfmyes">' + esc(ok) + '</button></div></div>';
+    const done = v => { box.hidden = true; box.innerHTML = ''; box.onclick = null; document.removeEventListener('keydown', onKey, true); resolve(v); };
+    const onKey = e => { if (e.key === 'Escape') { e.stopPropagation(); done(false); } };
+    document.addEventListener('keydown', onKey, true);
+    box.onclick = e => { if (e.target.id === 'cfmyes') done(true); else if (e.target.id === 'cfmno' || e.target === box) done(false); };
+    $('#cfmno').focus();
+  });
+}
+// Delete icons (files = names) or a whole set (files = null) from the library. Everything goes to the Recycle Bin.
+async function deleteFromLibrary(folder, files) {
+  const set = S.lib.find(l => l.folder === folder); if (!set) return;
+  const names = files && files.length && files.length < set.files.length ? files : set.files, whole = names === set.files;
+  const inB = S.basket.filter(b => b.folder === folder && names.includes(b.file)).length;
+  const label = prettyName(folder), n = names.length, s = n === 1 ? '' : 's';
+  const ok = await askConfirm({
+    title: whole ? 'Delete the set "' + label + '"?' : 'Delete ' + n + ' icon' + s + ' from "' + label + '"?',
+    body: (whole ? 'All ' + n + ' icons in this set' : n === 1 ? 'This icon' : 'These ' + n + ' icons') + ' will be moved to the Windows Recycle Bin, so you can restore ' + (whole || n > 1 ? 'them' : 'it') + ' from there. ' +
+      (inB ? inB + ' of them ' + (inB === 1 ? 'is' : 'are') + ' in your basket and will be taken out of it. ' : '') + 'Fonts you already made are not changed.',
+    ok: whole ? 'Delete set' : 'Delete ' + n + ' icon' + s });
+  if (!ok) return;
+  let r; try { r = await post('/api/library/delete', { set:folder, files: whole ? [] : names }); } catch (e) { r = { error:'Could not reach the app.' }; }
+  if (!r.ok) { toast(r.error || 'Could not delete'); return; }
+  const gone = new Set(names.map(f => key(folder, f)));
+  S.basket = S.basket.filter(b => !gone.has(b.key)); gone.forEach(k => S.sel.delete(k)); S.result = null;
+  S.sets.forEach(x => { if (x.folder === folder) x.files = x.files.filter(f => !gone.has(key(folder, f))); }); S.sets = S.sets.filter(x => x.files.length);
+  await refresh();
+  if (!S.lib.some(l => l.folder === folder)) S.libOpen = null;
+  render(); toast(r.setGone ? 'Set moved to the Recycle Bin' : r.deleted + ' icon' + (r.deleted === 1 ? '' : 's') + ' moved to the Recycle Bin');
 }
 async function makeMore(si) {
   const set = S.sets[si]; S.kws = [set.keyword]; S.genKws = [set.keyword]; S.style = set.style || 'line'; S.detail = set.detail || S.detail; S.step = 1; S.jobErr = ''; renderTop(); await startGen();
 }
 
+// Small checkboxes on the basket tiles: tick some, and a bar appears with a button to remove them all at once.
+function updateBSel() {
+  const bar = $('#bselbar'); if (!bar) return;
+  const n = S.bSel.size, total = S.basket.length;
+  document.querySelectorAll('.tile[data-ctx]').forEach((t, i) => { const x = S.basket[i], on = !!x && S.bSel.has(x.key); t.classList.toggle('sel', on); const c = t.querySelector('.bchk'); if (c) c.checked = on; });
+  bar.hidden = !n;
+  bar.innerHTML = n ? '<b>' + n + ' selected</b><button class="btn small" id="bselall"' + (n === total ? ' disabled' : '') + '>Select all ' + total + '</button><button class="btn small" id="bselclr">Clear selection</button><button class="btn small danger" id="bselrm" style="margin-left:auto">Remove ' + n + ' from basket</button>' : '';
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('.bchk'); if (!c) return;
+  const i = +c.dataset.bi, on = c.checked, set = k => { const x = S.basket[k]; if (x) on ? S.bSel.add(x.key) : S.bSel.delete(x.key); };
+  if (e.shiftKey && S.bLast >= 0) { for (let k = Math.min(S.bLast, i); k <= Math.max(S.bLast, i); k++) set(k); } else set(i);   // Shift + click ticks a whole run
+  S.bLast = i; updateBSel();
+});
 function viewBasket() {
   const b = S.basket, s = slug(S.font);
+  S.bSel = new Set([...S.bSel].filter(k => b.some(x => x.key === k)));
   $('#app').innerHTML = '<h1>4. Basket and font</h1><p class="lead">Check your selection, rename icons if you like, then create the font. <b>Tip:</b> right-click any icon to copy it.</p>' +
-    '<div class="two"><div class="card"><div class="sh"><h2>Basket <small>' + b.length + ' icons</small></h2><button class="btn small" data-go="2"' + (S.sets.length ? '' : ' disabled') + '>+ Add more</button></div>' +
-    (b.length ? '<div class="grid">' + b.map((x, n) => '<div class="tile" data-ctx="' + esc(x.key) + '"><button class="rm" data-del="' + n + '" aria-label="Remove">×</button>' + icE(x) + '<input type="text" value="' + esc(x.name) + '" data-name="' + n + '" aria-label="Icon name"></div>').join('') + '</div>' : '<div class="empty">Your basket is empty. Pick some icons first.</div>') +
-    '<div class="sample" id="sample">' + b.slice(0, 10).map(x => icE(x)).join('') + (b.length ? '<span style="color:var(--muted)">Live preview at <span id="szv">32</span>px</span>' : '') + '</div>' +
-    '<div class="row" style="margin-top:10px"><label style="color:var(--muted)">Size <input type="range" id="sz" min="16" max="256" step="8" value="32"></label><label style="color:var(--muted)">Colour <input type="color" id="co" value="#1a1d23"></label></div></div>' +
+    '<div class="two"><div class="card"><div class="sh"><h2>Basket <small>' + b.length + ' icons</small></h2><span class="seg" role="tablist" aria-label="Basket view"><button role="tab" data-btab="icons" class="' + (S.bTab === 'icons' ? 'on' : '') + '" aria-selected="' + (S.bTab === 'icons') + '">Icons</button><button role="tab" data-btab="preview" class="' + (S.bTab === 'preview' ? 'on' : '') + '" aria-selected="' + (S.bTab === 'preview') + '">Preview</button></span><button class="btn small" data-go="5">+ Add more</button>' + (b.length && S.bTab !== 'preview' ? '<button class="btn small" data-dlzip="1">Download as zip</button>' : '') + (b.length ? '<button class="btn small" id="clearb">Clear basket</button>' : '') + '</div>' +
+    (S.bTab === 'preview' ? previewTab() : (b.length ? '<div class="bselbar" id="bselbar" hidden></div><div class="grid">' + b.map((x, n) => '<div class="tile' + (S.bSel.has(x.key) ? ' sel' : '') + '" data-ctx="' + esc(x.key) + '"><input type="checkbox" class="bchk" data-bi="' + n + '"' + (S.bSel.has(x.key) ? ' checked' : '') + ' aria-label="Select ' + esc(x.name) + '"><button class="rm" data-del="' + n + '" aria-label="Remove">×</button>' + icE(x) + '<input type="text" value="' + esc(x.name) + '" data-name="' + n + '" aria-label="Icon name"><button class="btn small rmtext" data-del="' + n + '">Remove</button></div>').join('') + '</div>' : '<div class="empty">Your basket is empty. Pick some icons first.</div>')) + '</div>' +
     '<aside class="side card"><h2 style="margin:0 0 4px;font-size:16px">Font</h2><label for="fname">What do you want to call it?</label><input type="text" id="fname" value="' + esc(S.font) + '">' +
     '<p style="color:var(--muted);font-size:13px">Classes will look like <code>' + esc(s) + ' ' + esc(s) + '-' + esc(b[0] ? slug(b[0].name) : 'icon') + '</code></p>' +
     '</aside></div>' +
     (S.fontErr ? '<div class="err">' + esc(S.fontErr) + '</div>' : '') + (S.result ? doneCard() : '');
+  updateBSel();
   dockBasket();
+}
+// ---- Vary: pick an icon, change its words (or start from its picture), draw new versions beside it ----
+const VSTY = { line:'Line', filled:'Filled', double:'Double line', hand:'Hand-drawn' };
+async function openVary(folder, file, back) {
+  let info = {};
+  try { info = await (await fetch('/api/icon-info?set=' + encodeURIComponent(folder) + '&file=' + encodeURIComponent(file))).json(); } catch (e) { /* use the guess below */ }
+  const m = info.meta || null, g = info.guess || { subject:prettyName(folder), style:'line', detail:2, prompt:'' }, base = m || g;
+  S.vary = { folder, file, back:back == null ? S.step : back, meta:m, subject:base.subject || g.subject, style:base.style || 'line', detail:base.detail || 2, prompt:base.prompt || g.prompt, promptEdited:false, advOpen:false,
+    mode:'prompt', strength:0.6, count:4, keepSeed:!!(m && Number.isFinite(m.seed)), jobId:null, job:null, results:[], err:'' };
+  S.step = 6; render(); window.scrollTo(0, 0);
+}
+let varyPromptTimer = null;
+function refreshVaryPrompt() {
+  clearTimeout(varyPromptTimer);
+  varyPromptTimer = setTimeout(async () => {
+    const v = S.vary; if (!v || v.promptEdited) return;
+    try {
+      const r = await (await fetch('/api/prompt?subject=' + encodeURIComponent(v.subject) + '&style=' + v.style + '&detail=' + v.detail)).json();
+      if (S.vary === v && !v.promptEdited && r.prompt) { v.prompt = r.prompt; const t = $('#vprompt'); if (t) t.value = r.prompt; }
+    } catch (e) { /* keep the old text */ }
+  }, 250);
+}
+const varyRunning = () => !!(S.vary && S.vary.job && S.vary.job.state === 'running');
+function viewVary() {
+  const v = S.vary; if (!v) { go(5); return; }
+  renderTop();
+  document.documentElement.style.setProperty('--tile', '120px');   // big enough to compare versions
+  const m = v.meta, busy = varyRunning(), dis = busy ? ' disabled' : '';
+  const when = m && m.created ? fmtDate(Date.parse(m.created)) : '';
+  const origin = '<div class="vorig">' + ic(v.folder, v.file) + '</div><div class="vname">' + esc(v.file.replace(/\.svg$/i, '')) + '</div>' +
+    (m ? '<p class="vnote">Recipe saved' + (when ? ' · ' + esc(when) : '') + (Number.isFinite(m.seed) ? ' · seed ' + m.seed : '') + '</p>' + (m.parent ? '<p class="vnote">A version of ' + esc(m.parent.file) + '</p>' : '')
+      : '<p class="vnote">No recipe was saved for this icon (it was made before recipes were stored), so the words are a best guess from the set name. Correct them if they are wrong.</p>');
+  const canKeep = !!(m && Number.isFinite(m.seed));
+  const form = '<label class="vl" for="vsub">What should it show?</label><input type="text" id="vsub" value="' + esc(v.subject) + '" placeholder="e.g. spaceman waving" autocomplete="off"' + dis + '>' +
+    '<p class="vnote" style="margin:4px 0 0">Change the words to change the icon, for example add "waving" or "holding a flag".</p>' +
+    '<div class="vrow"><span>Style</span><span class="seg">' + Object.keys(VSTY).map(k => '<button data-vstyle="' + k + '" class="' + (v.style === k ? 'on' : '') + '"' + dis + '>' + VSTY[k] + '</button>').join('') + '</span></div>' +
+    '<div class="vrow"><span>Detail</span><span class="seg">' + [1, 2, 3].map(n => '<button data-vdetail="' + n + '" class="' + (v.detail === n ? 'on' : '') + '"' + dis + '>' + DETAIL[n][0] + '</button>').join('') + '</span></div>' +
+    '<div class="vrow"><span>Start from</span><span class="seg"><button data-vmode="prompt" class="' + (v.mode === 'prompt' ? 'on' : '') + '"' + dis + '>The words</button><button data-vmode="image" class="' + (v.mode === 'image' ? 'on' : '') + '"' + dis + '>This picture</button></span></div>' +
+    (v.mode === 'image'
+      ? '<div class="sl vsl"><span>How much to change</span><input type="range" id="vstr" min="25" max="95" step="5" value="' + Math.round(v.strength * 100) + '"' + dis + '><output id="vstrv">' + Math.round(v.strength * 100) + '%</output></div><p class="vnote" style="margin:0">Low keeps the shape and changes small things. High lets the AI redraw almost everything.</p>'
+      : canKeep ? '<label class="vchk"><input type="checkbox" id="vkeep"' + (v.keepSeed ? ' checked' : '') + dis + '> Make the first version as close to the original as possible</label>' : '') +
+    '<div class="vrow"><span>How many versions</span><span class="stepper"><button data-vcnt="-1" aria-label="Fewer"' + dis + '>−</button><output id="vcnt">' + v.count + '</output><button data-vcnt="1" aria-label="More"' + dis + '>+</button></span></div>' +
+    '<details class="vdet" id="vdet"' + (v.advOpen ? ' open' : '') + '><summary>Full prompt (advanced)</summary><textarea id="vprompt" rows="7"' + dis + '>' + esc(v.prompt) + '</textarea>' +
+    '<div class="row" style="margin-top:6px"><button class="btn small" id="vreset"' + dis + '>Reset to automatic</button></div><p class="vnote">If you change this text, it is used exactly as you wrote it.</p></details>';
+  const shown = [{ folder:v.folder, file:v.file, orig:true }].concat(v.results);
+  const grid = shown.map(r => { const k = key(r.folder, r.file); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (r.orig ? '<span class="badge">original</span>' : inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(r.folder, r.file) + '<span style="font-size:12px;color:var(--muted)">' + esc(r.file.replace(/\.svg$/i, '')) + '</span></button>'; }).join('');
+  $('#app').innerHTML = '<h1>Vary an icon</h1><p class="lead">Change the words and the AI draws new versions of this icon. They are saved in the same set, next to the original.</p>' +
+    '<div class="two vv"><div class="card vleft">' + origin + '</div><div class="card">' + form + '</div></div>' +
+    (S.ready ? '' : '<div class="err">The AI model is not installed yet. Open Settings (the gear) and download it first.</div>') +
+    (v.err ? '<div class="err">' + esc(v.err) + '</div>' : '') +
+    '<section class="section card"><div class="sh"><h2>Versions <small>' + v.results.length + ' new</small></h2></div><div id="vprog"></div>' +
+    (v.results.length ? '<p class="vnote" style="margin:0 0 8px">Tick one and press <b>Vary this icon…</b> to change it further, or add the ones you like to the basket.</p>' : '') +
+    '<div class="grid">' + grid + '</div></section>';
+  if (busy) drawVaryProgress();
+  dockVary();
+}
+function drawVaryProgress() {
+  const el = $('#vprog'), v = S.vary; if (!el || !v || !v.job) return;
+  const j = v.job, it = (j.items || [])[0], cur = j.current, now = Date.now(), avg = j.avgMs || 60000;
+  const n = it ? it.done + it.failed : 0, t = v.count;
+  const fmt = ms => { const s = Math.max(1, Math.round(ms / 1000)); return s >= 60 ? Math.floor(s / 60) + ' min ' + (s % 60) + ' s' : s + ' s'; };
+  let msg = '';
+  if (cur) { const el2 = now - cur.startedAt, est = cur.first ? (j.avgMs || 60000) + 60000 : avg;
+    msg = cur.first ? '<b>Loading the Flux model and drawing the first version.</b> This one takes a little longer. ' + fmt(el2) + ' so far.' : '<b>Drawing version ' + cur.n + ' of ' + t + '.</b> About ' + fmt(Math.max(0, est - el2)) + ' left for this one.'; }
+  else if (j.stage) msg = '<b>' + esc(j.stage) + '…</b>';
+  let slots = '';
+  for (let i = 0; i < t; i++) {
+    const frac = cur && i === n ? Math.min(0.95, (now - cur.startedAt) / (cur.first ? avg + 60000 : avg)) : 0;
+    if (it && i < it.done) slots += '<span class="slot ok" title="Done">✓</span>';
+    else if (it && i < n) slots += '<span class="slot bad" title="Did not finish">✕</span>';
+    else if (cur && i === n) slots += '<span class="slot now" style="--p:' + Math.round(frac * 100) + '"><span>' + Math.round(frac * 100) + '%</span></span>';
+    else slots += '<span class="slot">' + (i + 1) + '</span>';
+  }
+  el.innerHTML = (msg ? '<div class="genmsg">' + msg + '</div>' : '') + '<div class="slots" style="margin:8px 0 14px">' + slots + '</div>';
+}
+function dockVary() {
+  const v = S.vary, d = $('#dock'); if (!v) { d.hidden = true; return; }
+  d.hidden = false; const run = varyRunning(), n = S.sel.size, one = n === 1;
+  d.innerHTML = '<span class="msg">' + (run ? 'Drawing versions…' : v.results.length ? v.results.length + ' new version' + (v.results.length === 1 ? '' : 's') + ' saved in "' + esc(prettyName(v.folder)) + '"' : 'New versions are saved in the same set') + (n ? ' · ' + n + ' selected' : '') + '</span>' +
+    '<button class="btn" id="vback">← Back</button>' + (S.basket.length ? '<button class="btn" data-go="4">Open basket (' + S.basket.length + ') →</button>' : '') + (one && !run ? '<button class="btn" id="varybtn">Vary this icon…</button>' : '') + (n && !run ? '<button class="btn" id="addb">Add ' + n + ' to basket</button>' : '') +
+    (run ? '<button class="btn primary" id="vstop">■ Stop</button>' : '<button class="btn primary" id="vgo"' + (S.ready && v.subject.trim() ? '' : ' disabled') + '>Make ' + v.count + ' version' + (v.count === 1 ? '' : 's') + '</button>');
+}
+async function rasterise(folder, file) {   // the icon as a 1024 px black-on-white picture, to use as the starting point
+  const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(await svgText(folder, file, null)); await img.decode();
+  const c = document.createElement('canvas'); c.width = c.height = 1024; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, 1024, 1024); g.drawImage(img, 0, 0, 1024, 1024);
+  return c.toDataURL('image/png').replace(/^data:image\/png;base64,/, '');
+}
+async function startVary() {
+  const v = S.vary; if (!v || varyRunning()) return;
+  v.err = ''; v.results = []; v.promptEdited = v.promptEdited && !!$('#vprompt') && v.prompt.trim() !== '';
+  let initPng = '';
+  if (v.mode === 'image') { try { initPng = await rasterise(v.folder, v.file); } catch (e) { v.err = 'Could not read this icon as a picture.'; viewVary(); return; } }
+  const r = await post('/api/vary', { set:v.folder, file:v.file, subject:v.subject, style:v.style, detail:v.detail, prompt:v.promptEdited ? v.prompt : '', count:v.count, mode:v.mode, strength:v.strength, initPng, keepSeed:v.keepSeed, parentSeed:v.meta ? v.meta.seed : null });
+  if (r.error) { v.err = r.error; viewVary(); return; }
+  v.jobId = r.id; v.job = { state:'running', items:[], per:v.count }; viewVary();
+  const tick = setInterval(() => { if (S.step === 6 && S.vary === v && varyRunning()) drawVaryProgress(); }, 400);
+  const t = setInterval(async () => {
+    let j; try { j = await (await fetch('/api/job?id=' + r.id)).json(); } catch (e) { return; }
+    v.job = j; if (S.step === 6 && S.vary === v) drawVaryProgress();
+    if (j.state === 'running') return;
+    clearInterval(t); clearInterval(tick);
+    await refresh();
+    const it = (j.items || [])[0]; v.results = it ? it.files.map(f => ({ folder:v.folder, file:f })) : [];
+    v.err = j.error || (j.state === 'stopped' ? 'Stopped. Versions that were already drawn are kept.' : it && it.failed ? it.failed + ' version' + (it.failed === 1 ? '' : 's') + ' did not finish. Try again.' : '');
+    if (S.step === 6 && S.vary === v) viewVary(); else renderTop();
+  }, 1500);
+}
+
+// ---- Basket > Preview tab: see the icons at any size, in any colour, on any background ----
+const PV_BGS = [['#ffffff', 'White'], ['#f1f3f6', 'Light grey'], ['#1a1d23', 'Dark'], ['#000000', 'Black']];
+const pvInk = bg => { const h = bg.replace('#', ''), v = [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) || 0); return (0.299 * v[0] + 0.587 * v[1] + 0.114 * v[2]) / 255 < 0.55 ? '#ffffff' : '#1a1d23'; };
+function previewTab() {
+  const b = S.basket, p = S.pv;
+  if (!b.length) return '<div class="empty">Your basket is empty. Pick some icons first.</div>';
+  const shown = b.slice(0, 120);
+  return '<div class="pvbar"><span class="pvg"><span class="pvl">Background</span><span class="seg">' +
+    PV_BGS.map(([c, n]) => '<button data-pvbg="' + c + '" class="' + (p.bg.toLowerCase() === c ? 'on' : '') + '" title="' + n + '"><i class="sw" style="background:' + c + '"></i>' + n + '</button>').join('') +
+    '</span><label class="pvl">Custom <input type="color" id="pvbgc" value="' + esc(p.bg) + '"></label></span>' +
+    '<span class="pvg"><label class="pvl">Icon colour <input type="color" id="co" value="' + esc(p.col) + '"></label><label class="pvl">Size <input type="range" id="sz" min="16" max="512" step="8" value="' + p.size + '"> <output id="szv">' + p.size + 'px</output></label>' +
+    '<span class="seg" aria-label="Quick sizes">' + [16, 32, 64, 128, 256, 512].map(n => '<button data-pvsz="' + n + '" class="' + (p.size === n ? 'on' : '') + '">' + n + '</button>').join('') + '</span></span>' +
+    '<span class="pvg" style="margin-left:auto"><label class="pvl"><input type="checkbox" id="pvuse"' + (p.useCol ? ' checked' : '') + '> Use this colour in the zip</label><button class="btn small primary" data-dlzip="1">Download as zip</button></span></div>' +
+    '<div class="sample pv" id="sample" style="--s:' + p.size + 'px;--c:' + esc(p.col) + ';background:' + esc(p.bg) + '">' + shown.map(x => '<span class="pvi" title="' + esc(x.name) + '">' + icE(x) + '</span>').join('') + '</div>' +
+    (b.length > shown.length ? '<p style="color:var(--muted);font-size:13px;margin:8px 0 0">Showing the first ' + shown.length + ' of ' + b.length + ' icons.</p>' : '') +
+    '<p style="color:var(--muted);font-size:13px;margin:8px 0 0">This only changes how you see the icons here. The font itself has no colour: you set it with CSS <code>color</code>.</p>';
 }
 function dockBasket() {
   const d = $('#dock'), b = S.basket; d.hidden = false;
-  d.innerHTML = '<span class="msg">' + b.length + ' icons in basket</span><button class="btn primary" id="mkfont"' + (b.length && !S.building ? '' : ' disabled') + '>' + (S.building ? 'Creating…' : 'Create font from ' + b.length + ' icons') + '</button>';
+  d.innerHTML = '<span class="msg">' + b.length + ' icons in basket</span><button class="btn" data-go="' + (b.length ? 3 : 5) + '">← Back</button><button class="btn primary" id="mkfont"' + (b.length && !S.building ? '' : ' disabled') + '>' + (S.building ? 'Creating…' : 'Create font from ' + b.length + ' icon' + (b.length === 1 ? '' : 's')) + '</button>';
 }
 function doneCard() {
   const r = S.result, s = r.slug;
@@ -367,23 +672,23 @@ const edTf = (e, s, x, y) => { x -= 512; y -= 512; for (let i = 0; i < e.rot / 9
 
 function viewEdit() {
   const b = S.basket;
-  if (!b.length) { $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><div class="card empty">Your basket is empty. Pick some icons first.</div>'; return; }
+  if (!b.length) { $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><div class="card empty">Your basket is empty. Pick some icons first.</div>'; dockEdit(); return; }
   S.edSel = Math.min(S.edSel, b.length - 1);
   const x = b[S.edSel], e = x.ed, clean = S.edMode === 'clean';
   const stage = clean ? '<span class="fr"><div id="cleansvg" style="width:100%;height:100%;transform:' + edT(e) + '"></div></span>'
     : '<span class="fr"><span class="ic" id="edic" style="--u:url(\'' + urlD(x) + '\'); transform:' + edT(e) + '"></span></span>';
   const move = '<div class="ctl"><button class="btn small" data-ed="fh">↔ Flip</button><button class="btn small" data-ed="fv">↕ Flip</button><button class="btn small" data-ed="rl">⟲ 90°</button><button class="btn small" data-ed="rr">⟳ 90°</button><button class="btn small" data-ed="fit">Fit to canvas</button><button class="btn small" data-ed="reset">Reset</button></div>' +
     '<div class="sl"><span>Size</span><input type="range" data-edin="s" min="50" max="200" value="' + Math.round(e.s * 100) + '"><output id="o_s">' + Math.round(e.s * 100) + '%</output></div>' +
-    '<div class="sl"><span>Move left/right</span><input type="range" data-edin="dx" min="-300" max="300" value="' + Math.round(e.dx) + '"><output id="o_dx">' + Math.round(e.dx) + '</output></div>' +
-    '<div class="sl"><span>Move up/down</span><input type="range" data-edin="dy" min="-300" max="300" value="' + Math.round(e.dy) + '"><output id="o_dy">' + Math.round(e.dy) + '</output></div>' +
+    '<div class="sl"><span>Move left/right</span><input type="range" data-edin="dx" min="-512" max="512" value="' + Math.round(e.dx) + '"><output id="o_dx">' + Math.round(e.dx) + '</output></div>' +
+    '<div class="sl"><span>Move up/down</span><input type="range" data-edin="dy" min="-512" max="512" value="' + Math.round(e.dy) + '"><output id="o_dy">' + Math.round(e.dy) + '</output></div>' +
     '<div class="ctl"><button class="btn small" data-ed="all">Apply these edits to all ' + b.length + ' icons</button><button class="btn small" data-ed="fitall">Fit all to canvas</button></div>';
   const tidy = '<p style="color:var(--muted);font-size:14px;margin:12px 0 4px">Click shapes to select them (they turn red), then delete. Deleting is per icon and your original file is untouched.</p><div class="ctl" id="cleaninfo"></div>' +
     '<div class="ctl"><button class="btn small" data-ed="delsel" id="delsel" disabled>Delete selected</button><button class="btn small" data-ed="undo"' + ((x.hist || []).length ? '' : ' disabled') + '>Undo</button><button class="btn small" data-ed="restore"' + (e.del.length ? '' : ' disabled') + '>Restore all</button><button class="btn small" data-ed="clearsel">Clear selection</button></div>' +
     '<div class="sl"><span>Speck size</span><input type="range" data-speck="1" min="5" max="150" value="' + S.speck + '"><output id="o_speck">' + S.speck + '</output></div>' +
     '<div class="ctl"><button class="btn small" data-ed="specks">Select shapes smaller than this</button></div>';
   $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><p class="lead">Fix direction, size and position, or delete stray shapes, before the font is made. Edits apply to the copies sent to the font. Your original SVG files are never changed.</p>' +
-    '<div class="two" style="grid-template-columns:minmax(0,1fr) 340px"><div class="card"><div class="sh"><h2>' + esc(x.name) + ' <small>' + (S.edSel + 1) + ' of ' + b.length + (e.del.length ? ' · ' + e.del.length + ' shapes deleted' : '') + '</small></h2><span class="seg mode"><button data-ed="mode-move" class="' + (clean ? '' : 'on') + '">Position</button><button data-ed="mode-clean" class="' + (clean ? 'on' : '') + '">Clean up</button></span></div>' +
-    '<div class="canvas">' + stage + '</div>' + (clean ? tidy : move) + '</div>' +
+    '<div class="two ed"><div class="card"><div class="sh"><h2>' + esc(x.name) + ' <small>' + (S.edSel + 1) + ' of ' + b.length + (e.del.length ? ' · ' + e.del.length + ' shapes deleted' : '') + '</small></h2><span class="seg mode"><button data-ed="mode-move" class="' + (clean ? '' : 'on') + '">Position</button><button data-ed="mode-clean" class="' + (clean ? 'on' : '') + '">Clean up</button></span></div>' +
+    '<div class="canvas' + (clean ? '' : ' mv') + '">' + stage + '</div>' + (clean ? '' : '<p style="color:var(--muted);font-size:14px;margin:10px 0 0;text-align:center"><b style="color:var(--ink)">Drag the icon</b> with your mouse to place it, or use the arrow keys (Shift = bigger steps). It snaps to the centre lines; hold Alt to turn snapping off.</p>') + (clean ? tidy : move) + '<div class="ctl"><button class="btn small" data-vary="1">Vary this icon…</button><button class="btn small rmtext" style="width:auto" data-ed="remove">Remove this icon from the basket</button></div></div>' +
     '<aside class="card"><h2 style="margin:0 0 10px;font-size:16px">Icons</h2><div class="edgrid">' +
     b.map((it, i) => '<button class="tile ' + (i === S.edSel ? 'sel' : '') + '" data-edsel="' + i + '" title="' + esc(it.name) + '">' + icE(it) + '</button>').join('') + '</div></aside></div>';
   dockEdit();
@@ -391,7 +696,8 @@ function viewEdit() {
 }
 function dockEdit() {
   const d = $('#dock'); d.hidden = false;
-  d.innerHTML = '<span class="msg">' + S.basket.length + ' in basket</span><button class="btn" data-go="2">← Pick more</button><button class="btn primary" data-go="4">Basket &amp; font →</button>';
+  const k = S.edMode === 'clean' ? S.cleanSel.size : 0;
+  d.innerHTML = '<span class="msg">' + S.basket.length + ' in basket</span>' + (k ? '<button class="btn danger" data-ed="delsel">Delete ' + k + ' selected shape' + (k === 1 ? '' : 's') + ' (Del)</button>' : '') + '<button class="btn" data-go="' + (S.sets.length ? 2 : 5) + '">← Back</button><button class="btn primary" data-go="4"' + (S.basket.length ? '' : ' disabled') + '>Basket &amp; font →</button>';
 }
 async function loadClean() {
   const x = S.basket[S.edSel], box = $('#cleansvg'); if (!box) return;
@@ -411,11 +717,14 @@ function cleanInfo() {
   const total = document.querySelectorAll('#cleansvg path').length;
   el.innerHTML = '<span style="color:var(--muted)">' + total + ' shapes · ' + S.cleanSel.size + ' selected</span>';
   const b = $('#delsel'); if (b) b.disabled = !S.cleanSel.size;
+  if (S.step === 3) dockEdit();
 }
 function edLive() {
   const x = S.basket[S.edSel], e = x.ed;
   $('#edic').style.transform = edT(e);
   $('#o_s').textContent = Math.round(e.s * 100) + '%'; $('#o_dx').textContent = Math.round(e.dx); $('#o_dy').textContent = Math.round(e.dy);
+  const sv = { s:Math.round(e.s * 100), dx:Math.round(e.dx), dy:Math.round(e.dy) };
+  document.querySelectorAll('[data-edin]').forEach(i => { if (document.activeElement !== i) i.value = sv[i.dataset.edin]; });
   const th = document.querySelectorAll('.edgrid .tile')[S.edSel]; if (th) th.querySelector('.ic').style.transform = edT(e);
   S.result = null;
 }
@@ -434,6 +743,7 @@ async function fitOne(x) {
 }
 async function edAction(a) {
   const b = S.basket, x = b[S.edSel], e = x.ed; S.result = null;
+  if (a === 'remove') { const nm = x.name; b.splice(S.edSel, 1); S.edSel = Math.max(0, Math.min(S.edSel, b.length - 1)); S.cleanSel.clear(); render(); toast('Removed ' + nm + ' from the basket'); return; }
   if (a === 'fh') e.fx *= -1; else if (a === 'fv') e.fy *= -1;
   else if (a === 'rl') e.rot = (e.rot + 270) % 360; else if (a === 'rr') e.rot = (e.rot + 90) % 360;
   else if (a === 'reset') { const del = e.del; Object.assign(e, newEd()); e.del = del; }
@@ -444,8 +754,11 @@ async function edAction(a) {
   else if (a === 'mode-clean') { S.edMode = 'clean'; S.cleanSel.clear(); }
   else if (a === 'clearsel') { S.cleanSel.clear(); document.querySelectorAll('#cleansvg path.s').forEach(p => p.classList.remove('s')); cleanInfo(); return; }
   else if (a === 'specks') {
-    document.querySelectorAll('#cleansvg path').forEach(p => { const bb = p.getBBox(); if (Math.max(bb.width, bb.height) < S.speck) { S.cleanSel.add(+p.dataset.i); p.classList.add('s'); } });
-    cleanInfo(); return;
+    let found = 0;
+    document.querySelectorAll('#cleansvg path').forEach(p => { const bb = p.getBBox(); if (Math.max(bb.width, bb.height) < S.speck) { S.cleanSel.add(+p.dataset.i); p.classList.add('s'); found++; } });
+    cleanInfo();
+    toast(found ? found + ' small shape' + (found === 1 ? '' : 's') + ' selected. Press Delete to remove ' + (found === 1 ? 'it' : 'them') + '.' : 'No shapes are smaller than that. Raise the speck size.');
+    return;
   }
   else if (a === 'delsel') { if (!S.cleanSel.size) return; (x.hist = x.hist || []).push(e.del.slice()); e.del = [...new Set([...e.del, ...S.cleanSel])].sort((m, n) => m - n); S.cleanSel.clear(); }
   else if (a === 'undo') { if (x.hist && x.hist.length) e.del = x.hist.pop(); S.cleanSel.clear(); }
@@ -464,6 +777,39 @@ document.addEventListener('input', e => {
   edLive();
 });
 
+document.addEventListener('toggle', e => { if (e.target.id === 'vdet' && S.vary) S.vary.advOpen = e.target.open; }, true);
+// Place the icon by hand: drag it on the canvas, or nudge it with the arrow keys. It snaps to the centre lines.
+const EDMAX = 512, SNAP = 9;
+const edClamp = v => Math.max(-EDMAX, Math.min(EDMAX, v));
+const edSnap = v => Math.abs(v) < SNAP ? 0 : v;
+let edDrag = null;
+document.addEventListener('pointerdown', e => {
+  const c = e.target.closest && e.target.closest('.canvas.mv'); if (!c || S.step !== 3 || e.button !== 0) return;
+  const x = S.basket[S.edSel]; if (!x) return;
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  e.preventDefault(); try { c.setPointerCapture(e.pointerId); } catch (err) { /* the move listeners are on the document anyway */ } c.classList.add('drag');
+  edDrag = { c, id:e.pointerId, sx:e.clientX, sy:e.clientY, dx:x.ed.dx, dy:x.ed.dy, w:c.getBoundingClientRect().width || 420 };
+});
+document.addEventListener('pointermove', e => {
+  if (!edDrag || e.pointerId !== edDrag.id) return;
+  const ed = S.basket[S.edSel].ed, k = 1024 / edDrag.w;
+  const snap = !e.altKey;   // hold Alt to turn snapping off
+  const nx = edClamp(edDrag.dx + (e.clientX - edDrag.sx) * k), ny = edClamp(edDrag.dy + (e.clientY - edDrag.sy) * k);
+  ed.dx = snap ? edSnap(nx) : nx; ed.dy = snap ? edSnap(ny) : ny; edLive();
+});
+const edEnd = e => { if (!edDrag || e.pointerId !== edDrag.id) return; edDrag.c.classList.remove('drag'); edDrag = null; };
+document.addEventListener('pointerup', edEnd); document.addEventListener('pointercancel', edEnd);
+document.addEventListener('keydown', e => {
+  if (S.step !== 3 || S.settings || !S.basket.length) return;
+  const a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'range') return;
+  // Clean up mode: the Delete key removes the selected shapes (same as the Delete button).
+  if (S.edMode === 'clean') { if ((e.key === 'Delete' || e.key === 'Backspace') && S.cleanSel.size) { e.preventDefault(); edAction('delsel'); } return; }
+  if (a && a.tagName === 'INPUT') return;
+  const d = { ArrowLeft:[-1, 0], ArrowRight:[1, 0], ArrowUp:[0, -1], ArrowDown:[0, 1] }[e.key]; if (!d) return;
+  e.preventDefault(); const ed = S.basket[S.edSel].ed, step = e.shiftKey ? 32 : 8;
+  ed.dx = edClamp(ed.dx + d[0] * step); ed.dy = edClamp(ed.dy + d[1] * step); edLive();
+});
+
 // right-click an icon: copy its SVG to the clipboard
 function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
 function closeMenu() { const m = $('#ctxm'); if (m) m.remove(); }
@@ -472,10 +818,53 @@ async function copyText(txt) {
   const a = document.createElement('textarea'); a.value = txt; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select();
   let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} a.remove(); return ok;
 }
+// The saved recipe (prompt, seed...) stays in your library files, but is left out of anything you copy or download.
+const stripMeta = svg => String(svg).replace(/<metadata\b[^>]*\bid="iconforge"[^>]*>[\s\S]*?<\/metadata>/i, '');
 async function svgText(folder, file, ed) {
-  if (ed) return (await post('/api/bake', { folder, file, edit:ed })).svg;
+  if (ed) return stripMeta((await post('/api/bake', { folder, file, edit:ed })).svg);
   const txt = await (await fetch(url(folder, file))).text();
-  return txt.slice(txt.indexOf('<svg'));
+  return stripMeta(txt.slice(txt.indexOf('<svg')));
+}
+
+// ---- Download the basket as one .zip of SVG files (a small store-only zip writer, so no extra libraries) ----
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+function makeZip(files) {
+  const enc = new TextEncoder(), parts = [], central = []; let offset = 0;
+  const d = new Date(), dt = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), dd = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  for (const f of files) {
+    const name = enc.encode(f.name), crc = crc32(f.data), size = f.data.length;
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true); lh.setUint16(10, dt, true); lh.setUint16(12, dd, true);
+    lh.setUint32(14, crc, true); lh.setUint32(18, size, true); lh.setUint32(22, size, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+    parts.push(new Uint8Array(lh.buffer), name, f.data);
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true); ch.setUint16(12, dt, true); ch.setUint16(14, dd, true);
+    ch.setUint32(16, crc, true); ch.setUint32(20, size, true); ch.setUint32(24, size, true); ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
+    central.push(new Uint8Array(ch.buffer), name);
+    offset += 30 + name.length + size;
+  }
+  const cdSize = central.reduce((a, p) => a + p.length, 0), end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true); end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+  return new Blob([...parts, ...central, new Uint8Array(end.buffer)], { type:'application/zip' });
+}
+async function downloadZip() {
+  const b = S.basket; if (!b.length || S.zipping) return;
+  S.zipping = true; toast('Making the zip…');
+  try {
+    const used = new Set(), files = [], enc = new TextEncoder(), recolour = S.bTab === 'preview' && S.pv.useCol;
+    for (const x of b) {
+      let svg = await svgText(x.folder, x.file, edIsId(x.ed) ? null : x.ed);
+      // Optional: paint the icons in the preview colour (white-ish background shapes are left alone).
+      if (recolour) svg = svg.replace(/fill="#([0-9a-fA-F]{6})"/g, (m, h) => { const v = [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16)); return 0.299 * v[0] + 0.587 * v[1] + 0.114 * v[2] > 230 ? m : 'fill="' + S.pv.col + '"'; });
+      const base = (x.name || 'icon').replace(/[^\w.\-]+/g, '-').replace(/^-+|-+$/g, '') || 'icon';
+      let nm = base, i = 2; while (used.has(nm.toLowerCase())) nm = base + '-' + i++; used.add(nm.toLowerCase());
+      files.push({ name: nm + '.svg', data: enc.encode(svg) });
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(makeZip(files)); a.download = (slug(S.font) || 'icons') + '.zip';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 20000);
+    toast('Zip ready: ' + a.download + ' (' + files.length + ' icon' + (files.length === 1 ? '' : 's') + ')');
+  } catch (e) { toast('Could not make the zip'); } finally { S.zipping = false; }
 }
 async function copySvg(folder, file, ed) {
   closeMenu();
@@ -510,10 +899,13 @@ document.addEventListener('contextmenu', e => {
   e.preventDefault(); closeMenu();
   const m = document.createElement('div'); m.className = 'ctxm'; m.id = 'ctxm';
   const edited = r.item && !edIsId(r.item.ed);
-  m.innerHTML = '<button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '') + '<button data-cp="2">Copy as picture (PNG)</button>';
+  m.innerHTML = '<button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '') + '<button data-cp="2">Copy as picture (PNG)</button>' + (r.item ? '<button data-cp="3" style="color:#dc2626">Remove from basket</button>' : '') + '<button data-cp="5">Vary this icon…</button>' + (S.step === 5 && S.libOpen === r.folder ? '<button data-cp="4" style="color:#dc2626">Delete from library…</button>' : '');
   m.style.left = Math.min(e.clientX, innerWidth - 240) + 'px'; m.style.top = Math.min(e.clientY, innerHeight - 140) + 'px';
   m.addEventListener('click', ev => {
     const b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.cp === '5') { closeMenu(); openVary(r.folder, r.file, S.step === 6 && S.vary ? S.vary.back : S.step); return; }
+    if (b.dataset.cp === '4') { closeMenu(); deleteFromLibrary(r.folder, [r.file]); return; }
+    if (b.dataset.cp === '3') { closeMenu(); const i = S.basket.indexOf(r.item); if (i >= 0) { S.basket.splice(i, 1); S.result = null; render(); toast('Removed ' + r.item.name + ' from the basket'); } return; }
     if (b.dataset.cp === '2') copyPng(r.folder, r.file, edited ? r.item.ed : null);
     else copySvg(r.folder, r.file, b.dataset.cp === '1' ? r.item.ed : null);
   });
@@ -528,7 +920,36 @@ document.addEventListener('click', e => {
   if (t.id === 'chip') { go(4); return; }
   if (d.edsel !== undefined) { S.edSel = +d.edsel; S.cleanSel.clear(); viewEdit(); return; }
   if (d.ed) { edAction(d.ed); return; }
+  if (d.varyhome) { S.libHint = true; go(5); return; }
   if (d.go) { go(+d.go); return; }
+  if (d.vstyle) { S.vary.style = d.vstyle; viewVary(); refreshVaryPrompt(); return; }
+  if (d.vdetail) { S.vary.detail = +d.vdetail; viewVary(); refreshVaryPrompt(); return; }
+  if (d.vmode) { S.vary.mode = d.vmode; viewVary(); return; }
+  if (d.vcnt) { S.vary.count = Math.max(1, Math.min(6, S.vary.count + +d.vcnt)); viewVary(); return; }
+  if (t.id === 'vgo') { startVary(); return; }
+  if (t.id === 'vstop') { if (S.vary && S.vary.jobId) post('/api/generate/cancel', { id:S.vary.jobId }); return; }
+  if (t.id === 'vback') {   // back to where Vary was opened, unless that place is empty now
+    let to = S.vary && S.vary.back != null && S.vary.back !== 6 ? S.vary.back : 5;
+    if ((to === 2 && !S.sets.length) || (to === 3 && !S.basket.length)) to = 5;
+    go(to); return;
+  }
+  if (t.id === 'varybtn') { const k = [...S.sel][0]; if (k) { const i = k.indexOf('/'); openVary(k.slice(0, i), k.slice(i + 1), S.step === 6 && S.vary ? S.vary.back : S.step); } return; }
+  if (t.id === 'vreset') { S.vary.promptEdited = false; refreshVaryPrompt(); return; }
+  if (d.vary) { const x = S.basket[S.edSel]; if (x) openVary(x.folder, x.file, 3); return; }
+  if (d.dlzip) { downloadZip(); return; }
+  if (d.pvsz) { S.pv.size = +d.pvsz; const s = $('#sample'); if (s) { s.style.setProperty('--s', S.pv.size + 'px'); $('#sz').value = S.pv.size; $('#szv').textContent = S.pv.size + 'px'; document.querySelectorAll('[data-pvsz]').forEach(x => x.classList.toggle('on', +x.dataset.pvsz === S.pv.size)); } return; }
+  if (d.btab) { S.bTab = d.btab; viewBasket(); return; }
+  if (d.pvbg) { S.pv.bg = d.pvbg; if (!S.pv.touched) S.pv.col = pvInk(d.pvbg); viewBasket(); return; }
+  if (d.libopen !== undefined) { S.libOpen = d.libopen || null; render(); window.scrollTo(0, 0); return; }
+  if (d.liball) { const set = S.lib.find(l => l.folder === S.libOpen); if (set) set.files.forEach(f => { const k = key(set.folder, f); if (!inBasket(k)) S.sel.add(k); }); viewLibrary(); return; }
+  if (d.revealset) { post('/api/reveal', { set:d.revealset }); return; }
+  if (d.delset !== undefined) { deleteFromLibrary(d.delset, null); return; }
+  if (t.id === 'dellib') { const set = S.lib.find(l => l.folder === S.libOpen); if (set) deleteFromLibrary(set.folder, set.files.filter(f => S.sel.has(key(set.folder, f)))); return; }
+  if (t.id === 'bselall') { S.basket.forEach(x => S.bSel.add(x.key)); updateBSel(); return; }
+  if (t.id === 'bselclr') { S.bSel.clear(); updateBSel(); return; }
+  if (t.id === 'bselrm') { const n = S.bSel.size; S.basket = S.basket.filter(x => !S.bSel.has(x.key)); S.bSel.clear(); S.bLast = -1; S.result = null; S.edSel = 0; render(); toast(n + ' icon' + (n === 1 ? '' : 's') + ' removed from the basket'); return; }
+  if (t.id === 'rmsel') { removeSelected(); return; }
+  if (t.id === 'clearb') { clearBasket(); return; }
   if (d.rm !== undefined) { S.kws.splice(+d.rm, 1); viewKeywords(); return; }
   if (d.per) { S.per = Math.min(24, Math.max(1, S.per + +d.per)); viewKeywords(); return; }
   if (d.style) { S.style = d.style; viewKeywords(); return; }
@@ -536,7 +957,7 @@ document.addEventListener('click', e => {
   if (d.uselib) { const l = S.lib.find(x => x.folder === d.uselib); if (l && !S.sets.some(s => s.folder === l.folder)) S.sets.push({ folder:l.folder, title:l.folder, files:l.files }); go(2); return; }
   if (t.id === 'gobtn') { startGen(); return; }
   if (t.id === 'stopbtn') { stopGen(); return; }
-  if (d.pick) { S.sel.has(d.pick) ? S.sel.delete(d.pick) : S.sel.add(d.pick); t.classList.toggle('sel'); t.setAttribute('aria-pressed', S.sel.has(d.pick)); dockPick(); return; }
+  if (d.pick) { S.sel.has(d.pick) ? S.sel.delete(d.pick) : S.sel.add(d.pick); t.classList.toggle('sel'); t.setAttribute('aria-pressed', S.sel.has(d.pick)); S.step === 6 ? dockVary() : dockPick(); return; }
   if (d.all) { const set = S.sets[+d.all]; set.files.forEach(f => { const k = key(set.folder, f); if (!inBasket(k)) S.sel.add(k); }); viewPick(); return; }
   if (d.hide) { S.sets.splice(+d.hide, 1); S.sets.length ? viewPick() : go(1); return; }
   if (d.more) { makeMore(+d.more); return; }
@@ -554,9 +975,20 @@ document.addEventListener('submit', e => {
 });
 document.addEventListener('input', e => {
   const t = e.target;
+  if (t.id === 'libq') { S.libQ = t.value; drawLibGrid(); return; }
+  if (t.id === 'vsub') { S.vary.subject = t.value; refreshVaryPrompt(); dockVary(); return; }
+  if (t.id === 'vstr') { S.vary.strength = +t.value / 100; $('#vstrv').textContent = t.value + '%'; return; }
+  if (t.id === 'vprompt') { S.vary.prompt = t.value; S.vary.promptEdited = true; return; }
+  if (t.id === 'vkeep') { S.vary.keepSeed = t.checked; return; }
   if (t.id === 'tsz') { S.size = +t.value; document.documentElement.style.setProperty('--tile', S.size + 'px'); $('#tszv').textContent = S.size + 'px'; }
-  else if (t.id === 'sz') { $('#sample').style.setProperty('--s', t.value + 'px'); $('#szv').textContent = t.value; }
-  else if (t.id === 'co') $('#sample').style.setProperty('--c', t.value);
+  else if (t.id === 'pvuse') S.pv.useCol = t.checked;
+  else if (t.id === 'sz') { S.pv.size = +t.value; $('#sample').style.setProperty('--s', t.value + 'px'); $('#szv').textContent = t.value + 'px'; document.querySelectorAll('[data-pvsz]').forEach(x => x.classList.toggle('on', +x.dataset.pvsz === S.pv.size)); }
+  else if (t.id === 'co') { S.pv.col = t.value; S.pv.touched = true; $('#sample').style.setProperty('--c', t.value); }
+  else if (t.id === 'pvbgc') {
+    S.pv.bg = t.value; $('#sample').style.background = t.value;
+    document.querySelectorAll('[data-pvbg]').forEach(x => x.classList.toggle('on', x.dataset.pvbg === t.value.toLowerCase()));
+    if (!S.pv.touched) { S.pv.col = pvInk(t.value); $('#co').value = S.pv.col; $('#sample').style.setProperty('--c', S.pv.col); }
+  }
   else if (t.id === 'fname') { S.font = t.value; S.result = null; }
   else if (t.dataset && t.dataset.name !== undefined) { S.basket[+t.dataset.name].name = t.value; S.result = null; }
 });

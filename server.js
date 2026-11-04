@@ -4,7 +4,7 @@ const fs = require('fs');
 const http = require('http');
 const path = require('path');
 const { URL } = require('url');
-const { editParams, isIdentity, parseDels, dropPaths, bake, safePath } = require('./svgedit');
+const { editParams, isIdentity, parseDels, dropPaths, bake, safePath, readMeta } = require('./svgedit');
 const { makeFont, slugify } = require('./fontmaker');
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json',
@@ -29,8 +29,8 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
 
   function readBody(req) {
     return new Promise((resolve, reject) => {
-      const chunks = [];
-      req.on('data', c => chunks.push(c));
+      const chunks = []; let size = 0;
+      req.on('data', c => { size += c.length; if (size > 24 * 1024 * 1024) { reject(new Error('too large')); req.destroy(); return; } chunks.push(c); });
       req.on('end', () => { try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}')); } catch (e) { reject(e); } });
       req.on('error', reject);
     });
@@ -53,6 +53,23 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
         return send(res, 200, html, TYPES['.html']);
       }
       if (p === '/api/status') return send(res, 200, { model: models.status(), library: gen.library(), theme: models.getSetting('theme') || '' });
+      // The saved recipe of one icon (null for icons made before recipes were saved, or added by hand).
+      if (p === '/api/icon-info') {
+        const set = u.searchParams.get('set') || '';
+        const f = safePath(baseDir, set, u.searchParams.get('file') || '');
+        if (!set || !f || !f.toLowerCase().endsWith('.svg') || !fs.existsSync(f)) return send(res, 404, { error: 'icon not found' });
+        // Older icons have no saved recipe: offer a best guess from the set's name so they can still be varied.
+        const m = /_(filled|double|hand)$/i.exec(set), style = m ? m[1].toLowerCase() : 'line';
+        const subject = (m ? set.slice(0, -m[0].length) : set).replace(/[_-]+/g, ' ').trim() || 'icon';
+        return send(res, 200, { meta: readMeta(fs.readFileSync(f, 'utf8')), guess: { subject, style, detail: 2, prompt: gen.promptFor(subject, style, 2) } });
+      }
+      // The automatic prompt for a subject, style and detail (the Vary screen shows it and lets you edit it).
+      if (p === '/api/prompt') {
+        const subject = cleanKeyword(u.searchParams.get('subject') || '') || 'icon';
+        const style = ['line', 'filled', 'double', 'hand'].includes(u.searchParams.get('style')) ? u.searchParams.get('style') : 'line';
+        const detail = [1, 2, 3].includes(parseInt(u.searchParams.get('detail'), 10)) ? parseInt(u.searchParams.get('detail'), 10) : 2;
+        return send(res, 200, { prompt: gen.promptFor(subject, style, detail) });
+      }
       if (p === '/api/job') {
         const j = gen.jobs[u.searchParams.get('id') || ''];
         return send(res, j ? 200 : 404, j || { error: 'unknown job' });
@@ -67,6 +84,7 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
         }
       }
       if (p.startsWith('/iconfonts/')) return sendFile(res, safePath(fontsDir, ...p.slice(11).split('/')));
+      if (p === '/app-icon.png') return sendFile(res, path.join(publicDir, 'splash-icon.png'));
       if (p === '/favicon.ico') return send(res, 204, '', 'image/x-icon');
       return send(res, 404, { error: 'not found' });
     }
@@ -88,6 +106,28 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
       if (!['line', 'filled', 'double', 'hand'].includes(style)) style = 'line';
       if (!kws.length) return send(res, 400, { error: 'no keywords' });
       return send(res, 200, gen.start(kws, per, detail, style));
+    }
+
+    // Vary: new versions of one icon, saved in the same set. Changes the words, or starts from the icon's own picture.
+    if (p === '/api/vary') {
+      const folder = String(data.set || ''), file = String(data.file || '');
+      const src = safePath(baseDir, folder, file);
+      if (!folder || /[\\/]/.test(folder) || folder === 'iconfonts' || !src || !file.toLowerCase().endsWith('.svg') || !fs.existsSync(src)) return send(res, 404, { error: 'That icon was not found.' });
+      const subject = cleanKeyword(String(data.subject || '')) || 'icon';
+      const style = ['line', 'filled', 'double', 'hand'].includes(data.style) ? data.style : 'line';
+      const detail = [1, 2, 3].includes(parseInt(data.detail, 10)) ? parseInt(data.detail, 10) : 2;
+      const count = Math.max(1, Math.min(6, parseInt(data.count, 10) || 4));
+      const mode = data.mode === 'image' ? 'image' : 'prompt';
+      const strength = Math.max(0.2, Math.min(0.95, parseFloat(data.strength) || 0.6));
+      let prompt = String(data.prompt || '').replace(/\s+/g, ' ').trim().slice(0, 1500);
+      if (!prompt) prompt = gen.promptFor(subject, style, detail);
+      let initPng = '';
+      if (mode === 'image') {
+        initPng = String(data.initPng || '').replace(/^data:image\/png;base64,/, '');
+        if (!initPng || initPng.length > 14 * 1024 * 1024 || !/^[A-Za-z0-9+/=]+$/.test(initPng.slice(0, 200))) return send(res, 400, { error: 'The starting picture could not be read.' });
+      }
+      const parentSeed = Number.isFinite(+data.parentSeed) && data.parentSeed !== null && data.parentSeed !== '' ? +data.parentSeed : NaN;
+      return send(res, 200, gen.startVary({ folder, file, subject, style, detail, prompt, count, mode, strength, initPng, keepSeed: !!data.keepSeed && mode === 'prompt', parentSeed }));
     }
 
     if (p === '/api/generate/cancel') return send(res, 200, gen.cancel(String(data.id || '')));
@@ -114,9 +154,34 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
       return send(res, 200, { svg: text.slice(text.indexOf('<svg')) });
     }
 
+    // Delete icons (or a whole set) from the library. Everything goes to the Recycle Bin, never erased.
+    if (p === '/api/library/delete') {
+      const folder = String(data.set || '');
+      if (!folder || folder === 'iconfonts' || /[\\/]/.test(folder) || folder.startsWith('.')) return send(res, 400, { error: 'bad set name' });
+      const dir = safePath(baseDir, folder);
+      if (!dir || dir === path.resolve(baseDir) || !fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) return send(res, 404, { error: 'That set was not found.' });
+      if (!host.trash) return send(res, 501, { error: 'Moving to the Recycle Bin is not available here.' });
+      const files = Array.isArray(data.files) ? data.files.map(String) : [];
+      let deleted = 0, setGone = false;
+      try {
+        if (!files.length) {
+          deleted = fs.readdirSync(dir).filter(n => n.toLowerCase().endsWith('.svg')).length;
+          await host.trash(dir); setGone = true;
+        } else {
+          for (const f of files) {
+            if (!f.toLowerCase().endsWith('.svg') || /[\\/]/.test(f)) continue;
+            const fp = safePath(dir, f);
+            if (fp && fp !== dir && fs.existsSync(fp)) { await host.trash(fp); deleted++; }
+          }
+          if (!fs.readdirSync(dir).some(n => n.toLowerCase().endsWith('.svg'))) { await host.trash(dir); setGone = true; }
+        }
+      } catch (e) { return send(res, 500, { error: 'Could not move to the Recycle Bin: ' + e.message }); }
+      return send(res, 200, { ok: true, deleted, setGone });
+    }
+
     if (p === '/api/reveal') {
       const slug = slugify(String(data.slug || ''));
-      const d = slug ? safePath(fontsDir, slug) : baseDir;
+      const d = data.set ? safePath(baseDir, String(data.set)) : slug ? safePath(fontsDir, slug) : baseDir;
       if (d && fs.existsSync(d)) { host.openPath(d); return send(res, 200, { ok: true }); }
       return send(res, 404, { error: 'folder not found' });
     }

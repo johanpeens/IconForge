@@ -5,6 +5,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { spawn, execFileSync } = require('child_process');
 const { vectorize, ColorMode, Hierarchical, PathSimplifyMode } = require('@neplex/vectorizer');
+const { addMeta } = require('./svgedit');
 
 const slugUnderscore = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'icon';
 const natural = s => s.split(/(\d+)/).map(t => (/^\d+$/.test(t) ? parseInt(t, 10) : t.toLowerCase()));
@@ -24,24 +25,28 @@ const STYLES = {
     1: 'drawn with one uniform very thick black outline stroke, no fill, no shading, rounded line ends, very few bold simple shapes',
     2: 'drawn with one uniform thick black outline stroke, no fill, no shading, rounded line ends, simple geometric shapes',
     3: 'drawn with fine uniform black outline strokes, no fill, no shading, rounded line ends, rich interior detail and small features' } },
-  filled: { kind: 'solid glyph icon', text: {
-    1: 'a solid black filled silhouette, no outline, no shading, rounded corners, one bold simple shape',
-    2: 'a solid black filled silhouette with a few small white cut-out details, no outline, no shading, rounded corners',
-    3: 'a solid black filled silhouette with many fine white cut-out details, no outline, no shading, crisp edges' } },
+  // Filled: a solid black figure that stays readable because white gaps separate its parts. One figure, no frame or badge.
+  filled: { kind: 'solid glyph icon', lead: 'A flat black glyph pictogram of a single ', tail: ', centred with a generous margin on a plain white background.', text: {
+    1: 'filled solid black, with a few large white cut-out gaps that separate the main parts, plenty of white space, no outline, no shading, no grey, no frame, no border, no badge, rounded corners, one bold simple shape',
+    2: 'filled solid black, with clear white cut-out gaps and bold white lines that separate the main parts, white cut-outs for the key details, generous white space between the parts so every part is easy to read at small sizes, no outline, no shading, no grey, no frame, no border, no badge, rounded corners',
+    3: 'filled solid black, with many fine white cut-out lines and gaps that separate every part and show the details, plenty of white space so it stays legible, no outline, no shading, no grey, no frame, no border, no badge, crisp edges' } },
   double: { kind: 'double-line icon', text: {
     1: 'drawn with a very thick black outline and one inner line running parallel to it, no fill, no shading, rounded line ends, very few shapes',
     2: 'drawn with a bold black outline and a thin inner line running parallel to it, no fill, no shading, rounded line ends, simple shapes',
     3: 'drawn with a fine black outline and a thin inner line running parallel to it, no fill, no shading, rounded line ends, rich interior detail' } },
-  hand: { kind: 'hand-drawn line icon', text: {
-    1: 'drawn as a thick wobbly black ink line, no fill, no shading, rounded line ends, very few loose shapes',
-    2: 'drawn as a hand-drawn black ink line with slightly wobbly strokes, no fill, no shading, rounded line ends, simple loose shapes',
-    3: 'drawn as a fine hand-drawn black ink line with sketchy strokes, no fill, no shading, rounded line ends, rich interior detail' } },
+  // Hand-drawn: must look clearly different from Line, so it asks for uneven, overshooting pen strokes (tested 4 Nov 2026; the
+  // words "in a notebook" made the AI draw a spiral binding, so they are not used).
+  hand: { kind: 'hand-drawn ink sketch icon', lead: 'A hand-drawn ink sketch icon of ', text: {
+    1: 'drawn with a thick black marker line that wobbles visibly, uneven strokes that vary a little in thickness, no fill, no shading, rounded line ends, very few loose shapes, like a quick pen sketch',
+    2: 'drawn with a black pen-and-ink line with visibly wobbly, uneven strokes that vary in thickness, corners that overshoot a little and lines that do not quite meet, no fill, no shading, rounded line ends, simple loose shapes, like a quick pen sketch',
+    3: 'drawn as a fine black pen-and-ink sketch with sketchy, uneven strokes, a few doubled-up lines and small gaps where the pen lifted, strokes that vary in thickness, no fill, no shading, rounded line ends, rich interior detail, like a careful pen sketch' } },
 };
 const SPECKLE = { 1: 6, 2: 4, 3: 2 };
 
 function promptFor(subject, style, detail) {
   const st = STYLES[style];
-  return 'A flat vector ' + st.kind + ' of ' + subject + ', ' + st.text[detail] + ', centred with a generous margin on a plain white background, front view, even flat light.';
+  // A style may bring its own opening and ending (Filled does); the others keep the original wording exactly.
+  return (st.lead || 'A flat vector ' + st.kind + ' of ') + subject + ', ' + st.text[detail] + (st.tail || ', centred with a generous margin on a plain white background, front view, even flat light.');
 }
 
 // ---------------------------------------------------------------- the image engine
@@ -103,12 +108,13 @@ function createEngine(engineDir) {
   }
 
   // Draw one picture. If the engine dies or hangs up on us, start a fresh one and try again (up to 3 goes).
-  async function draw(model, prompt, seed, onStage, cancelled) {
+  // `init` ({ b64, strength }) makes it start from an existing picture instead of from nothing (the "Vary" tool).
+  async function draw(model, prompt, seed, onStage, cancelled, init) {
     let last;
     for (let a = 0; a < 3; a++) {
       try {
         await ensure(model, onStage);
-        return await txt2imgOnce(prompt, seed);
+        return init ? await img2imgOnce(prompt, seed, init) : await txt2imgOnce(prompt, seed);
       } catch (e) {
         if (cancelled && cancelled()) throw e;
         last = e;
@@ -119,10 +125,10 @@ function createEngine(engineDir) {
     throw last;
   }
 
-  async function txt2imgOnce(prompt, seed) {
-    const res = await fetch('http://127.0.0.1:' + port + '/sdapi/v1/txt2img', {
+  async function callEngine(route, body) {
+    const res = await fetch('http://127.0.0.1:' + port + route, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Connection: 'close' },
-      body: JSON.stringify({ prompt, negative_prompt: '', width: 1024, height: 1024, steps: 4, cfg_scale: 1, seed, sampler_name: 'euler', scheduler: 'simple', batch_size: 1 }),
+      body: JSON.stringify(body),
       signal: AbortSignal.timeout(10 * 60 * 1000),
     });
     if (!res.ok) throw new Error('The image engine answered ' + res.status + ': ' + (await res.text()).slice(0, 300));
@@ -130,6 +136,18 @@ function createEngine(engineDir) {
     const b64 = (j.images && j.images[0]) || '';
     if (!b64) throw new Error('The image engine returned no picture.\n' + log.slice(-800));
     return Buffer.from(b64.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+  }
+
+  function txt2imgOnce(prompt, seed) {
+    return callEngine('/sdapi/v1/txt2img', { prompt, negative_prompt: '', width: 1024, height: 1024, steps: 4, cfg_scale: 1, seed, sampler_name: 'euler', scheduler: 'simple', batch_size: 1 });
+  }
+
+  // Start from a picture: strength is how much it may change (0.2 = a little, 0.95 = almost anything). The engine only
+  // runs the last part of the steps, so a lower strength gets more steps to keep the number of real steps about 4.
+  function img2imgOnce(prompt, seed, init) {
+    const strength = Math.max(0.2, Math.min(0.95, +init.strength || 0.6));
+    const steps = Math.max(4, Math.min(12, Math.round(4 / strength)));
+    return callEngine('/sdapi/v1/img2img', { prompt, negative_prompt: '', init_images: [init.b64], denoising_strength: strength, width: 1024, height: 1024, steps, cfg_scale: 1, seed, sampler_name: 'euler', scheduler: 'simple', batch_size: 1 });
   }
 
   return { ensure, draw, stop, tail: () => log };
@@ -161,7 +179,9 @@ function create({ baseDir, engineDir, models }) {
     for (const name of names.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))) {
       if (name === 'iconfonts') continue;
       const files = listSvgs(name);
-      if (files.length) out.push({ folder: name, files });
+      let mtime = 0;
+      try { mtime = fs.statSync(path.join(baseDir, name)).mtimeMs; } catch (e) { /* keep 0 */ }
+      if (files.length) out.push({ folder: name, files, mtime });
     }
     return out;
   }
@@ -188,8 +208,12 @@ function create({ baseDir, engineDir, models }) {
             const existing = listSvgs(folder).filter(f => f.startsWith(folder + '_')).length;
             const name = folder + '_' + String(existing + 1).padStart(2, '0');
             const seed = crypto.randomInt(1, 2147483647);
-            const png = await engine.draw(model, promptFor(k, style, detail), seed, null, () => job.cancel);
-            const svg = await trace(png, detail);
+            const prompt = promptFor(k, style, detail);
+            const png = await engine.draw(model, prompt, seed, null, () => job.cancel);
+            const svg = addMeta(await trace(png, detail), {
+              v: 1, app: 'Icon Forge', created: new Date().toISOString(), subject: k, prompt, style, detail, seed,
+              model: path.basename(model || ''), size: 1024, steps: 4,
+            });
             fs.writeFileSync(path.join(dir, name + '.svg'), svg);
             item.done++;
             if (job.warm) job.timings.push(Date.now() - t0); else job.firstMs = Date.now() - t0;
@@ -233,7 +257,69 @@ function create({ baseDir, engineDir, models }) {
     return { id };
   }
 
-  return { jobs, start, cancel, library, listSvgs, stopEngine: engine.stop };
+  // ---- Vary: make new versions of one existing icon (change the words, or start from its picture) ----
+  function nextNumber(folder) {
+    let max = 0;
+    for (const f of listSvgs(folder)) { const m = /_(\d+)\.svg$/i.exec(f); if (m) max = Math.max(max, +m[1]); }
+    return max + 1;
+  }
+
+  async function runVary(job, o) {
+    const model = models.modelPath(), dir = path.join(baseDir, o.folder);
+    const item = { keyword: o.subject, folder: o.folder, done: 0, failed: 0, total: o.count, files: [] };
+    job.items.push(item);
+    try {
+      await engine.ensure(model, s => { job.stage = s; });
+      job.stage = '';
+      for (let n = 0; n < o.count; n++) {
+        if (job.cancel) break;
+        job.current = { keyword: o.subject, n: n + 1, startedAt: Date.now(), first: !job.warm };
+        const t0 = Date.now();
+        try {
+          // The first version can reuse the original's seed, which keeps it as close to the original as the new words allow.
+          const seed = n === 0 && o.keepSeed && Number.isFinite(o.parentSeed) ? o.parentSeed : crypto.randomInt(1, 2147483647);
+          const init = o.mode === 'image' ? { b64: o.initPng, strength: o.strength } : null;
+          const png = await engine.draw(model, o.prompt, seed, null, () => job.cancel, init);
+          const name = o.folder.replace(/_+$/, '') + '_' + String(nextNumber(o.folder)).padStart(2, '0');
+          const meta = {
+            v: 1, app: 'Icon Forge', created: new Date().toISOString(), subject: o.subject, prompt: o.prompt, style: o.style, detail: o.detail, seed,
+            model: path.basename(model || ''), size: 1024, steps: 4, mode: o.mode, parent: { set: o.folder, file: o.file, seed: Number.isFinite(o.parentSeed) ? o.parentSeed : null },
+          };
+          if (o.mode === 'image') meta.strength = o.strength;
+          fs.writeFileSync(path.join(dir, name + '.svg'), addMeta(await trace(png, o.detail), meta));
+          item.done++; item.files.push(name + '.svg');
+          if (job.warm) job.timings.push(Date.now() - t0); else job.firstMs = Date.now() - t0;
+          job.avgMs = job.timings.length ? job.timings.reduce((a, b) => a + b, 0) / job.timings.length : 0;
+          job.log = (job.log + name + ' saved\n').slice(-4000);
+        } catch (e) {
+          if (job.cancel) break;
+          item.failed++;
+          job.log = (job.log + 'vary failed: ' + (e.message || e) + '\n' + engine.tail().slice(-1200) + '\n').slice(-4000);
+          if (/image engine (stopped|did not start|is missing)/.test(String(e.message))) throw e;
+          if (!job.firstError) job.firstError = String(e.message || e).split('\n')[0];
+        } finally {
+          job.warm = true;
+        }
+      }
+    } catch (e) {
+      if (!job.cancel) job.error = e.message || String(e);
+    }
+    if (!job.error && !item.done && item.failed && job.firstError) job.error = job.firstError;
+    job.stage = ''; job.current = null;
+    job.state = job.error ? 'error' : job.cancel ? 'stopped' : 'done';
+  }
+
+  // o: { folder, file, subject, style, detail, prompt, count, mode ('prompt' | 'image'), strength, initPng (base64), keepSeed, parentSeed }
+  function startVary(o) {
+    if (!models.modelPath()) return { error: 'The Flux model is not installed yet. Open Settings (the gear, top right) and download it.' };
+    if (Object.values(jobs).some(j => j.state === 'running')) return { error: 'Another generation is still running.' };
+    const id = crypto.randomBytes(4).toString('hex');
+    const job = jobs[id] = { id, kind: 'vary', state: 'running', items: [], log: '', stage: '', current: null, timings: [], avgMs: 0, firstMs: 0, per: o.count, detail: o.detail, style: o.style, started: Date.now() };
+    runVary(job, o);
+    return { id };
+  }
+
+  return { jobs, start, startVary, cancel, library, listSvgs, promptFor, stopEngine: engine.stop };
 }
 
-module.exports = { create, slugUnderscore, trace };
+module.exports = { create, slugUnderscore, trace, promptFor };

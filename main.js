@@ -39,6 +39,8 @@ async function start() {
   gen = generate.create({ baseDir, engineDir, models });
   const host = {
     openPath: p => shell.openPath(p),
+    // Deleting from the library always goes to the Windows Recycle Bin, so it can be undone.
+    trash: p => shell.trashItem(p),
     pickFolder: async () => {
       const r = await dialog.showOpenDialog(win, { title: 'Choose where to save the Flux model (about 17 GB)', properties: ['openDirectory', 'createDirectory'] });
       return r.canceled ? '' : r.filePaths[0];

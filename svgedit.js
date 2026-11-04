@@ -1,6 +1,19 @@
 // Flip / rotate / scale / move / delete-shape edits applied to a traced SVG (ported from icon_app.py).
 const path = require('path');
 
+// The recipe of an icon (prompt, style, seed...) is saved inside its own SVG as a <metadata> block, so it travels
+// with the file when it is copied, zipped or moved, and nothing is left behind when an icon is deleted.
+const META_RE = /<metadata\b[^>]*\bid="iconforge"[^>]*>([\s\S]*?)<\/metadata>/i;
+function addMeta(svg, meta) {
+  const json = JSON.stringify(meta).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const tag = '<metadata id="iconforge">' + json + '</metadata>';
+  return String(svg).replace(META_RE, '').replace(/<svg\b[^>]*>/i, m => m + tag);
+}
+function readMeta(svg) {
+  const m = META_RE.exec(String(svg)); if (!m) return null;
+  try { return JSON.parse(m[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')); } catch (e) { return null; }
+}
+
 function editParams(e) {
   const num = (k, d, lo, hi) => {
     const v = parseFloat(e[k]);
@@ -85,4 +98,4 @@ function safePath(root, ...parts) {
   return p === r || p.startsWith(r + path.sep) ? p : null;
 }
 
-module.exports = { editParams, isIdentity, parseDels, dropPaths, bake, safePath };
+module.exports = { editParams, isIdentity, parseDels, dropPaths, bake, safePath, addMeta, readMeta };
