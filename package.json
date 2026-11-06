@@ -1,7 +1,7 @@
 {
   "name": "icon-forge",
   "productName": "Icon Forge",
-  "version": "1.1.0",
+  "version": "1.1.9",
   "description": "Make icon sets and icon fonts from a keyword. Flux Schnell runs on your own PC.",
   "author": "Johan Peens",
   "main": "main.js",

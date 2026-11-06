@@ -39,9 +39,9 @@ A thin bar also shows at the very top of the app. You can close the Settings win
 
 ## When it finishes
 
-- Icon Forge shows **"Flux model downloaded and ready"**.
+- Icon Forge shows **"AI model downloaded and ready"**.
 - It points itself at the new file. You do nothing.
-- The status at the top turns green: **Flux model ready**.
+- The dot on the gear goes away. That means the model is ready.
 
 ![Model ready](images/05-model-ready.png)
 
@@ -55,4 +55,4 @@ A thin bar also shows at the very top of the app. You can close the Settings win
 
 ## Next
 
-[Step 1: Keywords](Step-1-Keywords.md)
+[Step 1: Make](Step-1-Keywords.md)

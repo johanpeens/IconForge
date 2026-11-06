@@ -14,7 +14,7 @@ Find your problem in the table.
 
 | Problem | What to do |
 |---|---|
-| It says **"Flux model not installed"** | Open Settings (the gear). Download the model or pick one you have. See [Download the model](Download-the-Model.md). |
+| The gear at the top right has an **orange dot** (the AI model is not installed) | Open Settings (the gear). Download the model or pick one you have. See [Download the model](Download-the-Model.md). |
 | **Not enough free space** | Press **Change folder…** and choose a drive with at least 20 GB free. |
 | The download stopped | Check your internet. Press **Download** again. It carries on from where it stopped. |
 | **"That file is too small"** | You picked the wrong file. You need `flux1-schnell-fp8.safetensors` (17.2 GB). |
@@ -44,8 +44,8 @@ Find your problem in the table.
 | Problem | What to do |
 |---|---|
 | An icon looks strange | The AI makes mistakes. Skip it in step 2, or press **Make 5 more**. |
-| Stray dots on an icon | Use **Clean up** in [Step 3](Step-3-Edit-SVGs.md). |
-| An icon is off to one side | Use **Fit to canvas** in [Step 3](Step-3-Edit-SVGs.md). |
+| Stray dots on an icon | Use **Clean up** in [Edit icons](Step-3-Edit-SVGs.md). |
+| An icon is off to one side | Use **Fit to canvas** in [Edit icons](Step-3-Edit-SVGs.md). |
 
 ## The font
 
@@ -53,7 +53,7 @@ Find your problem in the table.
 |---|---|
 | The icons do not show on my website | Check the path to the `.css` file. Keep the font files in the same folder as the `.css`. |
 | I see a square instead of an icon | The font file did not load. Check that the folder was copied in full. |
-| The class name has changed | Class names come from the font name and icon names. Change them in [Step 4](Step-4-Basket-and-Font.md). |
+| The class name has changed | Class names come from the font name and icon names. Change them in [Step 3](Step-4-Basket-and-Font.md). |
 
 ## Still stuck?
 

@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Icon Forge</title>
+<script>try { if (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
 <style>
 
 :root { --bg:#f5f6f8; --panel:#fff; --ink:#1a1d23; --muted:#667085; --line:#e3e6eb; --accent:#4f46e5; --accent-ink:#fff; --soft:#eef0ff; --ok:#12805c; --icon:#1a1d23; --shadow:0 1px 2px rgba(16,24,40,.06); }
@@ -14,7 +15,7 @@ button { cursor:pointer; }
 .brand { font-weight:700; font-size:18px; display:flex; align-items:center; gap:8px; border:0; background:transparent; padding:0; border-radius:10px; }
 .hometiles { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:18px; margin-top:8px; }
 .hometile { text-align:left; display:flex; flex-direction:column; gap:10px; padding:22px; border:2px solid var(--line); border-radius:16px; background:var(--panel); box-shadow:var(--shadow); min-height:220px; transition:border-color .15s, transform .15s; }
-.hometile:hover { border-color:var(--accent); transform:translateY(-2px); }
+.hometile:hover { border-color:var(--accent); }
 .hometile h2 { margin:0; font-size:20px; }
 .hometile p { margin:0; color:var(--muted); }
 .hometile .go { margin-top:auto; color:var(--accent); font-weight:600; }
@@ -42,7 +43,35 @@ button { cursor:pointer; }
 .pvl { color:var(--muted); font-size:14px; display:inline-flex; align-items:center; gap:8px; }
 .seg .sw { display:inline-block; width:12px; height:12px; border-radius:50%; border:1px solid var(--muted); margin-right:6px; vertical-align:-1px; }
 .sample.pv { min-height:180px; border-style:solid; border-radius:12px; padding:18px; gap:18px 22px; transition:background .15s; }
-.pvi { display:inline-flex; }
+.pvi { display:grid; place-items:center; width:var(--s); height:var(--s); cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; border-radius:6px; }
+.pvi { position:relative; }
+.pvi:hover { outline:1px dashed var(--muted); outline-offset:3px; }
+/* the grid: faint lines every quarter, a clear cross in the middle, and a small ring at the centre point */
+.pvi.on::after, .pvgrid { content:''; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  background:
+    linear-gradient(var(--accent), var(--accent)) center/2px 100% no-repeat,
+    linear-gradient(var(--accent), var(--accent)) center/100% 2px no-repeat,
+    linear-gradient(rgba(128,128,128,.35), rgba(128,128,128,.35)) 25%/1px 100% no-repeat,
+    linear-gradient(rgba(128,128,128,.35), rgba(128,128,128,.35)) 75%/1px 100% no-repeat,
+    linear-gradient(rgba(128,128,128,.35), rgba(128,128,128,.35)) 0 25%/100% 1px no-repeat,
+    linear-gradient(rgba(128,128,128,.35), rgba(128,128,128,.35)) 0 75%/100% 1px no-repeat; }
+.pvgrid { display:block; }
+.pvgrid::after { content:''; position:absolute; left:50%; top:50%; width:14px; height:14px; margin:-7px 0 0 -7px; border:2px solid var(--accent); border-radius:50%; background:var(--panel); opacity:.9; }
+.pvcan { margin:12px auto 4px; cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
+.pvcan.drag { cursor:grabbing; border-color:var(--accent); }
+.pvcan .fr { position:relative; z-index:1; }
+.pvi.on { outline:2px solid var(--accent); outline-offset:3px; }
+.pvi.drag { cursor:grabbing; }
+.pvwrap { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; }
+.pvwrap .sample.pv { flex:1 1 480px; min-width:0; margin-top:0; }
+.pvadjc { flex:0 0 330px; max-width:100%; position:sticky; top:84px; max-height:calc(100vh - 170px); overflow:auto; border-radius:12px; }
+.pvadj { border:1px solid var(--line); border-radius:12px; padding:14px; background:var(--panel); }
+.pvadj h3 { margin:0; font-size:16px; } .pvadj h3 small { color:var(--muted); font-weight:400; }
+.pvadj .sh { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.pvhint { color:var(--muted); font-size:13px; margin:8px 0 4px; }
+.pvadj .ctl { margin:10px 0 4px; } .pvadj .sl { grid-template-columns:62px 1fr 50px; }
+.pvang { color:var(--muted); display:inline-flex; align-items:center; gap:6px; }
+.pvang input { width:78px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:var(--panel); color:var(--ink); }
 .rmtext { width:100%; color:#dc2626; }
 .rmtext:hover { background:rgba(220,38,38,.1); border-color:#dc2626; }
 .setwrap { position:relative; display:flex; flex-direction:column; }
@@ -61,8 +90,15 @@ button { cursor:pointer; }
 .step.on { background:var(--soft); border-color:var(--accent); color:var(--ink); }
 .step.on b { background:var(--accent); color:var(--accent-ink); }
 .step:disabled { opacity:.5; cursor:default; }
-.basketchip { display:flex; align-items:center; gap:8px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--panel); }
-.basketchip span { background:var(--accent); color:var(--accent-ink); min-width:22px; height:22px; border-radius:11px; display:grid; place-items:center; font-size:12px; padding:0 6px; }
+.step .cnt { background:var(--accent); color:var(--accent-ink); min-width:20px; height:20px; border-radius:10px; display:grid; place-items:center; font-size:12px; padding:0 6px; }
+.tw { position:relative; display:flex; }
+.tw > .tile { flex:1; min-width:0; }
+.morewrap { position:relative; display:inline-block; }
+.moremenu { position:absolute; bottom:calc(100% + 8px); right:0; min-width:220px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:4px; box-shadow:0 8px 24px rgba(0,0,0,.25); z-index:7; }
+.moremenu[hidden] { display:none; }
+.moremenu button { display:block; width:100%; text-align:left; border:0; background:transparent; padding:8px 12px; border-radius:6px; }
+.moremenu button:hover { background:var(--soft); }
+.moremenu .del { color:#dc2626; }
 main { max-width:1100px; margin:0 auto; padding:24px 20px 120px; }
 h1 { font-size:22px; margin:0 0 4px; }
 .lead { color:var(--muted); margin:0 0 20px; }
@@ -87,7 +123,7 @@ select { padding:6px 8px; border:1px solid var(--line); border-radius:8px; backg
 .stepper button { border:0; background:var(--panel); width:32px; height:34px; }
 .stepper output { min-width:34px; text-align:center; color:var(--ink); }
 .gen { display:grid; gap:10px; margin-top:20px; }
-.gen .g { display:grid; grid-template-columns:130px 1fr 50px; gap:12px; align-items:center; }
+.gen .g { display:grid; grid-template-columns:130px 1fr 110px; gap:12px; align-items:center; }
 .bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; }
 .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width .15s; }
 .section { margin-top:22px; }
@@ -126,9 +162,38 @@ button.tile:hover { border-color:var(--accent); }
 .navsep { width:1px; align-self:stretch; background:var(--line); margin:3px 4px; }
 .ndot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent); margin-left:6px; animation:pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity:.25; } }
+.setpick { display:grid; gap:8px; margin-top:14px; max-height:300px; overflow:auto; }
+.spr { display:flex; gap:10px; align-items:center; padding:9px 12px; border:1px solid var(--line); border-radius:10px; cursor:pointer; }
+.spr[hidden] { display:none; }
+.spr:has(input:checked) { border-color:var(--accent); background:var(--soft); }
+.spr small { color:var(--muted); }
+.setpick input[type=text] { width:100%; }
+.stag { display:inline-block; margin-left:8px; padding:1px 9px; border-radius:999px; background:var(--soft); border:1px solid var(--line); font-size:12px; font-weight:500; color:var(--muted); text-transform:none; vertical-align:middle; white-space:nowrap; }
+.emptycv { display:grid; place-items:center; color:var(--muted); font-size:13px; grid-template-columns:1fr; }
+.zoomb { position:absolute; bottom:6px; right:6px; width:26px; height:26px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--muted); display:grid; place-items:center; font-size:15px; line-height:1; opacity:0; transition:opacity .15s; cursor:zoom-in; }
+.tile:hover .zoomb, .tile:focus-within .zoomb, .zoomb:focus-visible { opacity:1; }
+.tw:hover .zoomb, .tw:focus-within .zoomb { opacity:1; }
+.zoomb:hover { color:var(--ink); border-color:var(--accent); }
+@media (hover:none) { .zoomb { opacity:.85; } }
+.viewer { position:fixed; inset:0; z-index:60; display:grid; grid-template-columns:72px 1fr 72px; grid-template-rows:auto 1fr auto; grid-template-areas:"bar bar bar" "prev stage next" "foot foot foot"; background:var(--vwbg); color:var(--vwink); animation:fadein .15s ease; }
+.viewer[hidden] { display:none; }
+.viewer.light { --vwbg:#ffffff; --vwink:#1a1d23; }
+.viewer.dark { --vwbg:#0b0d12; --vwink:#eceff4; }
+.vwbar { grid-area:bar; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 18px; border-bottom:1px solid rgba(128,128,128,.3); }
+.vwtitle { margin-right:auto; word-break:break-all; }
+.vwtitle small { opacity:.7; }
+.viewer .btn, .viewer .seg button { background:transparent; color:inherit; border-color:rgba(128,128,128,.5); }
+.viewer .seg { border-color:rgba(128,128,128,.5); }
+.viewer .seg button.on { background:var(--accent); color:var(--accent-ink); }
+.vwstage { grid-area:stage; display:grid; place-items:center; overflow:auto; padding:10px; }
+.vwart .ic { color:var(--vwink); }
+.vwnav { border:0; background:transparent; color:inherit; font-size:56px; line-height:1; opacity:.55; cursor:pointer; }
+.vwnav:hover { opacity:1; }
+.vwnav.prev { grid-area:prev; }
+.vwnav.next { grid-area:next; }
+.vwnav[hidden] { display:none; }
+.vwfoot { grid-area:foot; padding:10px 20px 14px; max-height:24vh; overflow:auto; font-size:13px; opacity:.85; border-top:1px solid rgba(128,128,128,.3); }
 .hint { border-color:var(--accent); background:var(--soft); margin:0 0 14px; }
-.side label { display:block; color:var(--muted); font-size:13px; margin:12px 0 4px; }
-.side input[type=text] { width:100%; }
 .sample { display:flex; flex-wrap:wrap; gap:14px; align-items:center; padding:12px; border:1px dashed var(--line); border-radius:10px; margin-top:8px; }
 .sample svg { width:var(--s,32px); height:var(--s,32px); color:var(--c,var(--icon)); }
 .done { border-color:var(--ok); }
@@ -142,13 +207,8 @@ pre { background:var(--bg); border:1px solid var(--line); border-radius:10px; pa
 .ic { display:block; width:64px; height:64px; background:currentColor; -webkit-mask:var(--u) center/contain no-repeat; mask:var(--u) center/contain no-repeat; }
 .tile .ic { color:var(--icon); width:var(--tile,64px); height:var(--tile,64px); }
 .sample .ic { width:var(--s,32px); height:var(--s,32px); color:var(--c,var(--icon)); }
-.pill { display:flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--muted); font-size:13px; }
-.pill i { width:9px; height:9px; border-radius:50%; background:#c2410c; }
-.pill.up i { background:#16a34a; }
 .err { margin-top:14px; padding:10px 12px; border-radius:10px; border:1px solid #c2410c; background:rgba(194,65,12,.08); }
 .badge { position:absolute; top:6px; right:6px; font-size:11px; color:var(--ok); }
-.libs { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
-.libs h3 { margin:0 0 8px; font-size:14px; color:var(--muted); font-weight:600; }
 pre.log { max-height:160px; font-size:12px; color:var(--muted); }
 a.btn { text-decoration:none; display:inline-block; color:inherit; }
 .fr { display:block; overflow:hidden; width:var(--tile,64px); height:var(--tile,64px); }
@@ -162,39 +222,30 @@ a.btn { text-decoration:none; display:inline-block; color:inherit; }
 .sl output { color:var(--ink); text-align:right; }
 .edgrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(78px,1fr)); gap:8px; --tile:52px; }
 .edgrid .tile { padding:8px 4px 6px; }
-.ctxm { position:fixed; z-index:20; min-width:200px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:4px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+.ctxm { position:fixed; z-index:80; max-height:calc(100vh - 12px); overflow:auto; min-width:200px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:4px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
 .ctxm button { display:block; width:100%; text-align:left; border:0; background:transparent; padding:8px 12px; border-radius:6px; }
 .ctxm button:hover { background:var(--soft); }
-#toast { position:fixed; bottom:78px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:8px; opacity:0; transition:opacity .2s; pointer-events:none; z-index:30; }
+#toast { position:fixed; bottom:78px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:8px; opacity:0; transition:opacity .2s; pointer-events:none; z-index:70; }
 #toast.show { opacity:1; }
 #cleansvg path { cursor:pointer; }
 #cleansvg path:hover { fill:var(--accent); }
 #cleansvg path.s { fill:#dc2626; }
 .seg.mode { margin-left:auto; }
-.slots { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-.slot { position:relative; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-size:14px; font-weight:700; background:var(--line); color:var(--muted); }
-.slot.ok { background:var(--ok); color:#fff; }
-.slot.bad { background:#c2410c; color:#fff; }
-.slot.now { background:conic-gradient(var(--accent) calc(var(--p) * 1%), var(--line) 0); color:var(--ink); }
-.slot.now::before { content:''; position:absolute; inset:4px; border-radius:50%; background:var(--panel); }
-.slot.now::after { content:''; position:absolute; inset:-3px; border-radius:50%; border:3px solid transparent; border-top-color:var(--accent); animation:spin 1s linear infinite; }
-.slot.now span { position:relative; z-index:1; font-size:11px; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .genmsg { color:var(--muted); font-size:14px; }
 .genmsg b { color:var(--ink); }
-.gear { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--panel); color:var(--muted); }
+.gear { position:relative; display:grid; place-items:center; width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--panel); color:var(--muted); }
 .gear:hover { color:var(--ink); border-color:var(--accent); }
 .gear svg { width:20px; height:20px; }
+.gdot { position:absolute; top:3px; right:3px; width:11px; height:11px; border-radius:50%; background:#c2410c; border:2px solid var(--panel); }
+.gdot[hidden] { display:none; }
+.gdot.dl { background:var(--accent); animation:pulse 1.2s ease-in-out infinite; }
 .modalbg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:40; display:grid; place-items:center; padding:16px; }
 .modalbg[hidden] { display:none; }
 .modal { width:min(560px,100%); max-height:90vh; overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
 .modal h2 { margin:0 0 4px; font-size:18px; }
 .warnbox { display:flex; align-items:center; gap:10px; margin:14px 0 0; padding:10px 12px; border-radius:10px; background:rgba(245,158,11,.16); border:1px solid rgba(245,158,11,.6); color:var(--ink); font-size:14px; }
 .warnicon { flex:none; width:22px; height:22px; border-radius:50%; background:#f59e0b; color:#1c1917; font-weight:800; font-size:15px; line-height:22px; text-align:center; }
-.wsteps { display:flex; align-items:center; gap:6px; margin-bottom:12px; color:var(--muted); font-size:13px; }
-.wsteps i { width:30px; height:5px; border-radius:3px; background:var(--line); }
-.wsteps i.on { background:var(--accent); }
-.wsteps span { margin-left:6px; }
 .modal .kv { display:grid; grid-template-columns:110px 1fr; gap:6px 12px; margin:14px 0; font-size:14px; }
 .modal .kv span:nth-child(odd) { color:var(--muted); }
 .modal code { word-break:break-all; }
@@ -207,29 +258,14 @@ a.btn { text-decoration:none; display:inline-block; color:inherit; }
 .bar.big i { border-radius:6px; }
 .dlinfo { margin-top:8px; font-size:14px; color:var(--muted); }
 .dlinfo b { color:var(--ink); }
-/* theme choice */
-.themes { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0 6px; }
-.themeopt { display:flex; flex-direction:column; gap:10px; align-items:center; padding:14px 12px 12px; border:2px solid var(--line); border-radius:14px; background:var(--panel); font-weight:600; }
-.themeopt:hover { border-color:var(--accent); }
-.themeopt .sw { width:100%; aspect-ratio:16/10; border-radius:8px; border:1px solid #d0d5dd; display:grid; grid-template-rows:22% 1fr; overflow:hidden; }
-.themeopt .sw i { background:#fff; border-bottom:1px solid #e3e6eb; }
-.themeopt .sw b { display:block; margin:12% 14%; border-radius:6px; background:#fff; border:1px solid #e3e6eb; }
-.themeopt .sw.light { background:#f5f6f8; }
-.themeopt .sw.dark { background:#101216; border-color:#2a2f38; }
-.themeopt .sw.dark i, .themeopt .sw.dark b { background:#181b21; border-color:#2a2f38; }
 /* long icon names are cut short instead of running into the next tile */
 button.tile { min-width:0; }
 button.tile > span:last-child { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-/* button movement */
-button, .btn, .tile, .chip, .step { transition:transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease, opacity .15s ease; }
-.btn:not(:disabled):hover, .step:not(:disabled):hover, .basketchip:hover, .chip:not(:disabled):hover, .pill:hover { transform:translateY(-1px); box-shadow:0 3px 8px rgba(16,24,40,.14); }
-button.tile:hover { transform:translateY(-2px); box-shadow:0 4px 10px rgba(16,24,40,.14); }
+/* Quiet hover: colour changes only. Only the main button gets a small lift, so the eye goes to it. */
+button, .btn, .tile, .chip, .step { transition:background-color .15s ease, border-color .15s ease, color .15s ease, opacity .15s ease, box-shadow .15s ease; }
 .btn.primary:not(:disabled):hover { box-shadow:0 4px 12px rgba(79,70,229,.35); filter:brightness(1.06); }
-.btn:not(:disabled):active, .step:not(:disabled):active, .basketchip:active, .chip:not(:disabled):active, button.tile:active, .gear:active { transform:translateY(0) scale(.96); box-shadow:none; transition-duration:.05s; }
-.gear { transition:transform .35s ease, color .15s ease, border-color .15s ease; }
-.gear:hover { transform:rotate(60deg); }
-.seg button, .stepper button, .chip button, .rm { transition:background-color .15s ease, color .15s ease, transform .1s ease; }
-.seg button:active, .stepper button:active { transform:scale(.92); }
+.btn:not(:disabled):active, .step:not(:disabled):active, .chip:not(:disabled):active, button.tile:active { filter:brightness(.95); }
+.seg button, .stepper button, .chip button, .rm { transition:background-color .15s ease, color .15s ease; }
 button:focus-visible, .btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 .btn:disabled, button:disabled { cursor:default; }
 .btn.busy { display:inline-flex; align-items:center; gap:8px; }
@@ -240,26 +276,24 @@ button:focus-visible, .btn:focus-visible { outline:2px solid var(--accent); outl
 #toast.show { transform:translate(-50%, 0); }
 @keyframes fadein { from { opacity:0; } }
 @keyframes popin { from { opacity:0; transform:translateY(8px) scale(.97); } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; } .gear:hover { transform:none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; } }
 </style></head><body>
 <header class="top">
   <button class="brand" data-go="0" title="Home" aria-label="Icon Forge home"><img src="/app-icon.png" alt="" width="32" height="32">Icon Forge</button>
   <nav class="steps" id="steps"></nav>
-  <span class="pill" id="comfy" title="Open settings"><i></i><span>Model…</span></span>
-  <button class="basketchip" id="chip" aria-label="Open basket">Basket <span id="chipn">0</span></button>
-  <button class="gear" id="gear" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  <button class="gear" id="gear" aria-label="Settings" title="Settings"><i class="gdot" id="gdot" hidden></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </header>
 <div class="dlbar" id="dlbar" hidden><i></i></div>
 <div class="modalbg" id="modal" hidden></div>
-<div class="modalbg" id="themeask" hidden></div>
 <div class="modalbg" id="cfm" hidden></div>
+<div class="viewer" id="viewer" hidden role="dialog" aria-label="Icon viewer"></div>
 <main id="app"></main>
 <div class="dock" id="dock" hidden></div>
 <div id="toast" role="status"></div>
 <script>
 const DETAIL = { 1:['Simple','very thick outline, few bold shapes. Best at small sizes.'], 2:['Medium','your usual look: thick outline with some inner detail.'], 3:['Detailed','fine lines and interior detail. Best at 48px and larger, slower to trace.'] };
 const STYLES = { line:['Line', 'outline strokes, no fill (your current look).'], filled:['Filled', 'solid silhouettes with small cut-out details.'], double:['Double line', 'a bold outline with a thin line inside it.'], hand:['Hand-drawn', 'a wobbly ink line, loose and friendly.'] };
-const S = { step:0, libOpen:null, libQ:'', vary:null, libHint:false, bTab:'icons', bSel:new Set(), bLast:-1, pv:{ bg:'#ffffff', col:'#1a1d23', size:32, touched:false }, kws:[], per:5, detail:2, ready:false, lib:[], model:{}, settings:false, theme:'', sets:[], sel:new Set(), basket:[], font:'myIcons', genKws:[], job:null, jobErr:'', building:false, size:64, edSel:0, edMode:'move', cleanSel:new Set(), speck:40, style:'line', result:null, fontErr:'' };
+const S = { step:0, libOpen:null, libQ:'', vary:null, bTab:'icons', bSel:new Set(), bLast:-1, optsOpen:false, edFine:false, mErr:'', pv:{ bg:'#ffffff', col:'#1a1d23', size:32, touched:false, sel:-1 }, kws:[], per:5, detail:2, ready:false, lib:[], model:{}, settings:false, theme:'', sets:[], sel:new Set(), basket:[], font:'myIcons', genKws:[], job:null, jobErr:'', building:false, size:64, edSel:0, edMode:'move', cleanSel:new Set(), speck:40, style:'line', result:null, fontErr:'' };
 const $ = s => document.querySelector(s), esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'icons';
 const key = (f, n) => f + '/' + n;
@@ -269,42 +303,51 @@ const inBasket = k => S.basket.some(b => b.key === k);
 const post = (u, b) => fetch(u, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(b) }).then(r => r.json());
 
 async function refresh() {
-  try { const r = await (await fetch('/api/status')).json(); S.ready = r.model.ready; S.model = r.model; S.lib = r.library; S.theme = r.theme || ''; } catch (e) { S.ready = false; }
-  const p = $('#comfy'); p.className = 'pill' + (S.ready ? ' up' : ''); p.lastChild.textContent = S.model.downloading ? 'Downloading model ' + Math.round(S.model.percent) + '%' + (S.model.speed ? ' · ' + (S.model.speed / 1e6).toFixed(1) + ' MB/s' : '') : S.ready ? 'Flux model ready' : 'Flux model not installed';
+  try { const r = await (await fetch('/api/status')).json(); S.ready = r.model.ready; S.model = r.model; S.lib = r.library; if (r.theme) S.theme = r.theme; if (S.savedBasket === undefined) S.savedBasket = r.basket || null; } catch (e) { S.ready = false; }
+  // The gear carries the model status: no dot when the AI model is ready, an orange dot when it is missing, a pulsing dot while it downloads.
+  const gear = $('#gear'), gdot = $('#gdot'), tip = S.model.downloading ? 'Settings · downloading the AI model ' + Math.round(S.model.percent) + '%' + (S.model.speed ? ' · ' + (S.model.speed / 1e6).toFixed(1) + ' MB/s' : '') : S.ready ? 'Settings · AI model ready' : 'Settings · AI model not installed';
+  gear.title = tip; gear.setAttribute('aria-label', tip); gdot.hidden = !!S.ready && !S.model.downloading; gdot.className = 'gdot' + (S.model.downloading ? ' dl' : '');
   const bar = $('#dlbar'); if (bar) { bar.hidden = !S.model.downloading; bar.firstChild.style.width = (S.model.percent || 0) + '%'; }
-  if (S.wasDl && !S.model.downloading && S.ready) toast('Flux model downloaded and ready');
+  if (S.wasDl && !S.model.downloading && S.ready) toast('AI model downloaded and ready');
   S.wasDl = !!S.model.downloading;
+  if (S.step === 1 && !S.job && typeof dockKeywords === 'function') dockKeywords();   // keeps the Generate button in step with the model status
 }
-function go(n) { S.step = n; if (n === 5) S.libOpen = null; if (n === 0) S.libHint = false; render(); window.scrollTo(0, 0); }
+function go(n) { S.step = n; if (n === 5) S.libOpen = null; render(); window.scrollTo(0, 0); }
 function renderTop() {
-  // The bar shows where you are and lets you reach every screen. A pulsing dot marks work that is still drawing.
-  const names = ['Keywords', 'Pick icons', 'Edit SVGs', 'Basket & font'];
+  // Three steps: Make, Pick, Finish (editing and the font live inside Finish). A pulsing dot marks work that is still drawing.
   const dot = '<i class="ndot" title="Drawing…"></i>', kwBusy = !!S.job, varyBusy = typeof varyRunning === 'function' && varyRunning();
   const plain = (go, label, on, extra) => '<button class="step ' + (on ? 'on' : '') + '" data-go="' + go + '"' + (extra || '') + '>' + label + '</button>';
+  const cnt = S.basket.length ? '<span class="cnt" title="Icons in your basket">' + S.basket.length + '</span>' : '';
   $('#steps').innerHTML = plain(0, 'Home', S.step === 0) + plain(5, 'Library', S.step === 5) + '<span class="navsep"></span>' +
-    names.map((t, i) => plain(i + 1, '<b>' + (i + 1) + '</b>' + t + (i === 0 && kwBusy ? dot : ''), S.step === i + 1, (i === 1 && !S.sets.length) || (i === 2 && !S.basket.length) ? ' disabled' : '')).join('') +
+    plain(1, '<b>1</b>Make' + (kwBusy ? dot : ''), S.step === 1) +
+    plain(2, '<b>2</b>Pick', S.step === 2, S.sets.length ? '' : ' disabled title="Make or open some icons first"') +
+    plain(4, '<b>3</b>Finish' + cnt, S.step === 3 || S.step === 4, S.basket.length ? '' : ' disabled title="Add icons to the basket first"') +
     (S.vary && (S.step === 6 || varyBusy) ? '<span class="navsep"></span>' + plain(6, 'Vary' + (varyBusy ? dot : ''), S.step === 6) : '');
   $('#steps').style.visibility = '';
-  $('#chipn').textContent = S.basket.length;
 }
 function render() { renderTop(); $('#dock').hidden = true; if (S.step === 0) viewHome(); else if (S.step === 6) viewVary(); else if (S.step === 5) viewLibrary(); else if (S.step === 1) viewKeywords(); else if (S.step === 2) viewPick(); else if (S.step === 3) viewEdit(); else viewBasket(); }
 
 // ---- Home: two big tiles ----
 const prettyName = f => f.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+// A set made in another style than Line has the style at the end of its folder name (spaceman_hand). Show the style as a
+// small tag next to the name, not as extra words in the name.
+const STYLE_SUFFIX = /_(filled|double|hand)$/i, STYLE_TAG = { filled:'Filled', double:'Double line', hand:'Hand-drawn' };
+const styleOf = f => { const m = STYLE_SUFFIX.exec(f); return m ? m[1].toLowerCase() : 'line'; };
+const baseName = f => prettyName(f.replace(STYLE_SUFFIX, ''));
+const tagHtml = f => styleOf(f) === 'line' ? '' : '<span class="stag">' + STYLE_TAG[styleOf(f)] + '</span>';
+const setLabel = f => baseName(f) + (styleOf(f) === 'line' ? '' : ' (' + STYLE_TAG[styleOf(f)] + ')');
 const fmtDate = ms => ms ? new Date(ms).toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' }) : '';
 const newest = () => S.lib.slice().sort((a, b) => (b.mtime || 0) - (a.mtime || 0) || a.folder.localeCompare(b.folder));
 function viewHome() {
   const sets = S.lib.length, icons = S.lib.reduce((a, l) => a + l.files.length, 0);
-  const covers = newest().slice(0, 5).map(l => ic(l.folder, l.files[0])).join('');
+  const covers = newest().filter(l => l.files.length).slice(0, 5).map(l => ic(l.folder, l.files[0])).join('');
   $('#app').innerHTML = '<h1>What would you like to do?</h1><p class="lead">Make a brand new set of icons, or reuse icons you made before.</p>' +
     '<div class="hometiles">' +
-    '<button class="hometile" data-go="1"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg></span><h2>Make new icons</h2><p>Type a word and the AI draws a set of icons for you. Four quick steps, then your icon font.</p>' +
+    '<button class="hometile" data-go="1"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg></span><h2>Make new icons</h2><p>Type a word and the AI draws a set of icons for you. Three quick steps, then your icon font.</p>' +
     (S.ready ? '' : '<span class="hnote">! Needs the AI model first. Press the gear to download it.</span>') + '<span class="go">Start →</span></button>' +
     '<button class="hometile" data-go="5"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><h2>My library</h2><p>' +
-    (sets ? icons + ' icons in ' + sets + ' set' + (sets === 1 ? '' : 's') + ' you made before. Pick some and add them to your basket.' : 'Your past icon sets will show up here once you have made some.') + '</p>' +
-    (covers ? '<span class="covers">' + covers + '</span>' : '') + '<span class="go">Open library →</span></button>' +
-    '<button class="hometile" data-varyhome="1"><span class="hico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="11" height="11" rx="2"/><path d="M17 4h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"/></svg></span><h2>Vary an icon</h2><p>' +
-    (icons ? 'Pick one of your icons, change the words, and the AI draws new versions of it. The new versions are saved next to the original.' : 'Once you have an icon, you can change its words here and the AI draws new versions of it.') + '</p><span class="go">Pick an icon →</span></button></div>' +
+    (sets ? icons + ' icons in ' + sets + ' set' + (sets === 1 ? '' : 's') + ' you made before. Pick some for your basket, or tick one and vary it.' : 'Your past icon sets will show up here once you have made some.') + '</p>' +
+    (covers ? '<span class="covers">' + covers + '</span>' : '') + '<span class="go">Open library →</span></button></div>' +
     (S.basket.length ? '<div class="card row" style="margin-top:18px"><span><b>' + S.basket.length + ' icon' + (S.basket.length === 1 ? '' : 's') + '</b> waiting in your basket.</span><button class="btn primary" data-go="4" style="margin-left:auto">Open basket</button></div>' : '');
 }
 
@@ -313,16 +356,16 @@ function viewLibrary() {
   document.documentElement.style.setProperty('--tile', S.size + 'px');
   const open = S.libOpen ? S.lib.find(l => l.folder === S.libOpen) : null;
   if (!open) S.libOpen = null;
-  const hint = S.libHint ? '<div class="card hint"><b>To vary an icon:</b> ' + (open ? 'tick one icon, then press <b>Vary this icon…</b> in the bar at the bottom.' : 'open a set, tick one icon, then press <b>Vary this icon…</b> in the bar at the bottom.') + '</div>' : '';
   if (open) {
-    $('#app').innerHTML = hint + '<h1>' + esc(prettyName(open.folder)) + '</h1><p class="lead">' + open.files.length + ' icons' + (open.mtime ? ' · ' + fmtDate(open.mtime) : '') + '. Click icons to select them, then add them to the basket. <b>Tip:</b> right-click any icon to copy it.</p>' +
-      '<div class="libbar"><button class="btn" data-libopen="">← All sets</button><button class="btn small" data-liball="1">Select all</button><button class="btn small" data-revealset="' + esc(open.folder) + '">Show in folder</button><button class="btn small rmtext" style="width:auto" data-delset="' + esc(open.folder) + '">Delete set…</button><label style="color:var(--muted);margin-left:auto">Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
-      '<section class="section card"><div class="grid">' + open.files.map(f => { const k = key(open.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(open.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>';
+    $('#app').innerHTML = '<h1>' + esc(baseName(open.folder)) + tagHtml(open.folder) + '</h1><p class="lead">' + open.files.length + ' icons' + (open.mtime ? ' · ' + fmtDate(open.mtime) : '') + '. Click icons to select them, then add them to the basket. <b>Tip:</b> right-click any icon to copy it.</p>' +
+      '<div class="libbar"><button class="btn" data-libopen="">← All sets</button><button class="btn small" data-liball="1">Select all</button>' + (open.files.length ? '<button class="btn small primary" data-libmore="1"' + (S.ready ? '' : ' disabled') + ' title="' + (S.ready ? 'Draws ' + S.per + ' new icons like the one you ticked (or the first one) and adds them to this set' : 'The AI model is not installed yet. Press the gear to download it.') + '">✨ Make ' + S.per + ' more like this</button>' : '') + '<button class="btn small" data-revealset="' + esc(open.folder) + '">Show in folder</button><button class="btn small rmtext" style="width:auto" data-delset="' + esc(open.folder) + '">Delete set…</button><label style="color:var(--muted);margin-left:auto">Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
+      (open.files.length ? '' : '<div class="card hint" style="margin-top:14px"><b>This set is empty.</b> Add icons by opening another set, ticking icons and pressing <b>Copy to…</b> or <b>Move to…</b>. You can also use <b>Save to a set…</b> in the basket, or make new icons.</div>') +
+      '<section class="section card"><div class="grid">' + open.files.map(f => { const k = key(open.folder, f); return '<span class="tw"><button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(open.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>' + ZOOMB + '</span>'; }).join('') + '</div></section>';
     dockPick();
     return;
   }
-  $('#app').innerHTML = hint + '<h1>My library</h1><p class="lead">Every icon set you have made. Open a set to pick icons for your basket.</p>' +
-    '<div class="libbar"><input type="text" id="libq" placeholder="Search sets and icons" autocomplete="off" value="' + esc(S.libQ) + '"><span id="libn" style="color:var(--muted)"></span><button class="btn primary" data-go="1" style="margin-left:auto">+ Make new icons</button></div><div id="libgrid"></div>';
+  $('#app').innerHTML = '<h1>My library</h1><p class="lead">Every icon set you have made. Open a set to pick icons for your basket.</p>' +
+    '<div class="libbar"><input type="text" id="libq" placeholder="Search sets and icons" autocomplete="off" value="' + esc(S.libQ) + '"><span id="libn" style="color:var(--muted)"></span><span class="row" style="margin-left:auto"><button class="btn" id="newset">+ New set</button><button class="btn primary" data-go="1">+ Make new icons</button></span></div><div id="libgrid"></div>';
   drawLibGrid();
   dockPick();
 }
@@ -333,23 +376,24 @@ function drawLibGrid() {
   $('#libn').textContent = q ? list.length + ' of ' + all.length + ' sets' : all.length + ' set' + (all.length === 1 ? '' : 's');
   g.innerHTML = !all.length ? '<div class="empty">No icon sets yet. <button class="btn primary" data-go="1">Make your first set</button></div>'
     : !list.length ? '<div class="empty">Nothing matches "' + esc(S.libQ) + '".</div>'
-    : '<div class="libgrid">' + list.map(l => '<div class="setwrap"><button class="setcard" data-libopen="' + esc(l.folder) + '"><span class="cv">' + l.files.slice(0, 4).map(f => ic(l.folder, f)).join('') + '</span><b>' + esc(prettyName(l.folder)) + '</b><small>' + l.files.length + ' icons' + (l.mtime ? ' · ' + fmtDate(l.mtime) : '') + '</small></button>' +
-      '<button class="setbin" data-delset="' + esc(l.folder) + '" title="Delete this set" aria-label="Delete the set ' + esc(prettyName(l.folder)) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg></button></div>').join('') + '</div>';
+    : '<div class="libgrid">' + list.map(l => '<div class="setwrap"><button class="setcard" data-libopen="' + esc(l.folder) + '"><span class="cv' + (l.files.length ? '' : ' emptycv') + '">' + (l.files.length ? l.files.slice(0, 4).map(f => ic(l.folder, f)).join('') : 'Empty set') + '</span><b>' + esc(baseName(l.folder)) + tagHtml(l.folder) + '</b><small>' + l.files.length + ' icons' + (l.mtime ? ' · ' + fmtDate(l.mtime) : '') + '</small></button>' +
+      '<button class="setbin" data-delset="' + esc(l.folder) + '" title="Delete this set" aria-label="Delete the set ' + esc(setLabel(l.folder)) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg></button></div>').join('') + '</div>';
 }
 
 function viewKeywords() {
   const busy = !!S.job;
-  const mins = Math.max(1, Math.round(S.kws.length * S.per * 60 / 60));
+  const mins = Math.max(1, S.kws.length * S.per);   // about a minute per icon
   $('#app').innerHTML =
-    '<h1>1. Add your keywords</h1><p class="lead">Each keyword is drawn by Flux Schnell on your PC and traced to SVG. Add as many as you like.</p>' +
+    '<h1>1. Add your keywords</h1><p class="lead">Each keyword is drawn by the AI model on your PC and traced to SVG. Add as many as you like.</p>' +
     '<div class="card"><form class="row" id="kwform"><input type="text" id="kwin" placeholder="Type a keyword, e.g. bicycle, then press Enter" autocomplete="off"' + (busy ? ' disabled' : '') + '><button class="btn" type="submit"' + (busy ? ' disabled' : '') + '>Add keyword</button></form>' +
     '<div class="chips">' + (S.kws.length ? S.kws.map((k, i) => '<span class="chip">' + esc(k) + '<button data-rm="' + i + '" aria-label="Remove ' + esc(k) + '"' + (busy ? ' disabled' : '') + '>×</button></span>').join('') : '<span class="empty" style="padding:6px 0">No keywords yet.</span>') + '</div>' +
     '<div class="opts"><span>Icons per keyword <span class="stepper"><button data-per="-1" aria-label="Fewer"' + (busy ? ' disabled' : '') + '>−</button><output>' + S.per + '</output><button data-per="1" aria-label="More"' + (busy ? ' disabled' : '') + '>+</button></span></span>' +
     '<span>About ' + (S.kws.length * S.per) + ' icons, roughly ' + mins + ' min</span></div>' +
+    // Detail and Style have good defaults, so they are tucked away. The summary shows what is chosen now.
+    '<details class="vdet" id="kwopts"' + (S.optsOpen ? ' open' : '') + '><summary>Options: ' + DETAIL[S.detail][0] + ' detail · ' + STYLES[S.style][0] + ' style</summary>' +
     '<div class="opts" style="margin-top:12px"><span>Detail <span class="seg">' + [1,2,3].map(n => '<button data-detail="' + n + '" class="' + (S.detail === n ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + DETAIL[n][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + DETAIL[S.detail][0] + ':</b> ' + DETAIL[S.detail][1] + '</span></div>' +
-    '<div class="opts" style="margin-top:12px"><span>Style <span class="seg">' + Object.keys(STYLES).map(k => '<button data-style="' + k + '" class="' + (S.style === k ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + STYLES[k][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + STYLES[S.style][0] + ':</b> ' + STYLES[S.style][1] + '</span></div>' +
+    '<div class="opts" style="margin-top:12px"><span>Style <span class="seg">' + Object.keys(STYLES).map(k => '<button data-style="' + k + '" class="' + (S.style === k ? 'on' : '') + '"' + (busy ? ' disabled' : '') + '>' + STYLES[k][0] + '</button>').join('') + '</span></span><span style="flex:1;min-width:220px"><b style="color:var(--ink)">' + STYLES[S.style][0] + ':</b> ' + STYLES[S.style][1] + '</span></div></details>' +
     '<div class="gen" id="gen"></div>' + (S.jobErr ? '<div class="err">' + esc(S.jobErr) + '</div>' : '') +
-    (S.lib.length ? '<div class="libs"><h3>Or start from icons you already have</h3><div class="chips" style="margin:0">' + S.lib.map(l => '<button class="chip" style="cursor:pointer" data-uselib="' + esc(l.folder) + '"' + (S.sets.some(s => s.folder === l.folder) ? ' disabled' : '') + '>' + esc(l.folder) + ' · ' + l.files.length + '</button>').join('') + '</div></div>' : '') +
     '</div>';
   if (busy) drawGen();
   dockKeywords();
@@ -358,7 +402,7 @@ function dockKeywords() {
   const d = $('#dock'); d.hidden = false;
   if (!S.job) {
     const n = S.kws.length * S.per;
-    d.innerHTML = '<span class="msg">' + (S.kws.length ? S.kws.length + ' keyword' + (S.kws.length === 1 ? '' : 's') + ' · about ' + n + ' icon' + (n === 1 ? '' : 's') : 'Add a keyword to start') + '</span><button class="btn" data-go="0">← Back</button><button class="btn primary" id="gobtn"' + (S.kws.length ? '' : ' disabled') + '>Generate ' + n + ' icon' + (n === 1 ? '' : 's') + '</button>';
+    d.innerHTML = '<span class="msg">' + (!S.ready ? 'The AI model is not installed yet. Press the gear to download it.' : S.kws.length ? S.kws.length + ' keyword' + (S.kws.length === 1 ? '' : 's') + ' ready' : 'Add a keyword to start') + '</span><button class="btn" data-go="0">← Back</button><button class="btn primary" id="gobtn"' + (S.kws.length && S.ready ? '' : ' disabled') + '>Generate ' + n + ' icon' + (n === 1 ? '' : 's') + '</button>';
     return;
   }
   d.innerHTML = '<span class="msg">' + (S.stopping ? 'Stopping, the icons already drawn are kept…' : 'Drawing icons…') + '</span><button class="btn primary" id="stopbtn"' + (S.stopping ? ' disabled' : '') + '>' + (S.stopping ? 'Stopping…' : '■ Stop generating') + '</button>';
@@ -376,7 +420,7 @@ function drawGen() {
   if (cur) {
     const el = now - cur.startedAt, est = cur.first ? (job.avgMs || 60000) + 60000 : avg;
     msg = cur.first
-      ? '<b>Loading the Flux model and drawing the first icon.</b> This one takes a little longer (about ' + fmt(est) + '), the rest are quicker. ' + fmt(el) + ' so far.'
+      ? '<b>Loading the AI model and drawing the first icon.</b> This one takes a little longer (about ' + fmt(est) + '), the rest are quicker. ' + fmt(el) + ' so far.'
       : '<b>Drawing ' + esc(cur.keyword) + ' icon ' + cur.n + ' of ' + job.per + '.</b> About ' + fmt(Math.max(0, est - el)) + ' left for this one.';
   } else if (job.stage) msg = '<b>' + esc(job.stage) + '…</b>';
   g.innerHTML = (msg ? '<div class="genmsg">' + msg + '</div>' : '') + S.genKws.map(k => {
@@ -385,14 +429,7 @@ function drawGen() {
     const active = cur && cur.keyword === k ? cur : null;
     const frac = active ? Math.min(0.95, (now - active.startedAt) / (active.first ? (job.avgMs || 60000) + 60000 : avg)) : 0;
     const pct = Math.round((n + frac) / t * 100);
-    let slots = '';
-    for (let i = 0; i < t; i++) {
-      if (i < (it ? it.done : 0)) slots += '<span class="slot ok" title="Done">✓</span>';
-      else if (i < n) slots += '<span class="slot bad" title="Did not finish">✕</span>';
-      else if (active && i === n) slots += '<span class="slot now" style="--p:' + Math.round(frac * 100) + '" title="Drawing…"><span>' + Math.round(frac * 100) + '%</span></span>';
-      else slots += '<span class="slot" title="Waiting">' + (i + 1) + '</span>';
-    }
-    return '<div class="g"><span>' + esc(k) + '</span><div><div class="bar"><i style="width:' + pct + '%"></i></div><div class="slots">' + slots + '</div></div><span>' + (it ? n + '/' + t : 'waiting') + '</span></div>';
+    return '<div class="g"><span>' + esc(k) + '</span><div class="bar"><i style="width:' + pct + '%"></i></div><span>' + (it ? n + '/' + t + (it.failed ? ' · ' + it.failed + ' failed' : '') : 'waiting') + '</span></div>';
   }).join('');
 }
 async function startGen() {
@@ -414,7 +451,7 @@ async function startGen() {
       if (!set) { set = { folder:lib.folder, title:it.keyword + (j.style && j.style !== 'line' ? ' (' + STYLES[j.style][0].toLowerCase() + ')' : ''), keyword:it.keyword, files:[], added:[], detail:j.detail, style:j.style }; S.sets.push(set); }
       set.files = lib.files; set.added = it.files; set.detail = j.detail; set.style = j.style; set.keyword = it.keyword;
     });
-    S.jobErr = j.error || (j.state === 'stopped' ? 'Stopped. Icons that were already drawn are kept.' : j.items.some(it => it.failed) ? 'Some icons did not finish. Try again, or check the settings.' : '');
+    S.jobErr = j.error || (j.state === 'stopped' ? 'Stopped. Icons that were already drawn are kept.' : j.items.some(it => it.failed) ? 'Some icons did not finish. Press Generate to try again. If it keeps failing, open Settings (the gear) and check the AI model is ready.' : '');
     S.job = null; S.stopping = false;
     // Only move the user on if they are still waiting on this screen. Otherwise leave them where they are.
     if (S.step === 1) { if (S.sets.length && !j.error) go(2); else viewKeywords(); }
@@ -426,19 +463,30 @@ function viewPick() {
   document.documentElement.style.setProperty('--tile', S.size + 'px');
   $('#app').innerHTML = '<h1>2. Pick the icons you want</h1><p class="lead">Click icons to select them, then add them to the basket. <b>Tip:</b> right-click any icon to copy its SVG or a picture of it.</p><div class="row" style="margin:-6px 0 6px;color:var(--muted)"><label>Icon size <input type="range" id="tsz" min="32" max="160" value="' + S.size + '"> <span id="tszv">' + S.size + 'px</span></label></div>' +
     S.sets.map((set, si) => '<section class="section card"><div class="sh"><h2>' + esc(set.title) + ' <small>' + set.files.length + ' icons' + (set.added && set.added.length ? ', ' + set.added.length + ' new' : '') + (set.detail && set.keyword ? ' · ' + DETAIL[set.detail][0] + ' detail' : '') + '</small></h2><button class="btn small" data-all="' + si + '">Select all</button>' +
-      (set.keyword ? '<button class="btn small" data-more="' + si + '"' + (S.ready ? '' : ' disabled') + '>Make ' + S.per + ' more</button>' : '') + '<button class="btn small" data-hide="' + si + '">Hide</button></div><div class="grid">' +
-      set.files.map(f => { const k = key(set.folder, f); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(set.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>'; }).join('') + '</div></section>').join('');
+      (set.keyword ? '<button class="btn small" data-more="' + si + '"' + (S.ready ? '' : ' disabled') + '>Make ' + S.per + ' more ' + esc(set.keyword) + '</button>' : '') + '<button class="btn small" data-hide="' + si + '">Hide</button></div><div class="grid">' +
+      set.files.map(f => { const k = key(set.folder, f); return '<span class="tw"><button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(set.folder, f) + '<span style="font-size:12px;color:var(--muted)">' + esc(f.replace(/\.svg$/i, '')) + '</span></button>' + ZOOMB + '</span>'; }).join('') + '</div></section>').join('');
   dockPick();
 }
 function dockPick() {
   const d = $('#dock'); d.hidden = false; const n = S.sel.size;
   const inB = S.basket.filter(b => S.sel.has(b.key)).length;
-  // Back goes one step: keywords from Pick, the set list from inside a set, Home from the set list.
-  const back = S.step === 5 ? (S.libOpen ? '<button class="btn" data-libopen="">← All sets</button>' : '<button class="btn" data-go="0">← Back</button>') : '<button class="btn" data-go="1">← Back</button>';
+  // The bar keeps the everyday actions. Rarer ones (remove, copy, move, delete) sit in the More menu.
+  // No Back button: the top bar and "← All sets" already take you back.
   const openSet = S.step === 5 && S.libOpen ? S.lib.find(l => l.folder === S.libOpen) : null;
   const libSel = openSet ? openSet.files.filter(f => S.sel.has(key(openSet.folder, f))).length : 0;
-  d.innerHTML = '<span class="msg">' + n + ' selected · ' + S.basket.length + ' in basket</span>' + back + '<button class="btn" id="clr"' + (n ? '' : ' disabled') + '>Clear selection</button>' + (inB ? '<button class="btn" id="rmsel">Remove ' + inB + ' from basket</button>' : '') + (libSel ? '<button class="btn danger" id="dellib">Delete ' + libSel + ' from library…</button>' : '') + (n === 1 ? '<button class="btn" id="varybtn">Vary this icon…</button>' : '') + '<button class="btn primary" id="addb"' + (n > inB ? '' : ' disabled') + '>Add ' + (n - inB) + ' to basket</button><button class="btn" data-go="3"' + (S.basket.length ? '' : ' disabled') + '>Edit icons →</button>';
+  const more = (inB ? '<button id="rmsel">Remove ' + inB + ' from basket</button>' : '') + (libSel ? '<button id="copyto">Copy to…</button><button id="moveto">Move to…</button><button class="del" id="dellib">Delete ' + libSel + ' from library…</button>' : '');
+  d.innerHTML = '<span class="msg">' + n + ' selected · ' + S.basket.length + ' in basket</span>' + (n ? '<button class="btn" id="clr">Clear selection</button>' : '') + (n === 1 ? '<button class="btn" id="varybtn">Vary this icon…</button>' : '') +
+    (more ? '<span class="morewrap"><button class="btn" id="morebtn" aria-haspopup="true" aria-expanded="false">More ▾</button><div class="moremenu" id="moremenu" hidden>' + more + '</div></span>' : '') +
+    '<button class="btn primary" id="addb"' + (n > inB ? '' : ' disabled') + '>Add ' + (n > inB ? (n - inB) + ' ' : '') + 'to basket</button><button class="btn' + (n === 0 || n <= inB ? ' primary' : '') + '" data-go="4"' + (S.basket.length ? '' : ' disabled') + '>Finish →</button>';
 }
+// The More menu opens upward from the bottom bar. Any click outside it, or on one of its items, closes it.
+document.addEventListener('click', e => {
+  const m = $('#moremenu'); if (!m || m.hidden) return;
+  if (e.target.closest('#morebtn')) return;
+  if (e.target.closest('#moremenu')) { setTimeout(() => { const x = $('#moremenu'); if (x) x.hidden = true; }, 0); return; }
+  m.hidden = true; const b = $('#morebtn'); if (b) b.setAttribute('aria-expanded', 'false');
+});
+document.addEventListener('keydown', e => { const m = $('#moremenu'); if (e.key === 'Escape' && m && !m.hidden) { m.hidden = true; const b = $('#morebtn'); if (b) { b.setAttribute('aria-expanded', 'false'); b.focus(); } } });
 function addToBasket() {
   [...S.sets, ...S.lib].forEach(set => set.files.forEach(f => { const k = key(set.folder, f); if (S.sel.has(k) && !inBasket(k)) S.basket.push({ key:k, folder:set.folder, file:f, name:f.replace(/\.svg$/i, '').replace(/_/g, '-').toLowerCase(), ed:newEd() }); }));
   S.sel.clear(); S.result = null; render();
@@ -466,12 +514,110 @@ function askConfirm({ title, body, ok, danger = true }) {
     $('#cfmno').focus();
   });
 }
+// A question with a text box, for naming a new set. Returns the text, or null if cancelled.
+function askName({ title, body, ok, value = '', error = '' }) {
+  return new Promise(resolve => {
+    const box = $('#cfm'); box.hidden = false;
+    box.innerHTML = '<div class="modal" role="dialog" aria-label="' + esc(title) + '"><h2>' + esc(title) + '</h2><p class="lead" style="margin:8px 0 12px">' + esc(body) + '</p>' +
+      '<input type="text" id="asknm" value="' + esc(value) + '" maxlength="60" autocomplete="off" placeholder="e.g. Client icons" style="width:100%">' +
+      (error ? '<div class="err" style="margin-top:10px">' + esc(error) + '</div>' : '') +
+      '<div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn" id="cfmno">Cancel</button><button class="btn primary" id="cfmyes"' + (value.trim() ? '' : ' disabled') + '>' + esc(ok) + '</button></div></div>';
+    const inp = $('#asknm'), yes = $('#cfmyes');
+    const done = v => { box.hidden = true; box.innerHTML = ''; box.onclick = null; document.removeEventListener('keydown', onKey, true); resolve(v); };
+    const onKey = e => { if (e.key === 'Escape') { e.stopPropagation(); done(null); } else if (e.key === 'Enter' && document.activeElement === inp && inp.value.trim()) { e.preventDefault(); e.stopPropagation(); done(inp.value.trim()); } };
+    document.addEventListener('keydown', onKey, true);
+    inp.addEventListener('input', () => { yes.disabled = !inp.value.trim(); });
+    box.onclick = e => { if (e.target.id === 'cfmyes') done(inp.value.trim()); else if (e.target.id === 'cfmno' || e.target === box) done(null); };
+    inp.focus(); inp.select();
+  });
+}
+// Make an empty set. Keeps asking until the name works or the user cancels. Returns the folder name, or ''.
+async function newSetFlow() {
+  let value = '', error = '';
+  for (;;) {
+    const name = await askName({ title:'New set', body:'Give the new set a name. It starts empty. You can fill it with icons from other sets.', ok:'Create set', value, error });
+    if (name === null) return '';
+    const r = await post('/api/library/new', { name });
+    if (r.ok) { await refresh(); toast('Set "' + setLabel(r.folder) + '" created'); return r.folder; }
+    value = name; error = r.error || 'Could not create the set.';
+  }
+}
+// Choose where icons go: one of the other sets, or a new set. Returns { to } or { newName }, or null if cancelled.
+function askSet({ title, body, exclude, ok }) {
+  return new Promise(resolve => {
+    const others = S.lib.filter(l => !exclude.includes(l.folder));
+    const box = $('#cfm'); box.hidden = false;
+    box.innerHTML = '<div class="modal" role="dialog" aria-label="' + esc(title) + '"><h2>' + esc(title) + '</h2><p class="lead" style="margin:8px 0 0">' + esc(body) + '</p>' +
+      '<input type="text" id="spsearch" placeholder="Search sets" autocomplete="off" aria-label="Search sets" style="width:100%;margin-top:14px">' +
+      '<div class="setpick" style="margin-top:10px">' + others.map(l => '<label class="spr" data-q="' + esc((l.folder + ' ' + prettyName(l.folder)).toLowerCase()) + '"><input type="radio" name="sp" value="' + esc(l.folder) + '"><span><b>' + esc(baseName(l.folder)) + tagHtml(l.folder) + '</b> <small>' + l.files.length + ' icon' + (l.files.length === 1 ? '' : 's') + '</small></span></label>').join('') +
+      '<div class="empty" id="spnone" hidden style="padding:14px 8px">No set matches your search.</div>' +
+      '<label class="spr"><input type="radio" name="sp" value="__new"><span><b>A new set</b></span></label><input type="text" id="spnew" placeholder="Name of the new set" maxlength="60" autocomplete="off" disabled></div>' +
+      '<div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn" id="cfmno">Cancel</button><button class="btn primary" id="cfmyes" disabled>' + esc(ok) + '</button></div></div>';
+    const yes = $('#cfmyes'), nm = $('#spnew'), sq = $('#spsearch'), none = $('#spnone');
+    // The search hides sets that do not match. A set you already ticked stays ticked, even if it is hidden. "A new set" is never hidden.
+    const filter = () => { const q = sq.value.trim().toLowerCase(); let n = 0; box.querySelectorAll('.spr[data-q]').forEach(r => { const on = !q || r.dataset.q.includes(q); r.hidden = !on; if (on) n++; }); none.hidden = n > 0 || !q; };
+    const chosen =() => { const r = box.querySelector('input[name=sp]:checked'); return r ? r.value : ''; };
+    const refreshOk = () => { const c = chosen(); nm.disabled = c !== '__new'; yes.disabled = !c || (c === '__new' && !nm.value.trim()); };
+    const answer = () => { const c = chosen(); return c === '__new' ? { newName:nm.value.trim() } : { to:c }; };
+    const done = v => { box.hidden = true; box.innerHTML = ''; box.onclick = null; box.onchange = null; box.oninput = null; document.removeEventListener('keydown', onKey, true); resolve(v); };
+    const onKey = e => { if (e.key === 'Escape') { e.stopPropagation(); done(null); } else if (e.key === 'Enter' && !yes.disabled && document.activeElement === nm) { e.preventDefault(); e.stopPropagation(); done(answer()); } };
+    document.addEventListener('keydown', onKey, true);
+    box.onchange = () => { refreshOk(); if (chosen() === '__new') nm.focus(); };
+    box.oninput = e => { if (e.target.id === 'spsearch') filter(); refreshOk(); };
+    box.onclick = e => { if (e.target.id === 'cfmyes' && !yes.disabled) done(answer()); else if (e.target.id === 'cfmno' || e.target === box) done(null); };
+    sq.focus();
+  });
+}
+// Copy or move icons (items: [{ folder, file }]) into another set. The first answer of the dialog decides where they go.
+async function sendIcons(mode, items) {
+  if (!items.length) return;
+  const n = items.length, s = n === 1 ? '' : 's', verb = mode === 'move' ? 'Move' : 'Copy';
+  const sources = [...new Set(items.map(i => i.folder))];
+  const pick = await askSet({ title:verb + ' ' + n + ' icon' + s + ' to…', body: mode === 'move' ? 'The icons leave their set and go into the one you choose. Icons already in the basket stay there.' : 'The icons stay where they are, and copies go into the one you choose.', exclude: sources.length === 1 ? sources : [], ok: verb + ' ' + n + ' icon' + s });
+  if (!pick) return;
+  let dest = pick.to || '', created = false, merged = false, total = 0, skipped = 0, problem = '';
+  const moves = [];
+  for (const folder of sources) {
+    if (dest && dest.toLowerCase() === folder.toLowerCase()) continue;   // already in that set
+    const r = await post('/api/library/transfer', { from:folder, to:dest || undefined, newName:dest ? undefined : pick.newName, files:items.filter(i => i.folder === folder).map(i => i.file), mode });
+    if (r.error) { problem = r.error; break; }
+    dest = r.dst; created = created || r.created; merged = merged || r.merged; total += r.done.length; skipped += r.skipped.length;
+    r.done.forEach(d => moves.push({ folder, from:d.from, to:d.to, dst:r.dst }));
+  }
+  if (problem) { toast(problem); return; }
+  if (mode === 'move' && moves.length) {   // the icons now live under new names: keep the basket and the Pick screen pointing at them
+    const map = new Map(moves.map(m => [key(m.folder, m.from), { folder:m.dst, file:m.to }]));
+    S.basket.forEach(b => { const t = map.get(b.key); if (t) { b.folder = t.folder; b.file = t.file; b.key = key(t.folder, t.file); } });
+    S.result = null;
+  }
+  S.sel.clear();
+  await refresh();
+  S.sets.forEach(x => { const l = S.lib.find(y => y.folder === x.folder); x.files = l ? l.files : []; }); S.sets = S.sets.filter(x => x.files.length);
+  if (S.libOpen && !S.lib.some(l => l.folder === S.libOpen)) S.libOpen = null;
+  render();
+  toast((mode === 'move' ? 'Moved ' : 'Copied ') + total + ' icon' + (total === 1 ? '' : 's') + ' to "' + setLabel(dest) + '"' + (created ? ' (new set)' : merged ? ' (that set already existed)' : '') + (skipped ? ', ' + skipped + ' skipped' : ''));
+}
+// Save the whole basket as a new set in the library, with the edits baked in and the names you gave the icons.
+async function setFromBasket() {
+  const b = S.basket; if (!b.length) return;
+  const n = b.length, edited = b.filter(x => !edIsId(x.ed)).length;
+  let value = '', error = '';
+  for (;;) {
+    const name = await askName({ title:'New set from the basket', body:'Your ' + n + ' icon' + (n === 1 ? '' : 's') + ' will be saved as a new set in your library' + (edited ? ', with the edits you made to ' + edited + ' of them (position, size, turning, deleted shapes)' : '') + '. The basket itself does not change.', ok:'Create set', value, error });
+    if (name === null) return;
+    const r = await post('/api/library/from-basket', { name, icons:b.map(x => ({ folder:x.folder, file:x.file, name:x.name, edit:x.ed })) });
+    if (r.error) { value = name; error = r.error; continue; }
+    await refresh();
+    toast('Saved ' + r.done.length + ' icon' + (r.done.length === 1 ? '' : 's') + ' to "' + setLabel(r.dst) + '"' + (r.created ? ' (new set)' : ' (that set already existed, so they were added to it)') + (r.skipped ? ', ' + r.skipped + ' skipped' : ''));
+    return;
+  }
+}
 // Delete icons (files = names) or a whole set (files = null) from the library. Everything goes to the Recycle Bin.
 async function deleteFromLibrary(folder, files) {
   const set = S.lib.find(l => l.folder === folder); if (!set) return;
   const names = files && files.length && files.length < set.files.length ? files : set.files, whole = names === set.files;
   const inB = S.basket.filter(b => b.folder === folder && names.includes(b.file)).length;
-  const label = prettyName(folder), n = names.length, s = n === 1 ? '' : 's';
+  const label = setLabel(folder), n = names.length, s = n === 1 ? '' : 's';
   const ok = await askConfirm({
     title: whole ? 'Delete the set "' + label + '"?' : 'Delete ' + n + ' icon' + s + ' from "' + label + '"?',
     body: (whole ? 'All ' + n + ' icons in this set' : n === 1 ? 'This icon' : 'These ' + n + ' icons') + ' will be moved to the Windows Recycle Bin, so you can restore ' + (whole || n > 1 ? 'them' : 'it') + ' from there. ' +
@@ -488,7 +634,11 @@ async function deleteFromLibrary(folder, files) {
   render(); toast(r.setGone ? 'Set moved to the Recycle Bin' : r.deleted + ' icon' + (r.deleted === 1 ? '' : 's') + ' moved to the Recycle Bin');
 }
 async function makeMore(si) {
-  const set = S.sets[si]; S.kws = [set.keyword]; S.genKws = [set.keyword]; S.style = set.style || 'line'; S.detail = set.detail || S.detail; S.step = 1; S.jobErr = ''; renderTop(); await startGen();
+  const set = S.sets[si], keep = { style:S.style, detail:S.detail, kws:S.kws };
+  S.kws = [set.keyword]; S.genKws = [set.keyword]; S.style = set.style || 'line'; S.detail = set.detail || S.detail; S.step = 1; S.jobErr = ''; renderTop();
+  await startGen();
+  // "Make more" uses the style of that set for this one run only. Your own choices on Step 1 come back afterwards.
+  S.style = keep.style; S.detail = keep.detail; S.kws = keep.kws;
 }
 
 // Small checkboxes on the basket tiles: tick some, and a bar appears with a button to remove them all at once.
@@ -508,12 +658,10 @@ document.addEventListener('click', e => {
 function viewBasket() {
   const b = S.basket, s = slug(S.font);
   S.bSel = new Set([...S.bSel].filter(k => b.some(x => x.key === k)));
-  $('#app').innerHTML = '<h1>4. Basket and font</h1><p class="lead">Check your selection, rename icons if you like, then create the font. <b>Tip:</b> right-click any icon to copy it.</p>' +
-    '<div class="two"><div class="card"><div class="sh"><h2>Basket <small>' + b.length + ' icons</small></h2><span class="seg" role="tablist" aria-label="Basket view"><button role="tab" data-btab="icons" class="' + (S.bTab === 'icons' ? 'on' : '') + '" aria-selected="' + (S.bTab === 'icons') + '">Icons</button><button role="tab" data-btab="preview" class="' + (S.bTab === 'preview' ? 'on' : '') + '" aria-selected="' + (S.bTab === 'preview') + '">Preview</button></span><button class="btn small" data-go="5">+ Add more</button>' + (b.length && S.bTab !== 'preview' ? '<button class="btn small" data-dlzip="1">Download as zip</button>' : '') + (b.length ? '<button class="btn small" id="clearb">Clear basket</button>' : '') + '</div>' +
-    (S.bTab === 'preview' ? previewTab() : (b.length ? '<div class="bselbar" id="bselbar" hidden></div><div class="grid">' + b.map((x, n) => '<div class="tile' + (S.bSel.has(x.key) ? ' sel' : '') + '" data-ctx="' + esc(x.key) + '"><input type="checkbox" class="bchk" data-bi="' + n + '"' + (S.bSel.has(x.key) ? ' checked' : '') + ' aria-label="Select ' + esc(x.name) + '"><button class="rm" data-del="' + n + '" aria-label="Remove">×</button>' + icE(x) + '<input type="text" value="' + esc(x.name) + '" data-name="' + n + '" aria-label="Icon name"><button class="btn small rmtext" data-del="' + n + '">Remove</button></div>').join('') + '</div>' : '<div class="empty">Your basket is empty. Pick some icons first.</div>')) + '</div>' +
-    '<aside class="side card"><h2 style="margin:0 0 4px;font-size:16px">Font</h2><label for="fname">What do you want to call it?</label><input type="text" id="fname" value="' + esc(S.font) + '">' +
-    '<p style="color:var(--muted);font-size:13px">Classes will look like <code>' + esc(s) + ' ' + esc(s) + '-' + esc(b[0] ? slug(b[0].name) : 'icon') + '</code></p>' +
-    '</aside></div>' +
+  $('#app').innerHTML = '<h1>3. Basket and font</h1><p class="lead">Check your selection, rename icons if you like, then create the font. <b>Tip:</b> right-click any icon to copy it.</p>' +
+    '<div class="card row" style="margin-bottom:14px"><label for="fname" style="color:var(--muted)">Font name</label><input type="text" id="fname" value="' + esc(S.font) + '" style="max-width:260px"><span style="color:var(--muted);font-size:13px">Classes will look like <code>' + esc(s) + ' ' + esc(s) + '-' + esc(b[0] ? slug(b[0].name) : 'icon') + '</code></span></div>' +
+    '<div class="card"><div class="sh"><h2>Basket <small>' + b.length + ' icons</small></h2><span class="seg" role="tablist" aria-label="Basket view"><button role="tab" data-btab="icons" class="' + (S.bTab === 'icons' ? 'on' : '') + '" aria-selected="' + (S.bTab === 'icons') + '">Icons</button><button role="tab" data-btab="preview" class="' + (S.bTab === 'preview' ? 'on' : '') + '" aria-selected="' + (S.bTab === 'preview') + '">Preview</button></span><button class="btn small" data-go="5">+ Add more</button>' + (b.length ? '<button class="btn small" data-go="3" title="Flip, turn, resize or clean up icons (optional)">Edit icons</button>' : '') + (b.length && S.bTab !== 'preview' ? '<button class="btn small primary" data-setfrombasket="1" title="Save the basket as a new set in your library, with your edits and names">New set from basket…</button><button class="btn small primary" data-dlzip="1">Download as zip</button>' : '') + (b.length ? '<button class="btn small" id="clearb">Clear basket</button>' : '') + '</div>' +
+    (S.bTab === 'preview' ? previewTab() : (b.length ? '<div class="bselbar" id="bselbar" hidden></div><div class="grid">' + b.map((x, n) => '<div class="tile' + (S.bSel.has(x.key) ? ' sel' : '') + '" data-ctx="' + esc(x.key) + '"><input type="checkbox" class="bchk" data-bi="' + n + '"' + (S.bSel.has(x.key) ? ' checked' : '') + ' aria-label="Select ' + esc(x.name) + '"><button class="rm" data-del="' + n + '" aria-label="Remove">×</button>' + ZOOMB + icE(x) + '<input type="text" value="' + esc(x.name) + '" data-name="' + n + '" aria-label="Icon name"></div>').join('') + '</div>' : '<div class="empty">Your basket is empty. Pick some icons first.</div>')) + '</div>' +
     (S.fontErr ? '<div class="err">' + esc(S.fontErr) + '</div>' : '') + (S.result ? doneCard() : '');
   updateBSel();
   dockBasket();
@@ -523,7 +671,7 @@ const VSTY = { line:'Line', filled:'Filled', double:'Double line', hand:'Hand-dr
 async function openVary(folder, file, back) {
   let info = {};
   try { info = await (await fetch('/api/icon-info?set=' + encodeURIComponent(folder) + '&file=' + encodeURIComponent(file))).json(); } catch (e) { /* use the guess below */ }
-  const m = info.meta || null, g = info.guess || { subject:prettyName(folder), style:'line', detail:2, prompt:'' }, base = m || g;
+  const m = info.meta || null, g = info.guess || { subject:baseName(folder), style:styleOf(folder), detail:2, prompt:'' }, base = m || g;
   S.vary = { folder, file, back:back == null ? S.step : back, meta:m, subject:base.subject || g.subject, style:base.style || 'line', detail:base.detail || 2, prompt:base.prompt || g.prompt, promptEdited:false, advOpen:false,
     mode:'prompt', strength:0.6, count:4, keepSeed:!!(m && Number.isFinite(m.seed)), jobId:null, job:null, results:[], err:'' };
   S.step = 6; render(); window.scrollTo(0, 0);
@@ -562,7 +710,7 @@ function viewVary() {
     '<details class="vdet" id="vdet"' + (v.advOpen ? ' open' : '') + '><summary>Full prompt (advanced)</summary><textarea id="vprompt" rows="7"' + dis + '>' + esc(v.prompt) + '</textarea>' +
     '<div class="row" style="margin-top:6px"><button class="btn small" id="vreset"' + dis + '>Reset to automatic</button></div><p class="vnote">If you change this text, it is used exactly as you wrote it.</p></details>';
   const shown = [{ folder:v.folder, file:v.file, orig:true }].concat(v.results);
-  const grid = shown.map(r => { const k = key(r.folder, r.file); return '<button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (r.orig ? '<span class="badge">original</span>' : inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(r.folder, r.file) + '<span style="font-size:12px;color:var(--muted)">' + esc(r.file.replace(/\.svg$/i, '')) + '</span></button>'; }).join('');
+  const grid = shown.map(r => { const k = key(r.folder, r.file); return '<span class="tw"><button class="tile ' + (S.sel.has(k) ? 'sel' : '') + '" data-pick="' + esc(k) + '" aria-pressed="' + S.sel.has(k) + '"><span class="tick">✓</span>' + (r.orig ? '<span class="badge">original</span>' : inBasket(k) ? '<span class="badge">in basket</span>' : '') + ic(r.folder, r.file) + '<span style="font-size:12px;color:var(--muted)">' + esc(r.file.replace(/\.svg$/i, '')) + '</span></button>' + ZOOMB + '</span>'; }).join('');
   $('#app').innerHTML = '<h1>Vary an icon</h1><p class="lead">Change the words and the AI draws new versions of this icon. They are saved in the same set, next to the original.</p>' +
     '<div class="two vv"><div class="card vleft">' + origin + '</div><div class="card">' + form + '</div></div>' +
     (S.ready ? '' : '<div class="err">The AI model is not installed yet. Open Settings (the gear) and download it first.</div>') +
@@ -580,22 +728,15 @@ function drawVaryProgress() {
   const fmt = ms => { const s = Math.max(1, Math.round(ms / 1000)); return s >= 60 ? Math.floor(s / 60) + ' min ' + (s % 60) + ' s' : s + ' s'; };
   let msg = '';
   if (cur) { const el2 = now - cur.startedAt, est = cur.first ? (j.avgMs || 60000) + 60000 : avg;
-    msg = cur.first ? '<b>Loading the Flux model and drawing the first version.</b> This one takes a little longer. ' + fmt(el2) + ' so far.' : '<b>Drawing version ' + cur.n + ' of ' + t + '.</b> About ' + fmt(Math.max(0, est - el2)) + ' left for this one.'; }
+    msg = cur.first ? '<b>Loading the AI model and drawing the first version.</b> This one takes a little longer. ' + fmt(el2) + ' so far.' : '<b>Drawing version ' + cur.n + ' of ' + t + '.</b> About ' + fmt(Math.max(0, est - el2)) + ' left for this one.'; }
   else if (j.stage) msg = '<b>' + esc(j.stage) + '…</b>';
-  let slots = '';
-  for (let i = 0; i < t; i++) {
-    const frac = cur && i === n ? Math.min(0.95, (now - cur.startedAt) / (cur.first ? avg + 60000 : avg)) : 0;
-    if (it && i < it.done) slots += '<span class="slot ok" title="Done">✓</span>';
-    else if (it && i < n) slots += '<span class="slot bad" title="Did not finish">✕</span>';
-    else if (cur && i === n) slots += '<span class="slot now" style="--p:' + Math.round(frac * 100) + '"><span>' + Math.round(frac * 100) + '%</span></span>';
-    else slots += '<span class="slot">' + (i + 1) + '</span>';
-  }
-  el.innerHTML = (msg ? '<div class="genmsg">' + msg + '</div>' : '') + '<div class="slots" style="margin:8px 0 14px">' + slots + '</div>';
+  const frac = cur ? Math.min(0.95, (now - cur.startedAt) / (cur.first ? avg + 60000 : avg)) : 0, pct = Math.round((n + frac) / t * 100);
+  el.innerHTML = (msg ? '<div class="genmsg">' + msg + '</div>' : '') + '<div class="gen" style="margin:8px 0 14px"><div class="g"><span>Versions</span><div class="bar"><i style="width:' + pct + '%"></i></div><span>' + n + '/' + t + (it && it.failed ? ' · ' + it.failed + ' failed' : '') + '</span></div></div>';
 }
 function dockVary() {
   const v = S.vary, d = $('#dock'); if (!v) { d.hidden = true; return; }
   d.hidden = false; const run = varyRunning(), n = S.sel.size, one = n === 1;
-  d.innerHTML = '<span class="msg">' + (run ? 'Drawing versions…' : v.results.length ? v.results.length + ' new version' + (v.results.length === 1 ? '' : 's') + ' saved in "' + esc(prettyName(v.folder)) + '"' : 'New versions are saved in the same set') + (n ? ' · ' + n + ' selected' : '') + '</span>' +
+  d.innerHTML = '<span class="msg">' + (run ? 'Drawing versions…' : v.results.length ? v.results.length + ' new version' + (v.results.length === 1 ? '' : 's') + ' saved in "' + esc(setLabel(v.folder)) + '"' : 'New versions are saved in the same set') + (n ? ' · ' + n + ' selected' : '') + '</span>' +
     '<button class="btn" id="vback">← Back</button>' + (S.basket.length ? '<button class="btn" data-go="4">Open basket (' + S.basket.length + ') →</button>' : '') + (one && !run ? '<button class="btn" id="varybtn">Vary this icon…</button>' : '') + (n && !run ? '<button class="btn" id="addb">Add ' + n + ' to basket</button>' : '') +
     (run ? '<button class="btn primary" id="vstop">■ Stop</button>' : '<button class="btn primary" id="vgo"' + (S.ready && v.subject.trim() ? '' : ' disabled') + '>Make ' + v.count + ' version' + (v.count === 1 ? '' : 's') + '</button>');
 }
@@ -603,6 +744,17 @@ async function rasterise(folder, file) {   // the icon as a 1024 px black-on-whi
   const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(await svgText(folder, file, null)); await img.decode();
   const c = document.createElement('canvas'); c.width = c.height = 1024; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, 1024, 1024); g.drawImage(img, 0, 0, 1024, 1024);
   return c.toDataURL('image/png').replace(/^data:image\/png;base64,/, '');
+}
+// Library: draw more icons like the ones in this set. The model is the ticked icon, or else the first one. New icons are added to the same set.
+async function moreLikeThis() {
+  const set = S.lib.find(l => l.folder === S.libOpen); if (!set || !set.files.length || !S.ready) return;
+  const ticked = set.files.filter(f => S.sel.has(key(set.folder, f)));
+  const file = ticked.length === 1 ? ticked[0] : set.files[0];
+  await openVary(set.folder, file, 5);
+  const v = S.vary; if (!v) return;
+  v.mode = 'prompt'; v.count = S.per; v.keepSeed = false;
+  if (v.meta) { viewVary(); startVary(); }   // the saved recipe is known, so just start
+  else toast('This icon has no saved recipe. Check the words, then press Make versions.');
 }
 async function startVary() {
   const v = S.vary; if (!v || varyRunning()) return;
@@ -625,26 +777,181 @@ async function startVary() {
   }, 1500);
 }
 
+// ---- Full-screen viewer: look at any icon thumbnail large, flip through the others, pick or vary it ----
+const ZOOMB = '<span class="zoomb" role="button" tabindex="0" title="View full screen" aria-label="View full screen">⤢</span>';
+let VW = null, VW_DARK = false;   // VW = { list, i, dark }
+const vwInfo = new Map();
+function viewerItems() {
+  return [...document.querySelectorAll('#app .tile[data-pick], #app .tile[data-ctx]')].map(el => {
+    if (el.dataset.pick) { const k = el.dataset.pick, c = k.indexOf('/'); return { key:k, folder:k.slice(0, c), file:k.slice(c + 1), el }; }
+    const b = S.basket.find(x => x.key === el.dataset.ctx); return b ? { key:b.key, folder:b.folder, file:b.file, item:b, name:b.name, el } : null;
+  }).filter(Boolean);
+}
+function openViewer(tile) {
+  const list = viewerItems(), i = list.findIndex(x => x.el === tile);
+  if (i >= 0) showViewer(list, i);
+}
+function openViewerFor(r) {   // from the right-click menu: use the tiles on screen if there are some, else just this icon
+  const k = r.folder + '/' + r.file, tile = document.querySelector('#app .tile[data-pick="' + CSS.escape(k) + '"], #app .tile[data-ctx="' + CSS.escape(k) + '"]');
+  if (tile) { openViewer(tile); return; }
+  showViewer([{ key:k, folder:r.folder, file:r.file, item:r.item || null, name:r.item ? r.item.name : '' }], 0);
+}
+function showViewer(list, i) { VW = { list, i:Math.max(0, Math.min(i, list.length - 1)), dark:VW_DARK }; drawViewer(); }
+function drawViewer() {
+  const v = VW, x = v.list[v.i], box = $('#viewer'), pickable = !x.item && !!x.el;
+  const art = x.item ? icE(x.item) : '<span class="fr">' + ic(x.folder, x.file) + '</span>';
+  box.hidden = false; box.className = 'viewer ' + (v.dark ? 'dark' : 'light');
+  box.innerHTML = '<div class="vwbar"><span class="vwtitle"><b>' + esc(x.name || x.file.replace(/\.svg$/i, '')) + '</b> <small>' + esc(setLabel(x.folder)) + ' · ' + (v.i + 1) + ' of ' + v.list.length + '</small></span>' +
+    '<span class="seg"><button data-vwbg="light" class="' + (v.dark ? '' : 'on') + '">Light</button><button data-vwbg="dark" class="' + (v.dark ? 'on' : '') + '">Dark</button></span>' +
+    (pickable ? '<button class="btn small" data-vwsel="1">' + (S.sel.has(x.key) ? '✓ Selected' : 'Select') + '</button>' : '') +
+    '<button class="btn small" data-vwcopy="1">Copy SVG</button><button class="btn small" data-vwvary="1">Vary this icon…</button><button class="btn small" data-vwclose="1" id="vwx">✕ Close</button></div>' +
+    '<button class="vwnav prev" data-vwgo="-1" aria-label="Previous icon"' + (v.list.length < 2 ? ' hidden' : '') + '>‹</button>' +
+    '<div class="vwstage" id="vwstage"><div class="vwart" style="--tile:min(70vh, 86vw)">' + art + '</div></div>' +
+    '<button class="vwnav next" data-vwgo="1" aria-label="Next icon"' + (v.list.length < 2 ? ' hidden' : '') + '>›</button>' +
+    '<div class="vwfoot" id="vwfoot">Loading the saved recipe…</div>';
+  const k = x.key, token = v.token = (v.token || 0) + 1;
+  const show = info => {
+    if (!VW || VW.token !== token) return;
+    const m = info && info.meta, f = $('#vwfoot'); if (!f) return;
+    f.innerHTML = m ? '<b>Recipe</b> · ' + esc(VSTY[m.style] || m.style || '') + (m.detail ? ' · ' + esc((DETAIL[m.detail] || [''])[0]) + ' detail' : '') + (Number.isFinite(m.seed) ? ' · seed ' + m.seed : '') + '<br>' + esc(m.prompt || '')
+      : 'No recipe was saved for this icon (it was made before recipes were stored).';
+  };
+  if (vwInfo.has(k)) show(vwInfo.get(k));
+  else fetch('/api/icon-info?set=' + encodeURIComponent(x.folder) + '&file=' + encodeURIComponent(x.file)).then(r => r.json()).then(j => { vwInfo.set(k, j); show(j); }).catch(() => show(null));
+  const cl = $('#vwx'); if (cl) cl.focus();
+}
+function closeViewer() {
+  if (!VW) return;
+  VW = null; const box = $('#viewer'); box.hidden = true; box.innerHTML = '';
+  // keep the tiles in step with anything picked inside the viewer
+  document.querySelectorAll('#app .tile[data-pick]').forEach(t => { const on = S.sel.has(t.dataset.pick); t.classList.toggle('sel', on); t.setAttribute('aria-pressed', on); });
+  if (S.step === 2 || S.step === 5) dockPick(); else if (S.step === 6) dockVary();
+}
+function viewerAction(d) {
+  if (!VW) return;
+  if (d.vwclose) { closeViewer(); return; }
+  if (d.vwgo) { VW.i = (VW.i + +d.vwgo + VW.list.length) % VW.list.length; drawViewer(); return; }
+  if (d.vwbg) { VW.dark = d.vwbg === 'dark'; VW_DARK = VW.dark; drawViewer(); return; }
+  const x = VW.list[VW.i];
+  if (d.vwsel) { if (S.sel.has(x.key)) S.sel.delete(x.key); else S.sel.add(x.key); drawViewer(); return; }
+  if (d.vwcopy) { copySvg(x.folder, x.file, x.item && !edIsId(x.item.ed) ? x.item.ed : null); return; }
+  if (d.vwvary) { closeViewer(); openVary(x.folder, x.file, S.step === 6 && S.vary ? S.vary.back : S.step); }
+}
+// The magnifier on a tile must not also pick the tile, so it is handled before the normal click handlers.
+// A tile's zoom button sits beside the tile button (a button inside a button is not allowed), in a .tw wrapper. Basket tiles are plain boxes, so the zoom button is inside them.
+const zoomTile = z => z.closest('.tile') || z.closest('.tw').querySelector('.tile');
+document.addEventListener('click', e => { const z = e.target.closest && e.target.closest('.zoomb'); if (!z) return; e.preventDefault(); e.stopImmediatePropagation(); openViewer(zoomTile(z)); }, true);
+document.addEventListener('click', e => { if (VW && e.target.id === 'vwstage') closeViewer(); });
+document.addEventListener('keydown', e => {
+  if (!VW) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('zoomb')) { e.preventDefault(); e.stopImmediatePropagation(); openViewer(zoomTile(e.target)); } return; }
+  if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); closeViewer(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopImmediatePropagation(); viewerAction({ vwgo:e.key === 'ArrowLeft' ? '-1' : '1' }); }
+}, true);
+
 // ---- Basket > Preview tab: see the icons at any size, in any colour, on any background ----
 const PV_BGS = [['#ffffff', 'White'], ['#f1f3f6', 'Light grey'], ['#1a1d23', 'Dark'], ['#000000', 'Black']];
 const pvInk = bg => { const h = bg.replace('#', ''), v = [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) || 0); return (0.299 * v[0] + 0.587 * v[1] + 0.114 * v[2]) / 255 < 0.55 ? '#ffffff' : '#1a1d23'; };
 function previewTab() {
   const b = S.basket, p = S.pv;
   if (!b.length) return '<div class="empty">Your basket is empty. Pick some icons first.</div>';
-  const shown = b.slice(0, 120);
+  const shown = b.slice(0, 120); if (p.sel >= shown.length) p.sel = -1;
   return '<div class="pvbar"><span class="pvg"><span class="pvl">Background</span><span class="seg">' +
     PV_BGS.map(([c, n]) => '<button data-pvbg="' + c + '" class="' + (p.bg.toLowerCase() === c ? 'on' : '') + '" title="' + n + '"><i class="sw" style="background:' + c + '"></i>' + n + '</button>').join('') +
     '</span><label class="pvl">Custom <input type="color" id="pvbgc" value="' + esc(p.bg) + '"></label></span>' +
-    '<span class="pvg"><label class="pvl">Icon colour <input type="color" id="co" value="' + esc(p.col) + '"></label><label class="pvl">Size <input type="range" id="sz" min="16" max="512" step="8" value="' + p.size + '"> <output id="szv">' + p.size + 'px</output></label>' +
+    '<span class="pvg"><label class="pvl">Icon colour <input type="color" id="co" value="' + esc(p.col) + '"></label><label class="pvl" title="Zooms the whole view. To change one icon, tap it.">Zoom all <input type="range" id="sz" min="16" max="512" step="8" value="' + p.size + '"> <output id="szv">' + p.size + 'px</output></label>' +
     '<span class="seg" aria-label="Quick sizes">' + [16, 32, 64, 128, 256, 512].map(n => '<button data-pvsz="' + n + '" class="' + (p.size === n ? 'on' : '') + '">' + n + '</button>').join('') + '</span></span>' +
-    '<span class="pvg" style="margin-left:auto"><label class="pvl"><input type="checkbox" id="pvuse"' + (p.useCol ? ' checked' : '') + '> Use this colour in the zip</label><button class="btn small primary" data-dlzip="1">Download as zip</button></span></div>' +
-    '<div class="sample pv" id="sample" style="--s:' + p.size + 'px;--c:' + esc(p.col) + ';background:' + esc(p.bg) + '">' + shown.map(x => '<span class="pvi" title="' + esc(x.name) + '">' + icE(x) + '</span>').join('') + '</div>' +
+    '<span class="pvg" style="margin-left:auto"><label class="pvl"><input type="checkbox" id="pvuse"' + (p.useCol ? ' checked' : '') + '> Use this colour in the zip</label><button class="btn small primary" data-setfrombasket="1" title="Save the basket as a new set in your library, with your edits and names">New set from basket…</button><button class="btn small primary" data-dlzip="1">Download as zip</button></span></div>' +
+    '<div class="pvwrap"><div class="sample pv" id="sample" style="--s:' + p.size + 'px;--c:' + esc(p.col) + ';background:' + esc(p.bg) + '">' + shown.map((x, n) => '<span class="pvi' + (n === p.sel ? ' on' : '') + '" data-pvi="' + n + '" title="' + esc(x.name) + ' (tap to adjust)">' + icE(x) + '</span>').join('') + '</div>' +
+    '<aside class="pvadjc" id="pvadj" aria-live="polite">' + pvPanel() + '</aside></div>' +
     (b.length > shown.length ? '<p style="color:var(--muted);font-size:13px;margin:8px 0 0">Showing the first ' + shown.length + ' of ' + b.length + ' icons.</p>' : '') +
-    '<p style="color:var(--muted);font-size:13px;margin:8px 0 0">This only changes how you see the icons here. The font itself has no colour: you set it with CSS <code>color</code>.</p>';
+    '<p style="color:var(--muted);font-size:13px;margin:8px 0 0"><b>Tap an icon</b> to move, resize or turn just that one. Those changes go into the font and the zip. Background, colour and zoom only change how you see the icons here. The font itself has no colour: you set it with CSS <code>color</code>.</p>';
 }
+const normRot = v => { v = ((v % 360) + 360) % 360; return Math.round(v * 10) / 10; };   // keep an angle between 0 and 360, one decimal
+
+// ---- Basket > Preview: tap one icon, then move / resize / turn just that icon. These are the same edits as "Edit icons", so they go into the font and the zip. ----
+function pvPanel() {
+  const b = S.basket, i = S.pv.sel, x = b[i];
+  if (!x) return '<div class="pvadj"><h3>Adjust one icon</h3><p class="pvhint"><b>Tap an icon</b> on the left. Then you can drag it to a new place, make it bigger or smaller, or turn it. The other icons stay as they are.</p></div>';
+  const e = x.ed;
+  return '<div class="pvadj"><div class="sh"><h3>' + esc(x.name) + ' <small>' + (i + 1) + ' of ' + b.length + '</small></h3><button class="btn small" data-pva="done">Done</button></div>' +
+    '<div class="canvas pvcan" title="Drag the icon. The cross marks the middle."><span class="fr"><span class="ic" id="pvcanic" style="--u:url(\'' + urlD(x) + '\'); transform:' + edT(e) + '"></span></span><i class="pvgrid"></i></div>' +
+    '<p class="pvhint"><b>Drag the icon</b> in the box to place it. The <b>cross</b> marks the middle and the icon snaps to it. Or use the arrow buttons (Shift + arrow keys = bigger steps).</p>' +
+    '<div class="ctl"><button class="btn small" data-pva="mv:-1,0" aria-label="Move left">◀</button><button class="btn small" data-pva="mv:0,-1" aria-label="Move up">▲</button><button class="btn small" data-pva="mv:0,1" aria-label="Move down">▼</button><button class="btn small" data-pva="mv:1,0" aria-label="Move right">▶</button><button class="btn small" data-pva="centre">Centre</button></div>' +
+    '<div class="sl"><span>Size</span><input type="range" data-pvin="s" min="50" max="200" value="' + Math.round(e.s * 100) + '" aria-label="Size of this icon"><output id="pv_s">' + Math.round(e.s * 100) + '%</output></div>' +
+    '<div class="sl"><span>Rotate</span><input type="range" data-pvin="rot" min="0" max="360" step="1" value="' + Math.round(e.rot) + '" aria-label="Turn this icon by degrees"><output id="pv_rot">' + e.rot + '°</output></div>' +
+    '<div class="ctl">' + [['-1', '−1°'], ['-0.1', '−0.1°'], ['0.1', '+0.1°'], ['1', '+1°']].map(([v, t]) => '<button class="btn small" data-pva="rot:' + v + '">' + t + '</button>').join('') +
+    '<label class="pvang">Angle <input type="number" id="pvrotn" min="-360" max="360" step="0.1" value="' + e.rot + '" aria-label="Exact angle in degrees">°</label></div>' +
+    '<div class="ctl"><button class="btn small" data-pva="rl">⟲ 90°</button><button class="btn small" data-pva="rr">⟳ 90°</button><button class="btn small" data-pva="fh">↔ Flip</button><button class="btn small" data-pva="fv">↕ Flip</button><button class="btn small" data-pva="fit">Fit to box</button><button class="btn small" data-pva="reset">Reset</button></div>' +
+    '<div class="ctl"><button class="btn small" data-pva="all">Copy these edits to all ' + b.length + ' icons</button><button class="btn small" data-pva="edit">More in Edit icons →</button></div></div>';
+}
+function pvSelect(i) {
+  S.pv.sel = i;
+  document.querySelectorAll('.pvi').forEach(t => t.classList.toggle('on', +t.dataset.pvi === i));
+  const p = $('#pvadj'); if (p) p.innerHTML = pvPanel();
+}
+function pvLive() {   // redraw every preview tile from its edits (cheap), and keep the panel's numbers in step
+  S.basket.forEach((x, n) => { const ic = document.querySelector('.pvi[data-pvi="' + n + '"] .ic'); if (ic) ic.style.transform = edT(x.ed); });
+  const cx = S.basket[S.pv.sel], ci = $('#pvcanic'); if (cx && ci) ci.style.transform = edT(cx.ed);
+  const x = S.basket[S.pv.sel]; S.result = null; if (!x) return;
+  const e = x.ed; $('#pv_s') && ($('#pv_s').textContent = Math.round(e.s * 100) + '%'); $('#pv_rot') && ($('#pv_rot').textContent = e.rot + '°');
+  const rn = $('#pvrotn'); if (rn && document.activeElement !== rn) rn.value = e.rot;
+  const sv = { s:Math.round(e.s * 100), rot:Math.round(e.rot) };
+  document.querySelectorAll('[data-pvin]').forEach(i => { if (document.activeElement !== i) i.value = sv[i.dataset.pvin]; });
+}
+async function pvAct(a, big) {
+  const b = S.basket, x = b[S.pv.sel]; if (!x) return; const e = x.ed; S.result = null;
+  if (a === 'done') { pvSelect(-1); return; }
+  if (a === 'edit') { S.edSel = S.pv.sel; S.edMode = 'move'; go(3); return; }
+  if (a.startsWith('mv:')) { const [mx, my] = a.slice(3).split(',').map(Number), st = big ? 32 : 8; e.dx = edClamp(e.dx + mx * st); e.dy = edClamp(e.dy + my * st); }
+  else if (a === 'centre') { e.dx = 0; e.dy = 0; }
+  else if (a.startsWith('rot:')) e.rot = normRot(e.rot + parseFloat(a.slice(4)));
+  else if (a === 'rl') e.rot = normRot(e.rot - 90); else if (a === 'rr') e.rot = normRot(e.rot + 90);
+  else if (a === 'fh') e.fx *= -1; else if (a === 'fv') e.fy *= -1;
+  else if (a === 'reset') { const del = e.del; Object.assign(e, newEd()); e.del = del; }
+  else if (a === 'fit') await fitOne(x);
+  else if (a === 'all') { b.forEach(it => { const del = it.ed.del; it.ed = Object.assign({}, e, { del:del.slice() }); }); toast('Copied to all ' + b.length + ' icons'); }
+  pvLive();
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest && e.target.closest('[data-pva]'); if (!t || t.disabled) return;
+  e.stopImmediatePropagation(); pvAct(t.dataset.pva, e.shiftKey);
+}, true);
+document.addEventListener('input', e => {
+  const t = e.target, x = S.basket[S.pv.sel]; if (!x || S.step !== 4) return;
+  if (t.id === 'pvrotn') { const a = parseFloat(t.value); if (Number.isFinite(a)) { x.ed.rot = normRot(a); pvLive(); } return; }
+  if (!t.dataset || !t.dataset.pvin) return;
+  if (t.dataset.pvin === 's') x.ed.s = +t.value / 100; else x.ed.rot = normRot(+t.value);
+  pvLive();
+});
+// drag an icon in the preview to place it (a plain tap just selects it)
+let pvDrag = null;
+document.addEventListener('pointerdown', e => {
+  const t = e.target.closest && e.target.closest('.pvi, .pvcan'); if (!t || S.step !== 4 || e.button !== 0) return;
+  const i = t.classList.contains('pvcan') ? S.pv.sel : +t.dataset.pvi, x = S.basket[i]; if (!x) return;
+  e.preventDefault(); if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  if (S.pv.sel !== i) pvSelect(i);
+  try { t.setPointerCapture(e.pointerId); } catch (err) { /* the move listeners are on the document anyway */ }
+  pvDrag = { t, id:e.pointerId, sx:e.clientX, sy:e.clientY, dx:x.ed.dx, dy:x.ed.dy, w:t.getBoundingClientRect().width || 64, moved:false };
+});
+document.addEventListener('pointermove', e => {
+  if (!pvDrag || e.pointerId !== pvDrag.id) return;
+  if (!pvDrag.moved && Math.hypot(e.clientX - pvDrag.sx, e.clientY - pvDrag.sy) < 3) return;
+  pvDrag.moved = true; pvDrag.t.classList.add('drag');
+  const ed = S.basket[S.pv.sel].ed, k = 1024 / pvDrag.w, snap = !e.altKey;
+  const nx = edClamp(pvDrag.dx + (e.clientX - pvDrag.sx) * k), ny = edClamp(pvDrag.dy + (e.clientY - pvDrag.sy) * k);
+  ed.dx = snap ? edSnap(nx) : nx; ed.dy = snap ? edSnap(ny) : ny; pvLive();
+});
+const pvEnd = e => { if (!pvDrag || e.pointerId !== pvDrag.id) return; pvDrag.t.classList.remove('drag'); pvDrag = null; };
+document.addEventListener('pointerup', pvEnd); document.addEventListener('pointercancel', pvEnd);
+document.addEventListener('keydown', e => {
+  if (S.step !== 4 || S.bTab !== 'preview' || S.pv.sel < 0 || S.settings || VW) return;
+  const a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'range') return;
+  const d = { ArrowLeft:[-1, 0], ArrowRight:[1, 0], ArrowUp:[0, -1], ArrowDown:[0, 1] }[e.key]; if (!d) return;
+  e.preventDefault(); pvAct('mv:' + d.join(','), e.shiftKey);
+});
 function dockBasket() {
   const d = $('#dock'), b = S.basket; d.hidden = false;
-  d.innerHTML = '<span class="msg">' + b.length + ' icons in basket</span><button class="btn" data-go="' + (b.length ? 3 : 5) + '">← Back</button><button class="btn primary" id="mkfont"' + (b.length && !S.building ? '' : ' disabled') + '>' + (S.building ? 'Creating…' : 'Create font from ' + b.length + ' icon' + (b.length === 1 ? '' : 's')) + '</button>';
+  d.innerHTML = '<span class="msg">' + b.length + ' icons in basket</span><button class="btn" data-go="' + (S.sets.length ? 2 : 5) + '">← ' + (S.sets.length ? 'Pick icons' : 'Library') + '</button><button class="btn primary" id="mkfont"' + (b.length && !S.building ? '' : ' disabled') + '>' + (S.building ? 'Creating…' : 'Create font from ' + b.length + ' icon' + (b.length === 1 ? '' : 's')) + '</button>';
 }
 function doneCard() {
   const r = S.result, s = r.slug;
@@ -668,27 +975,37 @@ const PATHS = {};
 const edT = e => 'translate(' + (e.dx / 10.24).toFixed(3) + '%,' + (e.dy / 10.24).toFixed(3) + '%) scale(' + (e.s * e.fx) + ',' + (e.s * e.fy) + ') rotate(' + e.rot + 'deg)';
 const edIsId = e => !e || (e.fx === 1 && e.fy === 1 && e.rot === 0 && e.s === 1 && e.dx === 0 && e.dy === 0 && !(e.del && e.del.length));
 const icE = x => '<span class="fr"><span class="ic" style="--u:url(\'' + urlD(x) + '\'); transform:' + edT(x.ed || DEF) + '"></span></span>';
-const edTf = (e, s, x, y) => { x -= 512; y -= 512; for (let i = 0; i < e.rot / 90; i++) [x, y] = [-y, x]; return [x * s * e.fx + 512, y * s * e.fy + 512]; };
+const edTf = (e, s, x, y) => {
+  x -= 512; y -= 512;
+  const th = e.rot * Math.PI / 180; let c = Math.cos(th), n = Math.sin(th);
+  if (e.rot % 90 === 0) { c = [1, 0, -1, 0][(e.rot / 90) % 4]; n = [0, 1, 0, -1][(e.rot / 90) % 4]; }
+  [x, y] = [x * c - y * n, x * n + y * c];
+  return [x * s * e.fx + 512, y * s * e.fy + 512];
+};
 
 function viewEdit() {
   const b = S.basket;
-  if (!b.length) { $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><div class="card empty">Your basket is empty. Pick some icons first.</div>'; dockEdit(); return; }
+  if (!b.length) { $('#app').innerHTML = '<h1>Edit icons</h1><div class="card empty">Your basket is empty. Pick some icons first.</div>'; dockEdit(); return; }
   S.edSel = Math.min(S.edSel, b.length - 1);
   const x = b[S.edSel], e = x.ed, clean = S.edMode === 'clean';
   const stage = clean ? '<span class="fr"><div id="cleansvg" style="width:100%;height:100%;transform:' + edT(e) + '"></div></span>'
     : '<span class="fr"><span class="ic" id="edic" style="--u:url(\'' + urlD(x) + '\'); transform:' + edT(e) + '"></span></span>';
   const move = '<div class="ctl"><button class="btn small" data-ed="fh">↔ Flip</button><button class="btn small" data-ed="fv">↕ Flip</button><button class="btn small" data-ed="rl">⟲ 90°</button><button class="btn small" data-ed="rr">⟳ 90°</button><button class="btn small" data-ed="fit">Fit to canvas</button><button class="btn small" data-ed="reset">Reset</button></div>' +
     '<div class="sl"><span>Size</span><input type="range" data-edin="s" min="50" max="200" value="' + Math.round(e.s * 100) + '"><output id="o_s">' + Math.round(e.s * 100) + '%</output></div>' +
-    '<div class="sl"><span>Move left/right</span><input type="range" data-edin="dx" min="-512" max="512" value="' + Math.round(e.dx) + '"><output id="o_dx">' + Math.round(e.dx) + '</output></div>' +
-    '<div class="sl"><span>Move up/down</span><input type="range" data-edin="dy" min="-512" max="512" value="' + Math.round(e.dy) + '"><output id="o_dy">' + Math.round(e.dy) + '</output></div>' +
+    // Moving is done by dragging the icon (or the arrow keys), so there are no move sliders. Turning to an odd angle is rarer, so it is folded away.
+    '<details class="vdet" id="edfine"' + (S.edFine ? ' open' : '') + '><summary>Fine tune (turn to any angle)</summary>' +
+    '<div class="sl"><span>Rotate</span><input type="range" data-edin="rot" min="0" max="360" step="1" value="' + Math.round(e.rot) + '" aria-label="Rotate by degrees"><output id="o_rot">' + e.rot + '°</output></div>' +
+    '<div class="ctl" title="Turn the icon by a small amount, or type an exact angle">' +
+    [['-1', '−1°'], ['-0.1', '−0.1°'], ['0.1', '+0.1°'], ['1', '+1°']].map(([v, t]) => '<button class="btn small" data-ed="rot:' + v + '">' + t + '</button>').join('') +
+    '<label style="color:var(--muted);display:inline-flex;align-items:center;gap:6px">Angle <input type="number" id="edrotn" min="-360" max="360" step="0.1" value="' + e.rot + '" aria-label="Exact angle in degrees" style="width:84px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)">°</label></div></details>' +
     '<div class="ctl"><button class="btn small" data-ed="all">Apply these edits to all ' + b.length + ' icons</button><button class="btn small" data-ed="fitall">Fit all to canvas</button></div>';
   const tidy = '<p style="color:var(--muted);font-size:14px;margin:12px 0 4px">Click shapes to select them (they turn red), then delete. Deleting is per icon and your original file is untouched.</p><div class="ctl" id="cleaninfo"></div>' +
     '<div class="ctl"><button class="btn small" data-ed="delsel" id="delsel" disabled>Delete selected</button><button class="btn small" data-ed="undo"' + ((x.hist || []).length ? '' : ' disabled') + '>Undo</button><button class="btn small" data-ed="restore"' + (e.del.length ? '' : ' disabled') + '>Restore all</button><button class="btn small" data-ed="clearsel">Clear selection</button></div>' +
     '<div class="sl"><span>Speck size</span><input type="range" data-speck="1" min="5" max="150" value="' + S.speck + '"><output id="o_speck">' + S.speck + '</output></div>' +
     '<div class="ctl"><button class="btn small" data-ed="specks">Select shapes smaller than this</button></div>';
-  $('#app').innerHTML = '<h1>3. Edit the SVGs</h1><p class="lead">Fix direction, size and position, or delete stray shapes, before the font is made. Edits apply to the copies sent to the font. Your original SVG files are never changed.</p>' +
+  $('#app').innerHTML = '<h1>Edit icons <small style="font-weight:400;color:var(--muted)">(optional)</small></h1><p class="lead">Fix direction, size and position, or delete stray shapes, before the font is made. You can skip this step. Edits apply to the copies sent to the font. Your original SVG files are never changed.</p>' +
     '<div class="two ed"><div class="card"><div class="sh"><h2>' + esc(x.name) + ' <small>' + (S.edSel + 1) + ' of ' + b.length + (e.del.length ? ' · ' + e.del.length + ' shapes deleted' : '') + '</small></h2><span class="seg mode"><button data-ed="mode-move" class="' + (clean ? '' : 'on') + '">Position</button><button data-ed="mode-clean" class="' + (clean ? 'on' : '') + '">Clean up</button></span></div>' +
-    '<div class="canvas' + (clean ? '' : ' mv') + '">' + stage + '</div>' + (clean ? '' : '<p style="color:var(--muted);font-size:14px;margin:10px 0 0;text-align:center"><b style="color:var(--ink)">Drag the icon</b> with your mouse to place it, or use the arrow keys (Shift = bigger steps). It snaps to the centre lines; hold Alt to turn snapping off.</p>') + (clean ? tidy : move) + '<div class="ctl"><button class="btn small" data-vary="1">Vary this icon…</button><button class="btn small rmtext" style="width:auto" data-ed="remove">Remove this icon from the basket</button></div></div>' +
+    '<div class="canvas' + (clean ? '' : ' mv') + '">' + stage + '</div>' + (clean ? '' : '<p style="color:var(--muted);font-size:14px;margin:10px 0 0;text-align:center"><b style="color:var(--ink)">Drag the icon</b> with your mouse to place it, or use the arrow keys (Shift = bigger steps). It snaps to the centre lines; hold Alt to turn snapping off.</p>') + (clean ? tidy : move) + '<div class="ctl"><button class="btn small" data-vwedit="1">View full screen</button><button class="btn small" data-vary="1">Vary this icon…</button><button class="btn small rmtext" style="width:auto" data-ed="remove">Remove this icon from the basket</button></div></div>' +
     '<aside class="card"><h2 style="margin:0 0 10px;font-size:16px">Icons</h2><div class="edgrid">' +
     b.map((it, i) => '<button class="tile ' + (i === S.edSel ? 'sel' : '') + '" data-edsel="' + i + '" title="' + esc(it.name) + '">' + icE(it) + '</button>').join('') + '</div></aside></div>';
   dockEdit();
@@ -697,7 +1014,7 @@ function viewEdit() {
 function dockEdit() {
   const d = $('#dock'); d.hidden = false;
   const k = S.edMode === 'clean' ? S.cleanSel.size : 0;
-  d.innerHTML = '<span class="msg">' + S.basket.length + ' in basket</span>' + (k ? '<button class="btn danger" data-ed="delsel">Delete ' + k + ' selected shape' + (k === 1 ? '' : 's') + ' (Del)</button>' : '') + '<button class="btn" data-go="' + (S.sets.length ? 2 : 5) + '">← Back</button><button class="btn primary" data-go="4"' + (S.basket.length ? '' : ' disabled') + '>Basket &amp; font →</button>';
+  d.innerHTML = '<span class="msg">' + S.basket.length + ' in basket</span>' + (k ? '<button class="btn danger" data-ed="delsel">Delete ' + k + ' selected shape' + (k === 1 ? '' : 's') + ' (Del)</button>' : '') + '<button class="btn" data-go="' + (S.sets.length ? 2 : 5) + '">← Back</button><button class="btn primary" data-go="4"' + (S.basket.length ? '' : ' disabled') + '>Next: basket and font →</button>';
 }
 async function loadClean() {
   const x = S.basket[S.edSel], box = $('#cleansvg'); if (!box) return;
@@ -722,8 +1039,10 @@ function cleanInfo() {
 function edLive() {
   const x = S.basket[S.edSel], e = x.ed;
   $('#edic').style.transform = edT(e);
-  $('#o_s').textContent = Math.round(e.s * 100) + '%'; $('#o_dx').textContent = Math.round(e.dx); $('#o_dy').textContent = Math.round(e.dy);
-  const sv = { s:Math.round(e.s * 100), dx:Math.round(e.dx), dy:Math.round(e.dy) };
+  $('#o_s').textContent = Math.round(e.s * 100) + '%';
+  const orot = $('#o_rot'); if (orot) orot.textContent = e.rot + '°';
+  const rn = $('#edrotn'); if (rn && document.activeElement !== rn) rn.value = e.rot;
+  const sv = { s:Math.round(e.s * 100), dx:Math.round(e.dx), dy:Math.round(e.dy), rot:Math.round(e.rot) };
   document.querySelectorAll('[data-edin]').forEach(i => { if (document.activeElement !== i) i.value = sv[i.dataset.edin]; });
   const th = document.querySelectorAll('.edgrid .tile')[S.edSel]; if (th) th.querySelector('.ic').style.transform = edT(e);
   S.result = null;
@@ -743,9 +1062,10 @@ async function fitOne(x) {
 }
 async function edAction(a) {
   const b = S.basket, x = b[S.edSel], e = x.ed; S.result = null;
+  if (a.startsWith('rot:')) { e.rot = normRot(e.rot + parseFloat(a.slice(4))); edLive(); return; }   // a small turn: update at once, no redraw
   if (a === 'remove') { const nm = x.name; b.splice(S.edSel, 1); S.edSel = Math.max(0, Math.min(S.edSel, b.length - 1)); S.cleanSel.clear(); render(); toast('Removed ' + nm + ' from the basket'); return; }
   if (a === 'fh') e.fx *= -1; else if (a === 'fv') e.fy *= -1;
-  else if (a === 'rl') e.rot = (e.rot + 270) % 360; else if (a === 'rr') e.rot = (e.rot + 90) % 360;
+  else if (a === 'rl') e.rot = normRot(e.rot - 90); else if (a === 'rr') e.rot = normRot(e.rot + 90);
   else if (a === 'reset') { const del = e.del; Object.assign(e, newEd()); e.del = del; }
   else if (a === 'fit') await fitOne(x);
   else if (a === 'all') b.forEach(it => { const del = it.ed.del; it.ed = Object.assign({}, e, { del:del.slice() }); });
@@ -771,13 +1091,18 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('input', e => {
   const t = e.target; if (t.dataset && t.dataset.speck) { S.speck = +t.value; $('#o_speck').textContent = S.speck; return; }
+  if (t.id === 'edrotn') { const a = parseFloat(t.value); if (Number.isFinite(a) && S.basket[S.edSel]) { S.basket[S.edSel].ed.rot = normRot(a); edLive(); } return; }
   if (!t.dataset || !t.dataset.edin) return;
   const ed = S.basket[S.edSel].ed, v = +t.value;
-  if (t.dataset.edin === 's') ed.s = v / 100; else ed[t.dataset.edin] = v;
+  if (t.dataset.edin === 's') ed.s = v / 100; else if (t.dataset.edin === 'rot') ed.rot = normRot(v); else ed[t.dataset.edin] = v;
   edLive();
 });
 
-document.addEventListener('toggle', e => { if (e.target.id === 'vdet' && S.vary) S.vary.advOpen = e.target.open; }, true);
+document.addEventListener('toggle', e => {
+  if (e.target.id === 'vdet' && S.vary) S.vary.advOpen = e.target.open;
+  else if (e.target.id === 'kwopts') S.optsOpen = e.target.open;
+  else if (e.target.id === 'edfine') S.edFine = e.target.open;
+}, true);
 // Place the icon by hand: drag it on the canvas, or nudge it with the arrow keys. It snaps to the centre lines.
 const EDMAX = 512, SNAP = 9;
 const edClamp = v => Math.max(-EDMAX, Math.min(EDMAX, v));
@@ -850,7 +1175,7 @@ function makeZip(files) {
 }
 async function downloadZip() {
   const b = S.basket; if (!b.length || S.zipping) return;
-  S.zipping = true; toast('Making the zip…');
+  S.zipping = true; toast('Making the zip and the font…');
   try {
     const used = new Set(), files = [], enc = new TextEncoder(), recolour = S.bTab === 'preview' && S.pv.useCol;
     for (const x of b) {
@@ -859,11 +1184,27 @@ async function downloadZip() {
       if (recolour) svg = svg.replace(/fill="#([0-9a-fA-F]{6})"/g, (m, h) => { const v = [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16)); return 0.299 * v[0] + 0.587 * v[1] + 0.114 * v[2] > 230 ? m : 'fill="' + S.pv.col + '"'; });
       const base = (x.name || 'icon').replace(/[^\w.\-]+/g, '-').replace(/^-+|-+$/g, '') || 'icon';
       let nm = base, i = 2; while (used.has(nm.toLowerCase())) nm = base + '-' + i++; used.add(nm.toLowerCase());
-      files.push({ name: nm + '.svg', data: enc.encode(svg) });
+      files.push({ name: 'svg/' + nm + '.svg', data: enc.encode(svg) });
     }
+    // The icon font goes in too: .ttf, .woff, .woff2, the .css and preview.html. It is built now, from the basket as it is (reuses the last build if nothing changed).
+    let fontNote = '';
+    try {
+      let r = S.result && S.result.ok !== false ? S.result : null;
+      if (!r) {
+        r = await post('/api/font', { name:S.font, icons:b.map(x => ({ folder:x.folder, file:x.file, name:x.name, edit:x.ed })) });
+        if (r.ok) S.result = r; else fontNote = r.error || 'The font could not be made.';
+      }
+      if (r && r.ok) {
+        for (const f of r.files) {
+          const res = await fetch('/iconfonts/' + encodeURIComponent(r.slug) + '/' + encodeURIComponent(f));
+          if (res.ok) files.push({ name: 'font/' + f, data: new Uint8Array(await res.arrayBuffer()) });
+        }
+      }
+    } catch (e) { fontNote = 'The font could not be made.'; }
     const a = document.createElement('a'); a.href = URL.createObjectURL(makeZip(files)); a.download = (slug(S.font) || 'icons') + '.zip';
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 20000);
-    toast('Zip ready: ' + a.download + ' (' + files.length + ' icon' + (files.length === 1 ? '' : 's') + ')');
+    const nIcons = files.filter(f => f.name.startsWith('svg/')).length;
+    toast(fontNote ? 'Zip ready with the ' + nIcons + ' SVG icons only. ' + fontNote : 'Zip ready: ' + a.download + ' (' + nIcons + ' icon' + (nIcons === 1 ? '' : 's') + ' + the icon font and preview.html)');
   } catch (e) { toast('Could not make the zip'); } finally { S.zipping = false; }
 }
 async function copySvg(folder, file, ed) {
@@ -891,6 +1232,8 @@ function iconAt(el) {
   if ((n = el.closest('[data-pick]'))) { const r = sp(n.dataset.pick); r.item = S.basket.find(b => b.key === n.dataset.pick); return r; }
   if ((n = el.closest('[data-ctx]'))) { const r = sp(n.dataset.ctx); r.item = S.basket.find(b => b.key === n.dataset.ctx); return r; }
   if ((n = el.closest('[data-edsel]'))) { const it = S.basket[+n.dataset.edsel]; return it && { folder:it.folder, file:it.file, item:it }; }
+  if ((n = el.closest('[data-pvi]'))) { const it = S.basket[+n.dataset.pvi]; return it && { folder:it.folder, file:it.file, item:it }; }   // Basket > Preview
+  if (VW && el.closest('.vwart')) { const x = VW.list[VW.i]; return x && { folder:x.folder, file:x.file, item:x.item || S.basket.find(b => b.key === x.key) }; }   // full-screen viewer
   if (el.closest('.canvas')) { const it = S.basket[S.edSel]; return it && { folder:it.folder, file:it.file, item:it }; }
   return null;
 }
@@ -899,17 +1242,21 @@ document.addEventListener('contextmenu', e => {
   e.preventDefault(); closeMenu();
   const m = document.createElement('div'); m.className = 'ctxm'; m.id = 'ctxm';
   const edited = r.item && !edIsId(r.item.ed);
-  m.innerHTML = '<button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '') + '<button data-cp="2">Copy as picture (PNG)</button>' + (r.item ? '<button data-cp="3" style="color:#dc2626">Remove from basket</button>' : '') + '<button data-cp="5">Vary this icon…</button>' + (S.step === 5 && S.libOpen === r.folder ? '<button data-cp="4" style="color:#dc2626">Delete from library…</button>' : '');
-  m.style.left = Math.min(e.clientX, innerWidth - 240) + 'px'; m.style.top = Math.min(e.clientY, innerHeight - 140) + 'px';
+  m.innerHTML = '<button data-cp="8">View full screen</button><button data-cp="0">Copy SVG</button>' + (edited ? '<button data-cp="1">Copy SVG with my edits</button>' : '') + '<button data-cp="2">Copy as picture (PNG)</button>' + (r.item ? '<button data-cp="3" style="color:#dc2626">Remove from basket</button>' : '') + '<button data-cp="5">Vary this icon…</button>' + (S.step === 5 && S.libOpen === r.folder ? '<button data-cp="6">Copy to another set…</button><button data-cp="7">Move to another set…</button>' : '') + (S.step === 5 && S.libOpen === r.folder ? '<button data-cp="4" style="color:#dc2626">Delete from library…</button>' : '');
+  m.style.left = '0px'; m.style.top = '0px'; m.style.visibility = 'hidden'; document.body.appendChild(m);
+  // place it after measuring, so a tall menu opened near the bottom or right edge is moved up/left instead of being cut off
+  const mw = m.offsetWidth, mh = m.offsetHeight;
+  m.style.left = Math.max(6, Math.min(e.clientX, innerWidth - mw - 6)) + 'px'; m.style.top = Math.max(6, Math.min(e.clientY, innerHeight - mh - 6)) + 'px'; m.style.visibility = '';
   m.addEventListener('click', ev => {
     const b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.cp === '8') { closeMenu(); openViewerFor(r); return; }
+    if (b.dataset.cp === '6' || b.dataset.cp === '7') { closeMenu(); sendIcons(b.dataset.cp === '7' ? 'move' : 'copy', [{ folder:r.folder, file:r.file }]); return; }
     if (b.dataset.cp === '5') { closeMenu(); openVary(r.folder, r.file, S.step === 6 && S.vary ? S.vary.back : S.step); return; }
     if (b.dataset.cp === '4') { closeMenu(); deleteFromLibrary(r.folder, [r.file]); return; }
     if (b.dataset.cp === '3') { closeMenu(); const i = S.basket.indexOf(r.item); if (i >= 0) { S.basket.splice(i, 1); S.result = null; render(); toast('Removed ' + r.item.name + ' from the basket'); } return; }
     if (b.dataset.cp === '2') copyPng(r.folder, r.file, edited ? r.item.ed : null);
     else copySvg(r.folder, r.file, b.dataset.cp === '1' ? r.item.ed : null);
   });
-  document.body.appendChild(m);
 });
 document.addEventListener('mousedown', e => { if (!e.target.closest('#ctxm')) closeMenu(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
@@ -917,10 +1264,11 @@ window.addEventListener('scroll', closeMenu, true);
 
 document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t || t.disabled) return; const d = t.dataset;
-  if (t.id === 'chip') { go(4); return; }
+  if (t.id === 'morebtn') { const m = $('#moremenu'); if (m) { m.hidden = !m.hidden; t.setAttribute('aria-expanded', String(!m.hidden)); } return; }
   if (d.edsel !== undefined) { S.edSel = +d.edsel; S.cleanSel.clear(); viewEdit(); return; }
   if (d.ed) { edAction(d.ed); return; }
-  if (d.varyhome) { S.libHint = true; go(5); return; }
+  if (d.vwclose || d.vwgo || d.vwbg || d.vwsel || d.vwvary || d.vwcopy) { viewerAction(d); return; }
+  if (d.vwedit) { if (S.basket.length) showViewer(S.basket.map(b => ({ key:b.key, folder:b.folder, file:b.file, item:b, name:b.name })), S.edSel); return; }
   if (d.go) { go(+d.go); return; }
   if (d.vstyle) { S.vary.style = d.vstyle; viewVary(); refreshVaryPrompt(); return; }
   if (d.vdetail) { S.vary.detail = +d.vdetail; viewVary(); refreshVaryPrompt(); return; }
@@ -936,11 +1284,16 @@ document.addEventListener('click', e => {
   if (t.id === 'varybtn') { const k = [...S.sel][0]; if (k) { const i = k.indexOf('/'); openVary(k.slice(0, i), k.slice(i + 1), S.step === 6 && S.vary ? S.vary.back : S.step); } return; }
   if (t.id === 'vreset') { S.vary.promptEdited = false; refreshVaryPrompt(); return; }
   if (d.vary) { const x = S.basket[S.edSel]; if (x) openVary(x.folder, x.file, 3); return; }
+  if (t.id === 'newset') { newSetFlow().then(f => { if (f) { S.libOpen = f; S.sel.clear(); render(); window.scrollTo(0, 0); } }); return; }
+  if (t.id === 'copyto' || t.id === 'moveto') { const set = S.lib.find(l => l.folder === S.libOpen); if (set) sendIcons(t.id === 'copyto' ? 'copy' : 'move', set.files.filter(f => S.sel.has(key(set.folder, f))).map(f => ({ folder:set.folder, file:f }))); return; }
+  if (d.setfrombasket) { setFromBasket(); return; }
+  if (d.saveset) { sendIcons('copy', S.basket.map(b => ({ folder:b.folder, file:b.file }))); return; }
   if (d.dlzip) { downloadZip(); return; }
   if (d.pvsz) { S.pv.size = +d.pvsz; const s = $('#sample'); if (s) { s.style.setProperty('--s', S.pv.size + 'px'); $('#sz').value = S.pv.size; $('#szv').textContent = S.pv.size + 'px'; document.querySelectorAll('[data-pvsz]').forEach(x => x.classList.toggle('on', +x.dataset.pvsz === S.pv.size)); } return; }
   if (d.btab) { S.bTab = d.btab; viewBasket(); return; }
   if (d.pvbg) { S.pv.bg = d.pvbg; if (!S.pv.touched) S.pv.col = pvInk(d.pvbg); viewBasket(); return; }
   if (d.libopen !== undefined) { S.libOpen = d.libopen || null; render(); window.scrollTo(0, 0); return; }
+  if (d.libmore) { moreLikeThis(); return; }
   if (d.liball) { const set = S.lib.find(l => l.folder === S.libOpen); if (set) set.files.forEach(f => { const k = key(set.folder, f); if (!inBasket(k)) S.sel.add(k); }); viewLibrary(); return; }
   if (d.revealset) { post('/api/reveal', { set:d.revealset }); return; }
   if (d.delset !== undefined) { deleteFromLibrary(d.delset, null); return; }
@@ -954,7 +1307,6 @@ document.addEventListener('click', e => {
   if (d.per) { S.per = Math.min(24, Math.max(1, S.per + +d.per)); viewKeywords(); return; }
   if (d.style) { S.style = d.style; viewKeywords(); return; }
   if (d.detail) { S.detail = +d.detail; viewKeywords(); return; }
-  if (d.uselib) { const l = S.lib.find(x => x.folder === d.uselib); if (l && !S.sets.some(s => s.folder === l.folder)) S.sets.push({ folder:l.folder, title:l.folder, files:l.files }); go(2); return; }
   if (t.id === 'gobtn') { startGen(); return; }
   if (t.id === 'stopbtn') { stopGen(); return; }
   if (d.pick) { S.sel.has(d.pick) ? S.sel.delete(d.pick) : S.sel.add(d.pick); t.classList.toggle('sel'); t.setAttribute('aria-pressed', S.sel.has(d.pick)); S.step === 6 ? dockVary() : dockPick(); return; }
@@ -966,7 +1318,14 @@ document.addEventListener('click', e => {
   if (d.del !== undefined) { S.basket.splice(+d.del, 1); S.result = null; render(); return; }
   if (t.id === 'mkfont') { buildFont(); return; }
   if (d.reveal) { post('/api/reveal', { slug:d.reveal }); return; }
-  if (d.new) { S.basket = []; S.sel.clear(); S.result = null; S.sets = []; S.kws = []; go(1); return; }
+  if (d.new) {
+    const n = S.basket.length;
+    askConfirm({ title:'Start a new set?', body:'This empties the basket (' + n + ' icon' + (n === 1 ? '' : 's') + ', with their edits) and clears the keywords. The font you made and the icons in your library are not changed.', ok:'Start a new set', danger:false }).then(ok => {
+      if (!ok) return;
+      S.basket = []; S.sel.clear(); S.result = null; S.sets = []; S.kws = []; go(1);
+    });
+    return;
+  }
 });
 document.addEventListener('submit', e => {
   if (e.target.id !== 'kwform') return; e.preventDefault();
@@ -1004,14 +1363,14 @@ function viewSettings() {
     : w ? 'Icon Forge draws your icons with an AI model called Flux Schnell. It runs on your own PC, so you download it once (about ' + fmtGB(m.size) + '). Check the folder below, then press Download. If your drive is short on space, press Change folder first.'
     : 'Icon Forge draws icons with the Flux Schnell model, which runs on your own PC. It is one download of about ' + fmtGB(m.size) + ', saved wherever you choose. Check the folder below, then press Download.';
   const warn = m.ready ? '' : '<div class="warnbox" role="alert"><span class="warnicon" aria-hidden="true">!</span><b>Icon Forge will not work until the AI model is downloaded.</b></div>';
-  box.innerHTML = '<div class="modal" role="dialog" aria-label="' + (w ? 'Get the AI model' : 'Settings') + '">' + (w ? stepsHtml(2) : '') + '<h2>' + (w ? 'Get the AI model' : 'Settings') + '</h2><p class="lead" style="margin:0">' + lead + '</p>' + warn +
+  box.innerHTML = '<div class="modal" role="dialog" aria-label="' + (w ? 'Get the AI model' : 'Settings') + '"><h2>' + (w ? 'Get the AI model' : 'Settings') + '</h2><p class="lead" style="margin:0">' + lead + '</p>' + warn +
     '<div class="kv"><span>Model</span><span>' + esc(m.name) + ' (' + fmtGB(m.size) + ')</span>' +
     '<span>Status</span><span>' + (m.downloading ? 'Downloading… ' + pct + '%' : m.ready ? '<b style="color:var(--ok)">✓ Ready</b>' : 'Not installed') + '</span>' +
     '<span>' + (m.ready ? 'File' : 'Save to') + '</span><span><code>' + esc(m.ready ? m.path : m.folder) + '</code></span>' +
     (w ? '' : '<span>Library</span><span><code>' + esc(m.library || '') + '</code></span>' +
     '<span>Theme</span><span><span class="seg"><button data-theme-pick="light" class="' + (S.theme !== 'dark' ? 'on' : '') + '">Light</button><button data-theme-pick="dark" class="' + (S.theme === 'dark' ? 'on' : '') + '">Dark</button></span></span>') + '</div>' +
     (m.downloading ? '<div class="bar big"><i style="width:' + (m.percent || 0).toFixed(1) + '%"></i></div><div class="dlinfo"><b>' + fmtGB(m.got) + ' of ' + fmtGB(m.size) + '</b> · ' + pct + '%' + (speed ? ' · ' + speed : '') + (left ? ' · about ' + left + ' left' : '') + '</div>' : '') +
-    (m.error ? '<div class="err">' + esc(m.error) + '</div>' : '') +
+    (m.error ? '<div class="err">' + esc(m.error) + '</div>' : '') + (S.mErr ? '<div class="err" role="alert">' + esc(S.mErr) + '</div>' : '') +
     '<div class="row" style="margin-top:16px">' +
     (m.downloading ? '<button class="btn" id="mdlcancel">Cancel download</button>'
       : m.ready ? (w ? '<button class="btn primary" id="mclose">Start making icons</button>' : '<button class="btn" id="mbrowse">Use a different file…</button>')
@@ -1019,13 +1378,10 @@ function viewSettings() {
     (w ? '' : '<button class="btn" id="mopen">Open icon folder</button>') + (w && m.ready ? '' : '<button class="btn" id="mclose" style="margin-left:auto">' + (w && !m.downloading ? 'Not now' : 'Close') + '</button>') + '</div>' +
     '<p style="color:var(--muted);font-size:13px;margin:14px 0 0">Flux Schnell is free to use (Apache 2.0). Nothing else is sent anywhere; icons are made on this PC.' + (m.downloading ? ' You can close this window; the download carries on and the bar at the top of the app shows its progress.' : '') + '</p></div>';
 }
-// Only one dialog is ever open: showing one closes the other.
 function openSettings(on) {
-  S.settings = on; if (!on) S.welcome = null;
-  if (on) { const t = $('#themeask'); t.hidden = true; t.innerHTML = ''; }
+  S.settings = on; S.mErr = ''; if (!on) S.welcome = null;
   viewSettings(); if (on) pollModel();
 }
-const stepsHtml = n => '<div class="wsteps"><i class="on"></i><i' + (n === 2 ? ' class="on"' : '') + '></i><span>Step ' + n + ' of 2</span></div>';
 let modelTimer = null;
 function pollModel() {
   clearInterval(modelTimer);
@@ -1033,35 +1389,52 @@ function pollModel() {
 }
 document.addEventListener('click', async e => {
   const t = e.target.closest('button, .modalbg'); if (!t) return;
-  if (t.id === 'gear' || t.id === 'comfy') { await refresh(); openSettings(true); return; }
+  if (t.id === 'gear') { await refresh(); openSettings(true); return; }
   if (t.id === 'modal' && e.target === t) { openSettings(false); return; }
   if (t.id === 'mclose') { openSettings(false); return; }
   if (t.id === 'mdl') { await post('/api/model/download', {}); await refresh(); viewSettings(); pollModel(); return; }
   if (t.id === 'mdlcancel') { await post('/api/model/cancel', {}); await refresh(); viewSettings(); return; }
-  if (t.id === 'mchoose') { const r = await post('/api/model/folder', {}); if (r.error) alert(r.error); await refresh(); viewSettings(); return; }
-  if (t.id === 'mbrowse') { const r = await post('/api/model/browse', {}); if (r.error) alert(r.error); await refresh(); viewSettings(); return; }
+  // Errors show inside the dialog. A toast would sit behind it, and the browser's alert box looks out of place.
+  if (t.id === 'mchoose') { const r = await post('/api/model/folder', {}); S.mErr = r.error || ''; await refresh(); viewSettings(); return; }
+  if (t.id === 'mbrowse') { const r = await post('/api/model/browse', {}); S.mErr = r.error || ''; await refresh(); viewSettings(); return; }
   if (t.id === 'mopen') { post('/api/reveal', { slug:'' }); return; }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) openSettings(false); });
 function applyTheme(t) { document.documentElement.dataset.theme = t; S.theme = t; }
-function askTheme() {
-  S.settings = false; viewSettings();
-  const box = $('#themeask'); box.hidden = false;
-  box.innerHTML = '<div class="modal" role="dialog" aria-label="Choose a theme">' + stepsHtml(1) + '<h2>Welcome to Icon Forge</h2><p class="lead" style="margin:0">Let us get you set up in two quick steps. First, choose how the app looks: light or dark. Icon Forge remembers it, and you can change it later in Settings (the gear).</p>' +
-    '<div class="themes"><button class="themeopt" data-theme-pick="light"><span class="sw light"><i></i><b></b></span>Light</button><button class="themeopt" data-theme-pick="dark"><span class="sw dark"><i></i><b></b></span>Dark</button></div></div>';
-}
+// The theme follows Windows until you pick one in Settings (the gear). Your pick is saved and wins from then on.
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-theme-pick]'); if (!b) return;
-  const t = b.dataset.themePick; applyTheme(t); $('#themeask').hidden = true; $('#themeask').innerHTML = '';
+  const t = b.dataset.themePick; applyTheme(t);
   await post('/api/theme', { theme:t });
-  if (S.welcome === 'theme') { await refresh(); if (S.model.ready && !S.model.downloading) { S.welcome = null; return; } S.welcome = 'model'; openSettings(true); return; }
   if (S.settings) viewSettings();
 });
-// First start: step 1 = look (light or dark), step 2 = get the AI model. Later starts only show step 2 if the model is missing.
+// ---- Keep the basket between runs ----
+// The basket (picked icons, their names and edits) and the font name are saved a moment after any change. On the next start they come back,
+// minus any icon that was deleted from the library in the meantime.
+let basketSaved = '';
+const basketSnapshot = () => JSON.stringify({ items:S.basket.map(b => ({ folder:b.folder, file:b.file, name:b.name, ed:b.ed })), font:S.font });
+function restoreBasket() {
+  const sv = S.savedBasket; S.savedBasket = null;
+  if (!sv) { basketSaved = basketSnapshot(); return; }
+  if (sv.font) S.font = sv.font;
+  (sv.items || []).forEach(i => {
+    const lib = S.lib.find(l => l.folder === i.folder);
+    if (!lib || !lib.files.includes(i.file) || inBasket(key(i.folder, i.file))) return;
+    const ed = Object.assign(newEd(), i.ed || {}); ed.del = Array.isArray(ed.del) ? ed.del : [];
+    S.basket.push({ key:key(i.folder, i.file), folder:i.folder, file:i.file, name:i.name || i.file.replace(/\.svg$/i, '').replace(/_/g, '-').toLowerCase(), ed });
+  });
+  basketSaved = basketSnapshot();
+}
+setInterval(() => {
+  const now = basketSnapshot(); if (now === basketSaved) return;
+  basketSaved = now;
+  post('/api/basket', JSON.parse(now)).catch(() => { basketSaved = ''; });   // on a failed save, try again at the next tick
+}, 1500);
+// First start: the only question is the AI model download. It shows again on later starts only while the model is missing.
 refresh().then(() => {
-  if (S.theme) applyTheme(S.theme);
+  applyTheme(S.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  restoreBasket();
   render();
-  if (!S.theme) { S.welcome = 'theme'; askTheme(); }
-  else if (S.model.downloading || !S.model.ready) { S.welcome = 'model'; openSettings(true); }
+  if (S.model.downloading || !S.model.ready) { S.welcome = 'model'; openSettings(true); }
 });
 </script></body></html>

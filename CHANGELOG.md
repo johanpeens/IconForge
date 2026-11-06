@@ -1,5 +1,35 @@
 # Changelog
 
+## Next (not released yet)
+
+- **New set.** Make your own empty set in the library, and fill it with icons from other sets.
+- **Copy to / Move to.** Copy or move icons between sets from the library bar or the right-click menu. A name that is taken gets the next free number. The basket follows moved icons.
+
+- **Tidier set names.** A set made in Filled, Double line or Hand-drawn style now shows the style as a small tag, not as extra words in its name (it used to read "Spaceman Hand").
+- **"Make more" no longer changes your Style.** Pressing Make 5 more on a hand-drawn set used to leave Step 1 on Hand-drawn, so your next new keywords were drawn hand-drawn and got "hand" in their set name. Your Style, Detail and keywords now stay as you left them.
+- **Tap an icon in Preview to adjust just that one.** In Basket > Preview, tap (or drag) an icon, then move it, change its size or turn it to any angle. The other icons are not touched, and the changes go into the font and the zip. The size slider there now only zooms the view ("Zoom all"). The selected icon shows a grid with a clear cross for the middle, and a bigger box beside it with the same grid makes placing it easy.
+- **The zip now has the icon font too.** Download as zip makes the font from your basket and puts everything in one zip: an svg folder with the icons (with your edits), and a font folder with the .ttf, .woff and .woff2 files, the .css and preview.html. Before, it had the SVG files only.
+- **Make more like this, in the library.** Open a set and press **Make 5 more like this**. Icon Forge draws 5 new icons like the one you ticked (or the first one) and adds them to the same set. If the icon has no saved recipe, it opens the Vary screen so you can check the words first.
+- **New set from basket.** A button next to Download as zip (in both Basket tabs) saves the whole basket as a new set in your library, with your edits, your names and the saved recipe. It replaces the older "Save to a set…" button. Typing the name of a set that exists adds the icons to it.
+- **Search in Copy to / Move to.** The "Copy or move icons" box now has a **Search sets** box at the top, so you can find a set fast when you have many. A set you already ticked stays ticked, even when the search hides it.
+- **Right-click fixes.** The right-click menu is no longer cut off near the bottom of the window, and it now also works on Preview icons and in the full-screen view.
+- **View full screen.** A ⤢ button on every icon tile (and right-click → View full screen) opens the icon large in a dialog. Flip through the others with ‹ › or the arrow keys, switch Light/Dark, see the saved recipe, select it or vary it. Basket icons show with their edits.
+- **Fine rotation in Step 3.** Turn an icon to any angle: a slider, −1° / −0.1° / +0.1° / +1° buttons, and an exact Angle box. It is saved in the icon edits, so the font, the zip and "Copy SVG with my edits" all get the turned icon. A saved angle looks exactly like the one on screen (checked pixel by pixel).
+- **The basket is kept.** Closing the app no longer loses your basket, the icon names, your edits or the font name. They come back at the next start. An icon deleted from the library in the meantime is left out.
+- **Finish is next after Pick.** The Pick bar now ends with Finish →, and the optional Edit icons step is a button in the Finish step. "Start a new set" asks before it empties the basket.
+- **A simpler screen layout.**
+  - **Top bar.** Three steps (Make, Pick, Finish) instead of four. The model status moved onto the gear (a dot shows when the AI model is missing or downloading). The separate Basket chip is gone: the Finish step shows how many icons are in the basket. Steps that are not ready yet say why when you point at them.
+  - **Home.** Two tiles (Make new icons, My library). Vary an icon is reached from the library, the full-screen viewer, the right-click menu, or the Vary button on any selected icon.
+  - **First start.** One question, not two: the app follows the Windows light or dark theme. Pick a theme yourself in Settings.
+  - **Keywords.** Detail and Style are tucked into an Options fold-out (it shows what is chosen). The "start from icons you already have" chips are gone: use the Library.
+  - **Bottom bar.** The less common actions (Remove from basket, Copy to, Move to, Delete) are in a More menu, and the extra Back button is gone.
+  - **Edit icons.** The move sliders are gone (drag the icon, or use the arrow keys). Turning to any angle is under Fine tune. The step is marked optional.
+  - **Basket and font.** One remove button on each icon. The font name sits above the icons instead of in a side panel.
+  - **Progress.** One bar per keyword, with a count and how many failed, instead of a bar plus a row of numbered circles.
+  - **Preview.** The rotate controls that turned the whole view are removed, because they never changed the font or the zip. Tap one icon to change just that one instead.
+  - **Smaller things.** Quieter hover effects. Copy SVG button in the full-screen viewer. The zoom button no longer sits inside the icon button. Settings errors show in the dialog, not in a browser pop-up. The messages say "AI model" everywhere.
+- **Quieter start.** A second launch while Icon Forge is already running now does nothing, instead of showing an error box. The start-up splash is no longer see-through and is hidden before it is removed, so no picture of it is left on the desktop.
+
 ## 1.1.0
 
 A big update. New screens, new tools, and a smoother first start.

@@ -8,10 +8,10 @@ Like an icon but want it a little different? Pick it, change the words, and the 
 
 | Way in | How |
 |---|---|
-| From Home | Press the **Vary an icon** tile. Open a set, tick one icon, then press **Vary this icon…** in the bar at the bottom. |
-| From the library or Step 2 | Tick **one** icon. A **Vary this icon…** button appears in the bottom bar. |
+| From the library or Pick | Open a set (or go to the Pick step) and tick **one** icon. A **Vary this icon…** button appears in the bottom bar. |
+| From full screen | Press **Vary this icon…** at the top of the full-screen view |
 | With the mouse | **Right-click** any icon and choose **Vary this icon…** |
-| From Step 3 | Press **Vary this icon…** under the icon you are editing |
+| From Edit icons | Press **Vary this icon…** under the icon you are editing |
 
 ## What you can change
 
@@ -28,7 +28,7 @@ Like an icon but want it a little different? Pick it, change the words, and the 
 
 ## Make the versions
 
-Press **Make N versions** in the bottom bar. A ring shows each version while it is drawn. The first one takes longer if the model has to load.
+Press **Make N versions** in the bottom bar. A bar shows how far it has got, and how many versions did not finish. The first one takes longer if the model has to load.
 
 ![The new versions](images/21-vary-results.png)
 

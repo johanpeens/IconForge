@@ -19,7 +19,8 @@ function editParams(e) {
     const v = parseFloat(e[k]);
     return Number.isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d;
   };
-  const rot = ((Math.floor(num("rot", 0, -3600, 3600) / 90) * 90) % 360 + 360) % 360;
+  // Any angle is allowed (fine rotation), kept to 0.01 degree; quarter turns stay exact.
+  const rot = Math.round((((num('rot', 0, -3600, 3600) % 360) + 360) % 360) * 100) / 100;
   return [e.fx === -1 ? -1 : 1, e.fy === -1 ? -1 : 1, rot, num('s', 1, 0.2, 3.0), num('dx', 0, -1024, 1024), num('dy', 0, -1024, 1024)];
 }
 
@@ -54,9 +55,13 @@ function bake(text, e) {
   const cx = w / 2, cy = h / 2;
   const dels = parseDels(e.del);
 
+  // Turn about the centre by `rot` degrees (clockwise on screen, like CSS rotate), then flip and scale, then move.
+  const th = rot * Math.PI / 180;
+  let cs = Math.cos(th), sn = Math.sin(th);
+  if (rot % 90 === 0) { cs = [1, 0, -1, 0][rot / 90]; sn = [0, 1, 0, -1][rot / 90]; }   // exact for quarter turns
   const tf = (x, y) => {
     x -= cx; y -= cy;
-    for (let i = 0; i < rot / 90; i++) [x, y] = [-y, x];
+    [x, y] = [x * cs - y * sn, x * sn + y * cs];
     return [x * sc * fx + cx + dx, y * sc * fy + cy + dy];
   };
 

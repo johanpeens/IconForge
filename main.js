@@ -8,7 +8,10 @@ const server = require('./server');
 // Optional folders for testing and screenshots, so a demo never touches the real library or settings.
 if (process.env.ICONFORGE_DATA) app.setPath('userData', process.env.ICONFORGE_DATA);
 
-if (!app.requestSingleInstanceLock()) { app.quit(); }
+// Only one Icon Forge at a time. A second launch must do nothing at all (no splash, no error box): it just quits,
+// and the running one brings its window to the front (see 'second-instance' below).
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) { app.quit(); }
 
 // Icon sets and fonts live in Documents\Icon Forge; the model and settings in the app's data folder.
 const baseDir = process.env.ICONFORGE_LIBRARY || path.join(app.getPath('documents'), 'Icon Forge');
@@ -20,8 +23,9 @@ const SPLASH_MIN_MS = 1800;
 
 // Purple splash with the app icon; shown at once while the app sets itself up.
 function showSplash() {
+  // Not transparent on purpose: a see-through window can leave a ghost of its picture on the desktop on some Windows PCs.
   splash = new BrowserWindow({
-    width: 520, height: 360, frame: false, transparent: true, resizable: false, movable: false, show: false,
+    width: 520, height: 360, frame: false, transparent: false, backgroundColor: '#3b2aa8', resizable: false, movable: false, show: false,
     skipTaskbar: true, alwaysOnTop: true, hasShadow: false, title: 'Icon Forge', icon: path.join(__dirname, 'build', 'icon.png'),
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true },
   });
@@ -30,7 +34,13 @@ function showSplash() {
   splash.loadFile(path.join(__dirname, 'public', 'splash.html'));
   return Date.now();
 }
-const closeSplash = () => { if (splash) splash.destroy(); };
+// Hide it first, then remove it a moment later, so no picture of it is left on screen.
+const closeSplash = () => {
+  if (!splash) return;
+  const s = splash; splash = null;
+  try { s.setAlwaysOnTop(false); s.hide(); } catch (e) { /* already gone */ }
+  setTimeout(() => { try { if (!s.isDestroyed()) s.destroy(); } catch (e) { /* already gone */ } }, 200);
+};
 
 async function start() {
   const splashAt = showSplash();
@@ -90,7 +100,7 @@ app.on('web-contents-created', (_e, contents) => {
 });
 
 app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
-app.whenReady().then(start).catch(e => { closeSplash(); dialog.showErrorBox('Icon Forge could not start', String(e && e.stack || e)); app.quit(); });
+if (gotLock) app.whenReady().then(start).catch(e => { closeSplash(); dialog.showErrorBox('Icon Forge could not start', String(e && e.stack || e)); app.quit(); });
 app.on('before-quit', () => { if (gen) gen.stopEngine(); });
 app.on('will-quit', () => { if (gen) gen.stopEngine(); });
 process.on('exit', () => { if (gen) gen.stopEngine(); });

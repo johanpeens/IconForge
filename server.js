@@ -4,7 +4,7 @@ const fs = require('fs');
 const http = require('http');
 const path = require('path');
 const { URL } = require('url');
-const { editParams, isIdentity, parseDels, dropPaths, bake, safePath, readMeta } = require('./svgedit');
+const { editParams, isIdentity, parseDels, dropPaths, bake, safePath, readMeta, addMeta } = require('./svgedit');
 const { makeFont, slugify } = require('./fontmaker');
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json',
@@ -52,7 +52,7 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
         if (theme === 'light' || theme === 'dark') html = html.replace('<html lang="en">', '<html lang="en" data-theme="' + theme + '">');
         return send(res, 200, html, TYPES['.html']);
       }
-      if (p === '/api/status') return send(res, 200, { model: models.status(), library: gen.library(), theme: models.getSetting('theme') || '' });
+      if (p === '/api/status') return send(res, 200, { model: models.status(), library: gen.library(), theme: models.getSetting('theme') || '', basket: models.getSetting('basket') || null });
       // The saved recipe of one icon (null for icons made before recipes were saved, or added by hand).
       if (p === '/api/icon-info') {
         const set = u.searchParams.get('set') || '';
@@ -179,6 +179,39 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
       return send(res, 200, { ok: true, deleted, setGone });
     }
 
+    // A new, empty set; and copying or moving icons from one set to another (optionally into a brand new set).
+    if (p === '/api/library/new') return send(res, 200, gen.createSet(data.name));
+    if (p === '/api/library/transfer') {
+      let to = String(data.to || ''), created = false, merged = false;
+      if (data.newName) {
+        const r = gen.createSet(data.newName);
+        if (r.error && !r.folder) return send(res, 200, { error: r.error });
+        to = r.folder; created = !!r.ok; merged = !r.ok;   // a name that already exists simply sends the icons there
+      }
+      const out = gen.transfer({ from: String(data.from || ''), to, files: data.files, mode: data.mode === 'move' ? 'move' : 'copy' });
+      return send(res, 200, Object.assign(out, { created, merged }));
+    }
+
+    // Save the basket as a new set in the library: each icon with its edits baked in, under the name it has in the basket.
+    if (p === '/api/library/from-basket') {
+      const r = gen.createSet(data.name);
+      if (!r.ok && !r.folder) return send(res, 200, { error: r.error });
+      const dst = r.folder, dir = path.join(baseDir, dst), done = [];
+      let skipped = 0;
+      for (const ic of (Array.isArray(data.icons) ? data.icons : []).slice(0, 2000)) {
+        const src = ic && safePath(baseDir, String(ic.folder || ''), String(ic.file || ''));
+        if (!src || !fs.existsSync(src) || !src.toLowerCase().endsWith('.svg')) { skipped++; continue; }
+        let text = fs.readFileSync(src, 'utf8');
+        if (ic.edit && typeof ic.edit === 'object' && !isIdentity(ic.edit)) { const meta = readMeta(text); text = bake(text, ic.edit); if (meta) text = addMeta(text, meta); }   // keep the recipe so Vary still works on the copy
+        const base =String(ic.name || '').replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 80) || path.basename(String(ic.file), '.svg');
+        let fn = base + '.svg';
+        for (let n = 2; fs.existsSync(path.join(dir, fn)); n++) fn = base + '_' + n + '.svg';
+        fs.writeFileSync(path.join(dir, fn), text);
+        done.push(fn);
+      }
+      return send(res, 200, { ok: true, dst, created: !!r.ok, merged: !r.ok, done, skipped });
+    }
+
     if (p === '/api/reveal') {
       const slug = slugify(String(data.slug || ''));
       const d = data.set ? safePath(baseDir, String(data.set)) : slug ? safePath(fontsDir, slug) : baseDir;
@@ -190,6 +223,15 @@ function create({ publicDir, baseDir, gen, models, host, fixedPort = 0 }) {
       const t = data.theme === 'dark' ? 'dark' : 'light';
       models.setSetting('theme', t);
       return send(res, 200, { ok: true, theme: t });
+    }
+
+    // The basket (icons picked, their names and edits) and the font name, so a closed window does not lose them.
+    if (p === '/api/basket') {
+      const str = (v, n) => String(v == null ? '' : v).slice(0, n);
+      const items = (Array.isArray(data.items) ? data.items : []).slice(0, 2000).filter(i => i && typeof i.folder === 'string' && typeof i.file === 'string')
+        .map(i => ({ folder: str(i.folder, 200), file: str(i.file, 200), name: str(i.name, 100), ed: i.ed && typeof i.ed === 'object' ? i.ed : null }));
+      models.setSetting('basket', { items, font: str(data.font, 60) });
+      return send(res, 200, { ok: true });
     }
 
     if (p === '/api/model/folder') {

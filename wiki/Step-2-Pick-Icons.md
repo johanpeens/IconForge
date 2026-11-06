@@ -17,7 +17,7 @@ Not every icon will be perfect. This step is where you choose the good ones.
 | Button | What it does |
 |---|---|
 | **Select all** | Selects every icon in that set |
-| **Make 5 more** | Draws more icons for the same word (needs the model ready) |
+| **Make 5 more …** | Draws more icons for the same word. The button names the word, for example **Make 5 more bicycle**. Needs the model ready. |
 | **Hide** | Hides that set from this page. Your files stay safe. |
 | **Icon size** slider | Makes the icons bigger or smaller on screen. It does not change the icons. |
 
@@ -25,12 +25,13 @@ Not every icon will be perfect. This step is where you choose the good ones.
 
 | Button | What it does |
 |---|---|
-| **← Back** | Goes back to [Step 1](Step-1-Keywords.md) |
-| **Clear selection** | Unselects everything |
-| **Remove N from basket** | Shown when some selected icons are already in your basket. It takes them out of the basket. |
+| **Clear selection** | Shown when something is selected. Unselects everything. |
 | **Vary this icon…** | Shown when exactly one icon is selected. See [Vary an icon](Vary-an-Icon.md). |
+| **More ▾** | Shown when some selected icons are already in your basket. Its menu has **Remove N from basket**, which takes them out of the basket. |
 | **Add N to basket** | Puts the selected icons in your basket. Icons already there are not added twice. |
-| **Edit icons →** | Goes to [Step 3](Step-3-Edit-SVGs.md) |
+| **Finish →** | Goes to [Step 3: Basket and font](Step-4-Basket-and-Font.md). It turns bright purple once everything you ticked is already in the basket. |
+
+There is no Back button here. Use the steps at the top of the app (**Make**, **Pick**, **Finish**) to move around.
 
 ## Good to know
 
@@ -42,4 +43,4 @@ Not every icon will be perfect. This step is where you choose the good ones.
 
 ## Next
 
-[Step 3: Edit SVGs](Step-3-Edit-SVGs.md) is optional. You can also jump to [Step 4](Step-4-Basket-and-Font.md).
+Press **Finish →** to go to [Step 3: Basket and font](Step-4-Basket-and-Font.md). Want to flip, resize or clean up icons first? Press **Edit icons** there. [Edit icons](Step-3-Edit-SVGs.md) is optional.

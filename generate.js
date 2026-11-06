@@ -7,6 +7,7 @@ const { spawn, execFileSync } = require('child_process');
 const { vectorize, ColorMode, Hierarchical, PathSimplifyMode } = require('@neplex/vectorizer');
 const { addMeta } = require('./svgedit');
 
+const SET_MARK = '.iconforge-set';
 const slugUnderscore = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'icon';
 const natural = s => s.split(/(\d+)/).map(t => (/^\d+$/.test(t) ? parseInt(t, 10) : t.toLowerCase()));
 function naturalCmp(a, b) {
@@ -181,9 +182,52 @@ function create({ baseDir, engineDir, models }) {
       const files = listSvgs(name);
       let mtime = 0;
       try { mtime = fs.statSync(path.join(baseDir, name)).mtimeMs; } catch (e) { /* keep 0 */ }
-      if (files.length) out.push({ folder: name, files, mtime });
+      // A set you made yourself can be empty for now; the marker file says "this folder is one of ours".
+      if (files.length || fs.existsSync(path.join(baseDir, name, SET_MARK))) out.push({ folder: name, files, mtime });
     }
     return out;
+  }
+
+  // The real folder name of a set (matched without regard to upper/lower case), or '' if there is no such set.
+  function findSet(name) {
+    name = String(name || '');
+    if (!name || /[\\/]/.test(name) || name.startsWith('.') || name.toLowerCase() === 'iconfonts') return '';
+    try { const hit = fs.readdirSync(baseDir, { withFileTypes: true }).find(e => e.isDirectory() && e.name.toLowerCase() === name.toLowerCase()); return hit ? hit.name : ''; } catch (e) { return ''; }
+  }
+
+  // Make a new, empty set (a folder in the library). If the name is taken, say so and name the existing set.
+  function createSet(rawName) {
+    const name = String(rawName || '').replace(/[^A-Za-z0-9 \-]/g, '').trim().slice(0, 60);
+    if (!name) return { error: 'Type a name for the new set. Letters, numbers, spaces and dashes work.' };
+    const folder = slugUnderscore(name);
+    if (folder === 'iconfonts') return { error: 'That name is kept for fonts. Please choose another.' };
+    const have = findSet(folder);
+    if (have) return { error: 'A set called "' + have.replace(/_/g, ' ') + '" already exists.', folder: have };
+    const dir = path.join(baseDir, folder);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, SET_MARK), '');
+    return { ok: true, folder };
+  }
+
+  // Copy or move icons from one set to another. A name that is already taken gets the next free number.
+  function transfer({ from, to, files, mode }) {
+    const src = findSet(from), dst = findSet(to);
+    if (!src || !dst) return { error: 'That set was not found.' };
+    if (src === dst) return { error: 'Choose a different set to send the icons to.' };
+    const done = [], skipped = [];
+    for (const f of (Array.isArray(files) ? files : []).slice(0, 2000)) {
+      const name0 = String(f);
+      const a = path.join(baseDir, src, name0);
+      if (!/^[^\\/]+\.svg$/i.test(name0) || !fs.existsSync(a) || !fs.statSync(a).isFile()) { skipped.push(name0); continue; }
+      let name = name0;
+      if (fs.existsSync(path.join(baseDir, dst, name))) name = dst.replace(/_+$/, '') + '_' + String(nextNumber(dst)).padStart(2, '0') + '.svg';
+      const b = path.join(baseDir, dst, name);
+      if (mode === 'move') fs.renameSync(a, b); else fs.copyFileSync(a, b);
+      done.push({ from: name0, to: name });
+    }
+    // A set that was emptied by moving stays as an (empty) set, so you do not lose it by accident.
+    if (mode === 'move' && !listSvgs(src).length) { try { fs.writeFileSync(path.join(baseDir, src, SET_MARK), ''); } catch (e) { /* not important */ } }
+    return { ok: true, src, dst, mode: mode === 'move' ? 'move' : 'copy', done, skipped };
   }
 
   async function run(job, keywords, per, detail, style) {
@@ -319,7 +363,7 @@ function create({ baseDir, engineDir, models }) {
     return { id };
   }
 
-  return { jobs, start, startVary, cancel, library, listSvgs, promptFor, stopEngine: engine.stop };
+  return { jobs, start, startVary, cancel, library, listSvgs, promptFor, findSet, createSet, transfer, stopEngine: engine.stop };
 }
 
 module.exports = { create, slugUnderscore, trace, promptFor };

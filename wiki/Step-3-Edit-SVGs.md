@@ -1,6 +1,6 @@
-# Step 3: Edit SVGs
+# Edit icons (optional)
 
-Fix small problems before you make the font. This step is optional.
+Fix small problems before you make the font. You can skip this. Open it with **Edit icons** on the [Basket and font](Step-4-Basket-and-Font.md) step.
 
 **Your original SVG files are never changed.** Your edits only apply to the copies that go into the font.
 
@@ -19,7 +19,7 @@ Use this to turn, flip, resize or move an icon.
 
 ### Place it by hand
 
-**Drag the icon** with your mouse to put it where you want it. The sliders and the small icon on the right follow as you drag.
+**Drag the icon** with your mouse to put it where you want it. The small icon on the right follows as you drag. There are no move sliders: drag it, or use the arrow keys.
 
 | How | What happens |
 |---|---|
@@ -36,11 +36,11 @@ The arrow keys work after you click outside a slider or a text box.
 |---|---|
 | **↔ Flip** | Mirrors left and right |
 | **↕ Flip** | Mirrors up and down |
-| **⟲ 90° / ⟳ 90°** | Turns the icon a quarter turn |
+| **⟲ 90° / ⟳ 90°** | Turns the icon a quarter turn (from wherever it is now) |
 | **Fit to canvas** | Makes the icon fill the box nicely |
 | **Reset** | Puts it back how it was |
 | **Size** slider | 50% to 200% |
-| **Move left/right** and **Move up/down** | Slide the icon around |
+| **Fine tune** | A small panel that opens when you click it. Use it to turn the icon to any angle. It has the **Rotate** slider (0° to 360°), the **−1°**, **−0.1°**, **+0.1°** and **+1°** buttons for tiny turns, and an **Angle** box for an exact angle, such as `12.5`. |
 | **Apply these edits to all icons** | Copies the same edits to every icon in the basket |
 | **Fit all to canvas** | Fits every icon at once |
 
@@ -67,5 +67,5 @@ More tools:
 
 ## Next
 
-- Press **Basket & font →** at the bottom.
+- Press **Next: basket and font →** at the bottom.
 - Or press **← Back** to go back and add more icons.

@@ -30,7 +30,7 @@ That is all. You need Windows 10 or 11 (64-bit), a graphics card that supports V
 - **Copy with one right-click.** Copy any icon as SVG or as a picture, then paste it anywhere.
 - **Keep and reuse your icons.** A library of every set you made. Search it, reuse icons, delete what you do not need (it goes to the Recycle Bin).
 - **Vary an icon.** Pick an icon, change the words, and the AI draws new versions of it. Your prompt is saved inside each icon.
-- **Preview on dark.** Check your icons on any background colour, at any size up to 512 px, then download them all as a zip.
+- **Preview on dark.** Check your icons on any background colour, at any size up to 512 px, then download them all as a zip with the icon font inside.
 - **Icon font in one click.** Best way to use your icons on a website or in an app: one small file, any size, any colour. You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page.
 
 ## Help and guides

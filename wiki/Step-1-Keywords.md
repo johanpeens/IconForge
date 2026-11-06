@@ -1,4 +1,4 @@
-# Step 1: Keywords
+# Step 1: Make (keywords)
 
 Tell Icon Forge what to draw. Each word becomes a set of icons.
 
@@ -19,24 +19,26 @@ Tip: simple, single things work best. "scottish terrier" works better than "a sc
 
 ## Choose how they look
 
+**Icons per keyword** is always on show. **Detail** and **Style** are hidden under the **Options** line. Click **Options** to open them. The line shows what is chosen now, for example "Options: Medium detail · Line style". The defaults suit most icons.
+
 | Setting | Choices | What it does |
 |---|---|---|
 | **Icons per keyword** | 1 to 24 (starts at 5) | How many icons you get for each word |
 | **Detail** | Simple, Medium, Detailed | Simple has thick lines and few shapes. It is best for small icons. Detailed has fine lines. It is best for big icons, and it is slower. |
 | **Style** | Line, Filled, Double line, Hand-drawn | Line is an outline. Filled is a solid shape. Double line is an outline with a thin line inside. Hand-drawn is wobbly and friendly. |
 
-Under the settings you see how many icons you will get and about how long it takes.
+Next to **Icons per keyword** you see how many icons you will get and about how long it takes.
 
 ## Press Generate
 
 Press **Generate** in the bar at the bottom. It says how many icons you will get. **← Back** next to it goes back to Home. Now Icon Forge draws.
 
+If the AI model is not installed yet, the bar says so and **Generate** stays off until it is. See [Download the model](Download-the-Model.md).
+
 | What you see | What it means |
 |---|---|
 | A message at the top of the list | What Icon Forge is doing right now |
-| A row for each word | The progress of that word |
-| A ring for each icon | Grey = waiting. Spinning ring with a percent = drawing now. Green tick = done. Red cross = did not finish. |
-| A thin bar above the rings | The progress for the whole word |
+| A row for each word | The word, a progress bar and a count such as `3/5`. If some icons did not finish, the count says so, for example `3/5 · 2 failed`. |
 
 ![Drawing icons](images/08-generating.png)
 
@@ -58,7 +60,7 @@ Press **Generate** in the bar at the bottom. It says how many icons you will get
 
 ## Start from icons you already have
 
-Under the settings you may see **"Or start from icons you already have"**. Each tag is a folder of icons from before. Click one to jump straight to [Step 2](Step-2-Pick-Icons.md).
+Open the [library](Library.md), open a set and pick icons from there. You do not need to draw them again.
 
 ## Notes
 

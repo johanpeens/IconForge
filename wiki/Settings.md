@@ -1,6 +1,6 @@
 # Settings
 
-Open Settings with the **gear** at the top right. You can also click the model status next to it ("Flux model ready").
+Open Settings with the **gear** at the top right. A small dot on the gear shows the model status (see below).
 
 ![Settings](images/05-model-ready.png)
 
@@ -12,7 +12,7 @@ Open Settings with the **gear** at the top right. You can also click the model s
 | **Status** | Ready, Downloading, or Not installed |
 | **File** (or **Save to**) | Where the model file is. If it is not installed yet, this is the folder it will download into. |
 | **Library** | The folder where your icons and fonts are saved |
-| **Theme** | Light or Dark. Click one to change it. It is saved. |
+| **Theme** | Light or Dark. Until you click one, Icon Forge follows Windows. Your click is saved. |
 
 ## Buttons
 
@@ -26,10 +26,10 @@ Open Settings with the **gear** at the top right. You can also click the model s
 | **Open icon folder** | Always | Opens your library folder in Windows |
 | **Close** | Always | Closes Settings. A download keeps going. |
 
-## The status at the top
+## The dot on the gear
 
-| Colour | Meaning |
+| What you see | Meaning |
 |---|---|
-| Red dot: "Flux model not installed" | Download the model first. |
-| Text with a percent | The model is downloading. |
-| Green dot: "Flux model ready" | You can make icons. |
+| Orange dot | The AI model is not installed. Download it first. |
+| Pulsing dot | The model is downloading. Point at the gear to see the percent and the speed. |
+| No dot | The model is ready. You can make icons. |

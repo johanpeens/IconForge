@@ -59,6 +59,9 @@ Open the [library](Library.md). Tick icons and press **Delete N from library…*
 **What is the difference between "Remove" and "Delete"?**
 **Remove from basket** only takes an icon out of your basket. The file stays in your library. **Delete from library** moves the file to the Recycle Bin.
 
+**How do I keep the icons for one project together?**
+Make your own set with **+ New set** in the [library](Library.md#make-your-own-set). Then copy or move icons into it. In Step 3 (Basket and font), **New set from basket…** saves your whole basket as a new set.
+
 **Can I change an icon I already made?**
 Yes. Pick it and use [Vary an icon](Vary-an-Icon.md). Change the words and the AI draws new versions. Your original is kept.
 
@@ -66,7 +69,7 @@ Yes. Pick it and use [Vary an icon](Vary-an-Icon.md). Change the words and the A
 Yes, inside each new icon's SVG file. It is left out when you copy an icon or download a zip. See [Your files](Your-Files.md).
 
 **Can I get all my icons as one file?**
-Yes. In Step 4, press **Download as zip**. See [Step 4](Step-4-Basket-and-Font.md).
+Yes. In Step 3 (Basket and font), press **Download as zip**. The zip holds your SVG icons and the font files too. See [Step 3](Step-4-Basket-and-Font.md).
 
 ## About the font
 

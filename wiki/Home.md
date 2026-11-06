@@ -23,18 +23,18 @@ It all happens on your own PC. No account. No cloud.
 | **Keep every set** | Your [library](Library.md) holds every icon set you made. Search it, reuse icons, or delete what you do not need. |
 | **Vary an icon** | Pick an icon, change the words, and the AI draws new versions of it. See [Vary an icon](Vary-an-Icon.md). |
 | **Preview on dark** | Check your icons on a white, dark or any colour background, at any size up to 512 px. |
-| **Download as zip** | Save your icons as one `.zip` of SVG files, with your edits applied. |
+| **Download as zip** | Save your icons as one `.zip`: the SVG files (with your edits applied) and the icon font. |
+| **Nothing is lost** | Your basket, your edits and your font name are saved. Close the app and carry on later. |
 
 ## How it works
 
-When the app opens you see the [Home screen](Library.md): make new icons, open your library, or vary an icon. Making new icons takes four steps. The top of the app shows them.
+When the app opens you see the [Home screen](Library.md): make new icons or open your library. Making new icons takes three steps. The top of the app shows them.
 
 | Step | What you do | What you get |
 |---|---|---|
-| [1. Keywords](Step-1-Keywords.md) | Type words like `apple pie` or `scottish terrier`. Press Generate. | A folder of SVG icons for each word |
-| [2. Pick icons](Step-2-Pick-Icons.md) | Click the ones you like. | A basket of favourites |
-| [3. Edit SVGs](Step-3-Edit-SVGs.md) | Flip, resize, or clean up. This step is optional. | Tidier icons |
-| [4. Basket and font](Step-4-Basket-and-Font.md) | Name your font. Press Create. | An icon font you can use on a website |
+| [1. Make](Step-1-Keywords.md) | Type words like `apple pie` or `scottish terrier`. Press Generate. | A folder of SVG icons for each word |
+| [2. Pick](Step-2-Pick-Icons.md) | Click the ones you like. | A basket of favourites |
+| [3. Finish](Step-4-Basket-and-Font.md) | Name your font. Press Create. If you want, [edit your icons](Step-3-Edit-SVGs.md) first. | An icon font you can use on a website |
 
 ## What you need
 

@@ -8,10 +8,10 @@
 - [Download the model](Download-the-Model.md)
 
 **Make icons**
-- [1. Keywords](Step-1-Keywords.md)
+- [1. Make (keywords)](Step-1-Keywords.md)
 - [2. Pick icons](Step-2-Pick-Icons.md)
-- [3. Edit SVGs](Step-3-Edit-SVGs.md)
-- [4. Basket and font](Step-4-Basket-and-Font.md)
+- [3. Basket and font](Step-4-Basket-and-Font.md)
+- [Edit icons (optional)](Step-3-Edit-SVGs.md)
 - [Use your font](Use-Your-Font.md)
 
 **Your icons**

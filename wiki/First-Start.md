@@ -1,29 +1,23 @@
 # First start
 
-The first time you open Icon Forge, it walks you through two quick steps. Only one window is open at a time.
+The first time you open Icon Forge, there is one thing to do: get the AI model. Only one window is open at a time.
 
 | Order | What you see | What you do |
 |---|---|---|
-| 0 | A purple welcome screen | Nothing. It closes by itself. |
-| 1 | **Step 1 of 2: Welcome** | Pick Light or Dark. |
-| 2 | **Step 2 of 2: Get the AI model** | Press **Download**. See [Download the model](Download-the-Model.md). |
+| 1 | A purple welcome screen | Nothing. It closes by itself. |
+| 2 | **Get the AI model** | Press **Download**. See [Download the model](Download-the-Model.md). |
 
-## 1. The welcome screen
+## The welcome screen
 
 A purple screen with the Icon Forge icon and name. It shows for about two seconds while the app gets ready.
 
 ![Welcome screen](images/01-splash.png)
 
-## Step 1 of 2: Choose your look
+## Light or dark
 
-- Pick **Light** or **Dark**.
-- Icon Forge remembers your choice. It will not ask again.
-- You can change it later in [Settings](Settings.md).
-- When you pick, the window goes straight to step 2.
+Icon Forge follows the light or dark setting of Windows, so there is nothing to choose. To pick one yourself, open [Settings](Settings.md) (the gear) and click **Light** or **Dark**. Icon Forge remembers your choice.
 
-![Choose your look](images/02-choose-look.png)
-
-## Step 2 of 2: Get the AI model
+## Get the AI model
 
 Icon Forge needs the AI model before it can draw. This window tells you what it is and how big it is (17.2 GB).
 
