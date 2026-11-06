@@ -8,7 +8,7 @@ Find your problem in the table.
 |---|---|
 | Windows says **"Windows protected your PC"** | Click **More info**, then **Run anyway**. The installer is not signed yet. See [Installation](Installation.md). |
 | It says **"Windows is missing the Microsoft Visual C++ runtime"** | You clicked **No** when the installer asked for permission. Run the installer again and click **Yes**. Or get the runtime free from [Microsoft](https://aka.ms/vs/17/release/vc_redist.x64.exe). |
-| The app does not open a second time | Only one Icon Forge can run at once. Look for the first window. |
+| Nothing happens when I open it again | Only one Icon Forge can run at once. Opening it a second time does nothing, or brings the first window to the front. Look for it in the taskbar. |
 
 ## The model
 
@@ -23,6 +23,7 @@ Find your problem in the table.
 
 | Problem | What to do |
 |---|---|
+| **Generate** is greyed out | The AI model is not installed yet (look for the orange dot on the gear), or you have not added a keyword yet. |
 | The first icon takes a long time | This is normal. The 17 GB model is loading. It takes about a minute extra, once per session. |
 | Nothing moves for a few minutes | Wait up to 3 minutes. Then press **Stop generating** and try again. |
 | An icon shows a **red cross** | That icon did not finish. Icon Forge already tried three times. Press Generate again. |
@@ -43,7 +44,8 @@ Find your problem in the table.
 
 | Problem | What to do |
 |---|---|
-| An icon looks strange | The AI makes mistakes. Skip it in step 2, or press **Make 5 more**. |
+| An icon looks strange | The AI makes mistakes. Skip it in step 2, or press **Make 5 more …** there. In the library, **Make 5 more like this** adds new icons to a set. |
+| My basket has fewer icons after I reopen the app | The basket is saved. But icons you deleted from the library in the meantime are left out. |
 | Stray dots on an icon | Use **Clean up** in [Edit icons](Step-3-Edit-SVGs.md). |
 | An icon is off to one side | Use **Fit to canvas** in [Edit icons](Step-3-Edit-SVGs.md). |
 

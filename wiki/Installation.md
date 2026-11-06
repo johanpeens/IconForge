@@ -47,7 +47,7 @@ Installing takes about two minutes.
 
 1. Close Icon Forge.
 2. Run the new installer.
-3. Your icons, fonts, settings and model are kept.
+3. Your icons, fonts, settings, saved basket and model are kept.
 
 ## Uninstall
 

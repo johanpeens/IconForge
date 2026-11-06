@@ -49,7 +49,7 @@ The model (Flux Schnell) uses the Apache 2.0 licence, which allows it. AI pictur
 Yes. Put them in a folder inside `Documents\Icon Forge`. See [Your files](Your-Files.md). One-colour icons work best.
 
 **Why do some icons look odd?**
-The AI is not perfect. That is why step 2 lets you choose. You can also press **Make 5 more**.
+The AI is not perfect. That is why step 2 lets you choose. You can also press **Make 5 more …**, or **Make 5 more like this** in the library.
 
 ## About your library
 
@@ -61,6 +61,9 @@ Open the [library](Library.md). Tick icons and press **Delete N from library…*
 
 **How do I keep the icons for one project together?**
 Make your own set with **+ New set** in the [library](Library.md#make-your-own-set). Then copy or move icons into it. In Step 3 (Basket and font), **New set from basket…** saves your whole basket as a new set.
+
+**Is my basket saved if I close the app?**
+Yes. Your basket, the names, your edits and the font name are saved. They are back the next time you open Icon Forge. Icons you deleted from the library in the meantime are left out.
 
 **Can I change an icon I already made?**
 Yes. Pick it and use [Vary an icon](Vary-an-Icon.md). Change the words and the AI draws new versions. Your original is kept.

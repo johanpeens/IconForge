@@ -9,7 +9,7 @@ Icon Forge keeps everything in normal folders. You can open them, copy them, or 
 | Your icons (SVG) | `Documents\Icon Forge\<word>\` |
 | Your fonts | `Documents\Icon Forge\iconfonts\<font name>\` |
 | The AI model | `AppData\Roaming\Icon Forge\models\` (or the folder you chose) |
-| Your settings | `AppData\Roaming\Icon Forge\settings.json` |
+| Your settings and your saved basket | `AppData\Roaming\Icon Forge\settings.json` |
 
 Tip: press **Open icon folder** in [Settings](Settings.md), or **Show in folder** in the [library](Library.md), to jump to your icons.
 
@@ -22,6 +22,7 @@ On some PCs, Documents is kept in OneDrive. Then the folder is `OneDrive\Documen
 | `spaceman` (Line style) | `spaceman` | `spaceman_01.svg`, `spaceman_02.svg`… |
 | `spaceman` (Filled style) | `spaceman_filled` | `spaceman_filled_01.svg`… |
 | A version made with [Vary](Vary-an-Icon.md) | the same folder as the original | the next free number |
+| A set you made with **+ New set** | the name you typed, for example `client_icons` | the icons you copy or move in. An empty set has a small hidden file `.iconforge-set` so Icon Forge knows it is yours. |
 
 ## The recipe inside each icon
 
@@ -36,7 +37,7 @@ Every icon made by Icon Forge keeps its **recipe** inside the SVG file, in a `<m
 
 - Put a folder of SVG files inside `Documents\Icon Forge`.
 - Restart Icon Forge.
-- The folder shows in the [library](Library.md), and under **"Or start from icons you already have"** in Step 1.
+- The folder shows in the [library](Library.md). Open it there and pick icons.
 - It works best with one-colour icons.
 
 ## Delete icons or sets
