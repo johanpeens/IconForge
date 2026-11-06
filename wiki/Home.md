@@ -19,7 +19,8 @@ It all happens on your own PC. No account. No cloud.
 | **Clean icons** | Every icon is an SVG. It stays sharp at any size. You can change its colour. |
 | **Fix them before you use them** | Flip, turn, resize, move, or delete stray dots. |
 | **Copy with one right-click** | Right-click any icon. Copy its SVG, or a picture (PNG), and paste it anywhere. |
-| **Icon font in one click** | You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page. |
+| **Icon font in one click** | The best way to use your icons on a website or in an app: one small file, any size, any colour. You get `.ttf`, `.woff`, `.woff2`, a `.css` file and a preview page. |
+| **Icons that are really yours** | Most websites use the same stock icon packs, so many sites look alike. Icon Forge draws icons for your own words, so yours stand out. |
 | **Keep every set** | Your [library](Library.md) holds every icon set you made. Search it, reuse icons, or delete what you do not need. |
 | **Vary an icon** | Pick an icon, change the words, and the AI draws new versions of it. See [Vary an icon](Vary-an-Icon.md). |
 | **Preview on dark** | Check your icons on a white, dark or any colour background, at any size up to 512 px. |
