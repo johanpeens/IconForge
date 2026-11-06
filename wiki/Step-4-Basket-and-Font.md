@@ -51,6 +51,8 @@ See your icons the way they will look. Change the background to check they work 
 
 **Tap an icon** in the preview. A box opens on the right. It changes only that icon. The others stay as they are. These are the same edits as in [Edit icons](Step-3-Edit-SVGs.md), so they go into the font and the zip.
 
+![Changing one icon in the Preview](images/25-preview-adjust.png)
+
 | Control | What it does |
 |---|---|
 | **Drag the icon** in the box | Puts it where you want it. The **cross** marks the middle, and the icon snaps to it. |

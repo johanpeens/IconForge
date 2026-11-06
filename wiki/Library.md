@@ -97,6 +97,8 @@ If the name is already used, Icon Forge tells you and keeps the box open so you 
 3. Choose the set they should go to. Or choose **A new set** and type a name. If you have many sets, type in the **Search sets** box at the top of the list to find one. A set you already ticked stays ticked, even if the search hides it.
 4. Press the button. A message tells you what happened.
 
+![Move icons to another set, with the search box](images/24-move-to-search.png)
+
 You can also **right-click** one icon and choose **Copy to another set…** or **Move to another set…**.
 
 Good to know:
